@@ -1,10 +1,9 @@
 import "@/styles/globals.css";
-import Head from "next/head";
-import { Fira_Code } from "@next/font/google";
+import { Noto_Sans } from "@next/font/google";
 
-const fira_code = Fira_Code({
+const fira_code = Noto_Sans({
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["500"],
 });
 
 export default function App({ Component, pageProps }) {

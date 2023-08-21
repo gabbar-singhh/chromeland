@@ -1,4 +1,15 @@
+.container_time {
+    color: #ffffff;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+
 .current_time {
     font-size: 4.8em;
-    color: #fff;
+}
+
+.current_day {
+    text-align: center;
 }
