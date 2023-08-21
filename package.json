@@ -9,9 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/font": "^13.4.19",
     "next": "13.4.16",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-draggable": "^4.4.5"
   },
   "devDependencies": {
     "depcheck": "^1.4.3"
