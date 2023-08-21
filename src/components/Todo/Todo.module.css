@@ -6,6 +6,11 @@
     display: flex;
     flex-direction: column;
     gap: 0.5em;
+    cursor: grab;
+}
+
+.container_todo:active {
+    cursor: grabbing;
 }
 
 .input_box {
@@ -60,10 +65,10 @@
 
 .todo_list::-webkit-scrollbar-track {
     box-shadow: inset 0 0 0 grey;
-    background-color: rgba(168, 168, 168, 0.542);
+    background-color: #292a2d;
 }
 
 .todo_list::-webkit-scrollbar-thumb {
-    background-color: #292a2d;
+    background-color: rgba(168, 168, 168, 0.542);
     border-radius: 5px;
 }

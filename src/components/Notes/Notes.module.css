@@ -1,0 +1,48 @@
+.container_notes {
+    color: #fff;
+    cursor: grab;
+
+    position: absolute;
+    top: 1em;
+    right: 0;
+}
+
+.container_notes:active {
+    cursor: grabbing;
+}
+
+.container_notes p {
+    font-size: 0.85em;
+    padding: 0.5em 0.5em;
+    text-align: center;
+    background-color: #100c1b;
+}
+
+.container_notes .notes_textarea {
+    outline: none;
+    resize: none;
+    padding: 0.5em 0.5em;
+    border-radius: 0.1em;
+    font-size: 1.2em;
+    background-color: #221a38;
+    border: none;
+    color: #fff;
+}
+
+.container_notes .notes_textarea::-webkit-scrollbar {
+    width: 4px;
+}
+
+.container_notes .notes_textarea::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 0 grey;
+    background-color: #292a2d;
+}
+
+.container_notes .notes_textarea::-webkit-scrollbar-thumb {
+    background-color: rgba(168, 168, 168, 0.542);
+    border-radius: 5px;
+}
+
+.container_notes .notes_textarea::selection {
+    background-color: #013246;
+}
