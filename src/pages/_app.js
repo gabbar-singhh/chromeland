@@ -3,7 +3,7 @@ import { Noto_Sans } from "@next/font/google";
 
 const fira_code = Noto_Sans({
   subsets: ["latin"],
-  weight: ["500"],
+  weight: ["400", "500"],
 });
 
 export default function App({ Component, pageProps }) {

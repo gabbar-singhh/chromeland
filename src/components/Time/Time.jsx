@@ -25,12 +25,12 @@ const Time = () => {
   }, []);
 
   return (
-    <div className={styles.container_time}>
+    <main className={styles.container_time}>
       <span className={styles.current_time}>{currentTime}</span>
       <span className={styles.current_day}>
         {currentDay}, {currentMonth} {currentDateOfMonth}
       </span>
-    </div>
+    </main>
   );
 };
 

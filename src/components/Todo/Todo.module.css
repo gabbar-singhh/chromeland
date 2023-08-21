@@ -1,0 +1,69 @@
+.container_todo {
+    position: absolute;
+    bottom: 1em;
+    right: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.input_box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2em;
+}
+
+.input_box input {
+    font-size: 0.85em;
+    outline: none;
+    padding: 0.2em 0.5em;
+    border-radius: 0.1em;
+}
+
+.input_box p {
+    color: #fff;
+    font-size: 0.7em;
+    font-weight: 400;
+}
+
+.todo_list {
+    font-size: 0.8em;
+    color: #fff;
+    height: 12em;
+    width: 20em;
+    overflow-y: auto;
+}
+
+.todo_list .todo_item {
+    display: flex;
+    justify-content: space-between;
+    background-color: #100c1b;
+
+    margin-bottom: 0.2em;
+    padding: 0.2em 0.5em;
+    border-radius: 0.1em;
+}
+
+.todo_list .todo_item .todo_title {
+    cursor: default;
+}
+
+.todo_list .todo_item .todo_del {
+    cursor: pointer;
+}
+
+.todo_list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.todo_list::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 0 grey;
+    background-color: rgba(168, 168, 168, 0.542);
+}
+
+.todo_list::-webkit-scrollbar-thumb {
+    background-color: #292a2d;
+    border-radius: 5px;
+}
