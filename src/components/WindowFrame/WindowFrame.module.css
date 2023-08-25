@@ -1,0 +1,87 @@
+.container_windowframe {
+    height: 400px;
+    width: 500px;
+
+    position: absolute;
+    background-color: #000;
+
+    border: 1.8px solid #fff;
+}
+
+.top_frame {
+    height: 28px;
+    width: 100%;
+    margin: 0;
+    padding: 0 0.2em;
+    background-color: #000;
+    border-bottom: 1.8px solid#fff;
+
+    display: flex;
+    color: #fff;
+    cursor: grab;
+}
+
+.top_frame:active {
+    cursor: grabbing;
+}
+
+.top_frame:hover {
+    cursor: grabbing;
+}
+
+.top_frame .close_program {
+    position: absolute;
+    top: 5px;
+    left: 0;
+
+    border-radius: 0.5px;
+    border: 0.5px solid #fff;
+    padding: 0 1px;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #000;
+
+}
+
+.top_frame .close_program:hover {
+    background-color: #232323;
+    color: #fff;
+    transition: all 400ms ease-in;
+}
+
+.top_frame .black_lines {
+    background-color: black;
+    width: 100%;
+    margin: 0.20em 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.black_lines .line_1,
+.black_lines .line_2,
+.black_lines .line_4,
+.black_lines .line_5 {
+    background-color: #fff;
+    height: 1.5px;
+}
+
+.black_lines .line_3 {
+    height: 3px;
+    background-color: #fff;
+}
+
+
+.top_frame p {
+    color: #fff;
+    font-size: 1em;
+    text-transform: lowercase;
+    text-align: center;
+    white-space: nowrap;
+    margin: 0 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

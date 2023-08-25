@@ -1,0 +1,19 @@
+.container_notefolder {
+    color: #fff;
+    cursor: pointer;
+
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.container_notefolder:active {
+    cursor: grabbing;
+}
+
+.container_notefolder p {
+    font-size: 14px;
+    color: #cdcdcd;
+    font-family: 'Fira Mono', monospace;
+}

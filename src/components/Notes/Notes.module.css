@@ -20,7 +20,7 @@
 
 .container_notes .notes_textarea {
     outline: none;
-    resize: none;
+    /* resize: none; */
     padding: 0.5em 0.5em;
     border-radius: 0.1em;
     font-size: 1.2em;

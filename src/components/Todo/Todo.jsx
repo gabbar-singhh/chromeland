@@ -55,7 +55,7 @@ const Todo = () => {
               : tasks.length > 1
               ? `${tasks.length} tasks`
               : null}
-            to pending!
+            pending!
           </p>
         </div>
 

@@ -1,14 +1,19 @@
 import "@/styles/globals.css";
-import { Noto_Sans } from "@next/font/google";
+import { Noto_Sans, Fira_Mono } from "@next/font/google";
 
-const fira_code = Noto_Sans({
+const NotoSans = Noto_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+});
+
+const FiraMono = Fira_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
 });
 
 export default function App({ Component, pageProps }) {
   return (
-    <main className={fira_code.className}>
+    <main className={`${NotoSans.className} ${FiraMono.className}`}>
       <Component {...pageProps} />
     </main>
   );
