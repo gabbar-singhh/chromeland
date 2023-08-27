@@ -89,3 +89,11 @@
     justify-content: center;
     letter-spacing: -2px
 }
+
+.data_container {
+    color: #fff;
+    padding: 0.8em 1em;
+    font-size: 14px;
+    letter-spacing: -1px;
+    word-spacing: -4px;
+}

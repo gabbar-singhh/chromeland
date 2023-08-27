@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "./WindowFrame.module.css";
 import Draggable from "react-draggable";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 const WindowFrame = (props) => {
   const [show, setShow] = useState(props.show);
-  
+
+  // AUTH CUSTOM HOOKS
+  const { user, error, isLoading } = useUser();
+
   const closeWindow = () => {
     setShow(false);
   };
@@ -35,6 +39,21 @@ const WindowFrame = (props) => {
                 <div className={styles.line_4}></div>
                 <div className={styles.line_4}></div>
               </div>
+            </div>
+
+            <div className={styles.data_container}>
+              {!user ? (
+                <div>
+                  <a href="/api/auth/login">
+                    SIGN IN WITH GOOGLE TO SAVE NOTES
+                  </a>
+                </div>
+              ) : (
+                <>
+                  <p>No Notes Found!</p>
+                  <a href="/api/auth/logout">logout</a>
+                </>
+              )}
             </div>
           </section>
         </Draggable>
