@@ -1,28 +1,31 @@
 .container_notes {
     color: #fff;
-    cursor: grab;
-
     position: absolute;
     top: 1em;
     right: 0;
-}
-
-.container_notes:active {
-    cursor: grabbing;
+    cursor: default;
 }
 
 .container_notes p {
-    font-size: 0.85em;
-    padding: 0.5em 0.5em;
+    font-size: 12px;
+    padding: 0.8em 0.8em;
     text-align: center;
     background-color: #100c1b;
+    letter-spacing: -2px;
+    cursor: grab;
+    border-top-left-radius: 0.1em;
+    border-top-right-radius: 0.1em;
+}
+
+.container_notes p:active {
+    cursor: grabbing;
 }
 
 .container_notes .notes_textarea {
     outline: none;
-    /* resize: none; */
     padding: 0.5em 0.5em;
     border-radius: 0.1em;
+    margin-bottom: -1.5px;
     font-size: 1.2em;
     background-color: #221a38;
     border: none;
@@ -45,4 +48,26 @@
 
 .container_notes .notes_textarea::selection {
     background-color: #013246;
+}
+
+.container_notes .notes_buttons {
+    background-color: #100c1b;
+    padding: 0.5em 0.5em;
+    border-bottom-left-radius: 0.1em;
+    border-bottom-right-radius: 0.1em;
+    font-size: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.container_notes .notes_buttons span {
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+.container_notes .notes_buttons span:hover {
+    color: rgb(173, 173, 173);
+    transition: all 200ms ease-in;
 }

@@ -5,16 +5,24 @@ import Todo from "@/components/Todo/Todo";
 import Notes from "@/components/Notes/Notes";
 import NoteFolder from "@/components/NoteFolder/NoteFolder";
 import WindowFrame from "@/components/WindowFrame/WindowFrame";
+import React, { useState } from "react";
 
 export default function Home() {
+  const [data, setData] = useState({ name: "", show: false });
+
+  const check_data = (e) => {
+    setData(e);
+    console.log("🙂", e);
+  };
+
   return (
     <Layout>
       <Time />
       <Todo />
       <Notes />
-      <WindowFrame />
+      {data.show && <WindowFrame show={true} />}
       <section className={styles.folder_section}>
-        <NoteFolder />
+        <NoteFolder values={check_data} />
       </section>
     </Layout>
   );

@@ -2,10 +2,13 @@
     height: 400px;
     width: 500px;
 
-    position: absolute;
     background-color: #000;
-
     border: 1.8px solid #fff;
+
+    position: absolute;
+    top: 20%;
+    left: 35%;
+
 }
 
 .top_frame {
@@ -76,7 +79,7 @@
 
 .top_frame p {
     color: #fff;
-    font-size: 1em;
+    font-size: 14px;
     text-transform: lowercase;
     text-align: center;
     white-space: nowrap;
@@ -84,4 +87,5 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    letter-spacing: -2px
 }

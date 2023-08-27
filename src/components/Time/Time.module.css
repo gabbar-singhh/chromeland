@@ -3,13 +3,14 @@
     display: inline-flex;
     flex-direction: column;
     justify-content: center;
-
+    margin: 1em 0;
 }
 
 .current_time {
-    font-size: 5.6em;
+    font-size: 4.2em;
 }
 
 .current_day {
     text-align: center;
+    color: rgb(173, 173, 173);
 }
