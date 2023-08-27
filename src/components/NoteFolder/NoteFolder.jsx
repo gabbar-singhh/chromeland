@@ -41,9 +41,6 @@ const NoteFolder = ({ values }) => {
           <p>Sticky Notes</p>
         </main>
       </Draggable>
-      <>
-        <WindowFrame></WindowFrame>
-      </>
     </>
   );
 };

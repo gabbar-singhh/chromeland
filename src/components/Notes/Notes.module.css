@@ -13,6 +13,8 @@
     background-color: #100c1b;
     letter-spacing: -2px;
     cursor: grab;
+    border-top-left-radius: 0.1em;
+    border-top-right-radius: 0.1em;
 }
 
 .container_notes p:active {
@@ -23,6 +25,7 @@
     outline: none;
     padding: 0.5em 0.5em;
     border-radius: 0.1em;
+    margin-bottom: -1.5px;
     font-size: 1.2em;
     background-color: #221a38;
     border: none;
@@ -50,7 +53,8 @@
 .container_notes .notes_buttons {
     background-color: #100c1b;
     padding: 0.5em 0.5em;
-    border-radius: 0.1em;
+    border-bottom-left-radius: 0.1em;
+    border-bottom-right-radius: 0.1em;
     font-size: 12px;
 
     display: flex;
@@ -60,6 +64,7 @@
 
 .container_notes .notes_buttons span {
     cursor: pointer;
+    font-size: 1.2em;
 }
 
 .container_notes .notes_buttons span:hover {

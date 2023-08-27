@@ -26,9 +26,11 @@ const Notes = () => {
           className={styles.notes_textarea}
         ></textarea>
         <div className={styles.notes_buttons}>
-          <span onClick={clearNotes}>clear</span>
+          <span onClick={clearNotes}>{"{X}"}</span>
 
-          <span>save</span>
+          <span>
+            {"{"}&#10003;{"}"}
+          </span>
         </div>
       </main>
     </Draggable>
