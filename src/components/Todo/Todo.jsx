@@ -54,7 +54,7 @@ const Todo = () => {
               ? "only 1 task"
               : tasks.length > 1
               ? `${tasks.length} tasks`
-              : null}
+              : null}{" "}
             pending!
           </p>
         </div>
@@ -68,7 +68,7 @@ const Todo = () => {
                   className={styles.todo_del}
                   onClick={() => deleteItemHandler(task.id)}
                 >
-                  {"🔴"}
+                  {"🟥"}
                 </p>
               </span>
             );
