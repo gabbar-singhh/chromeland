@@ -20,11 +20,17 @@ const Todo = () => {
   const keyDownHandler = (event) => {
     if (event.keyCode === 13) {
       if (task) {
+
         console.log("-->", task);
+
         const newTask = { id: new Date().getTime().toString(), title: task };
+
         setTasks([...tasks, newTask]);
+
         localStorage.setItem("localTask", JSON.stringify([...tasks, newTask]));
+        
         setTask("");
+
       }
     }
   };

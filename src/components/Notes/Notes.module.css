@@ -10,11 +10,28 @@
     font-size: 12px;
     padding: 0.8em 0.8em;
     text-align: center;
+    color: #fff;
     background-color: #100c1b;
     letter-spacing: -2px;
     cursor: grab;
     border-top-left-radius: 0.1em;
     border-top-right-radius: 0.1em;
+    outline: none;
+
+}
+
+.container_notes p::-webkit-scrollbar {
+    width: 4px;
+}
+
+.container_notes p::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 0 grey;
+    background-color: #292a2d;
+}
+
+.container_notes p::-webkit-scrollbar-thumb {
+    background-color: rgba(168, 168, 168, 0.542);
+    border-radius: 5px;
 }
 
 .container_notes p:active {

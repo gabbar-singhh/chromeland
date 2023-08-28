@@ -5,7 +5,6 @@ export default handleAuth({
     try {
       const loginResult = await handleLogin(req, res);
 
-      // If authentication was successful, loginResult will contain 'true'
       if (loginResult === true) {
         console.log("successful ✅");
       }

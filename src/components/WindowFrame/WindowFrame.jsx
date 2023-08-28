@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./WindowFrame.module.css";
 import Draggable from "react-draggable";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import Link from "next/link";
+import { formatDistanceToNowStrict } from "date-fns";
 
 const WindowFrame = (props) => {
   const [show, setShow] = useState(props.show);
+  const [notes, setNotes] = useState([]);
 
   // AUTH CUSTOM HOOKS
   const { user, error, isLoading } = useUser();
@@ -13,6 +15,14 @@ const WindowFrame = (props) => {
   const closeWindow = () => {
     setShow(false);
   };
+
+  // WHEN PAGE OPEN, IT CHECKS FOR PREVIOUS LOCAL-STORAGE
+  // useEffect(() => {
+  //   const data = JSON.parse(localStorage.getItem("localNotes"));
+
+  //   setNotes(data);
+  //   console.log(data);
+  // }, []);
 
   return (
     <>
@@ -46,15 +56,22 @@ const WindowFrame = (props) => {
             <div className={styles.data_container}>
               {!user ? (
                 <div className={styles.signin_btn}>
-                  <Link href={"/api/auth/login"} className={styles.link_sign}>
+                  <Link href="/api/auth/login" className={styles.link_sign}>
                     SIGN IN TO SAVE
                   </Link>
                 </div>
               ) : (
                 <>
-                  <p>No Notes Found!</p>
-                  <br />
-                  <Link href="/api/auth/logout">logout</Link>
+                  <div className={styles.notes_list}>
+                    {/* {notes.map((element) => {
+                      return (
+                        <span key={element.id} className={styles.note_item}>
+                          <img src="/icons/file_icon.webp" alt="" height={50} />
+                          <p>{element.title + ".txt"}</p>
+                        </span>
+                      );
+                    })} */}
+                  </div>
                 </>
               )}
             </div>

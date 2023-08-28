@@ -98,9 +98,6 @@
     word-spacing: -4px;
 
     height: 80%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .data_container .signin_btn {
@@ -179,4 +176,27 @@
         radial-gradient(circle at 100% 100%, rgba(204, 0, 0, 0) 14px, #fff 15px),
         radial-gradient(circle at 0 100%, rgba(204, 0, 0, 0) 14px, #fff 15px);
     font-family: 'Print Char 21';
+}
+
+.data_container .notes_list {
+    display: flex;
+    flex-wrap: wrap;
+    /* align-items: start; */
+    justify-content: flex-start;
+    gap: 1em;
+}
+
+.notes_list .note_item {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+
+    cursor: pointer;
+}
+
+.notes_list .note_item p {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: -1.5px;
 }
