@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "./WindowFrame.module.css";
 import Draggable from "react-draggable";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import Link from "next/link";
 
 const WindowFrame = (props) => {
   const [show, setShow] = useState(props.show);
@@ -12,6 +13,7 @@ const WindowFrame = (props) => {
   const closeWindow = () => {
     setShow(false);
   };
+
   return (
     <>
       {show && (
@@ -43,15 +45,16 @@ const WindowFrame = (props) => {
 
             <div className={styles.data_container}>
               {!user ? (
-                <div>
-                  <a href="/api/auth/login">
-                    SIGN IN WITH GOOGLE TO SAVE NOTES
-                  </a>
+                <div className={styles.signin_btn}>
+                  <Link href={"/api/auth/login"} className={styles.link_sign}>
+                    SIGN IN TO SAVE
+                  </Link>
                 </div>
               ) : (
                 <>
                   <p>No Notes Found!</p>
-                  <a href="/api/auth/logout">logout</a>
+                  <br />
+                  <Link href="/api/auth/logout">logout</Link>
                 </>
               )}
             </div>
