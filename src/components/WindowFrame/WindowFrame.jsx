@@ -1,16 +1,12 @@
 import React, { useState } from "react";
 import styles from "./WindowFrame.module.css";
 import Draggable from "react-draggable";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import Link from "next/link";
 import CloudBtn from "../Buttons/CloudBtn/CloudBtn";
 
 const WindowFrame = ({ children, windowName, visible }) => {
   const [show, setShow] = useState(visible);
   const [notes, setNotes] = useState([]);
-
-  // AUTH CUSTOM HOOKS
-  const { user, error, isLoading } = useUser();
 
   const closeWindow = () => {
     setShow(false);
@@ -47,7 +43,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
 
             <div className={styles.data_container}>
               {
-                !user && <CloudBtn href="/api/auth/login/" txt="SIGN IN" />
+                // !user && <CloudBtn href="/api/auth/login/" txt="SIGN IN" />
                 /* <div className={styles.notes_list}>
                     {notes.map((element) => {
                       return (
@@ -59,7 +55,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
                     })}
                   </div> */
               }
-              {user && <>{children}</>}
+              {/* {user && <>{children}</>} */}
             </div>
           </section>
         </Draggable>

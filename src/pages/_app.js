@@ -1,7 +1,5 @@
 import "@/styles/globals.css";
 import { Noto_Sans, Fira_Mono } from "@next/font/google";
-import { UserProvider } from "@auth0/nextjs-auth0/client";
-import Notification from "@/components/Notification/Notification";
 
 const NotoSans = Noto_Sans({
   subsets: ["latin"],
@@ -15,11 +13,8 @@ const FiraMono = Fira_Mono({
 
 export default function App({ Component, pageProps }) {
   return (
-    <UserProvider>
-      <main className={`${NotoSans.className} ${FiraMono.className}`}>
-        <Notification />
-        <Component {...pageProps} />
-      </main>
-    </UserProvider>
+    <main className={`${NotoSans.className} ${FiraMono.className}`}>
+      <Component {...pageProps} />
+    </main>
   );
 }
