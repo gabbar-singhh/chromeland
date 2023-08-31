@@ -9,6 +9,8 @@ const PomoFocusApp = () => {
   // DEFAULT UNDERLINE TO POMODORO
   const [activeLi, setActiveLi] = useState("pomodoro");
 
+  const [btnText, setBtnText] = useState("start");
+
   const handleItemClick = (data) => {
     setActiveLi(data);
   };
@@ -18,10 +20,13 @@ const PomoFocusApp = () => {
 
     if (timerActive && timeRemaining > 0) {
       timerInterval = setInterval(() => {
+        setBtnText("reset");
         setTimeRemaining((prevTime) => prevTime - 1);
       }, 1000);
     } else if (timeRemaining === 0) {
       // THROW YOUR NOTIFICATION CODE HERE!
+
+      setBtnText("start");
       clearInterval(timerInterval);
     }
 
@@ -32,6 +37,20 @@ const PomoFocusApp = () => {
 
   const startTimer = () => {
     setTimerActive(true);
+
+    if (btnText == "reset" && activeLi == "pomodoro") {
+      setTimeRemaining(25 * 60);
+      setTimerActive(false);
+      setBtnText("start");
+    } else if (btnText == "reset" && activeLi == "short") {
+      setTimeRemaining(5 * 60);
+      setTimerActive(false);
+      setBtnText("start");
+    } else if (btnText == "reset" && activeLi == "long") {
+      setTimeRemaining(10 * 60);
+      setTimerActive(false);
+      setBtnText("start");
+    }
   };
 
   const formatTime = (seconds) => {
@@ -90,7 +109,7 @@ const PomoFocusApp = () => {
       </div>
       <div className={styles.pomofocus_timer}>{formatTime(timeRemaining)}</div>
       <div className={styles.pomofocus_btn}>
-        <CloudBtn txt="start" onClick={startTimer} href="" />
+        <CloudBtn txt={btnText} onClick={startTimer} href="" />
       </div>
     </div>
   );
