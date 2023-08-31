@@ -53,5 +53,5 @@
 }
 
 .active_li {
-    text-decoration: rgb(255, 0, 0) underline wavy;
+    text-decoration: #ff0027 underline wavy;
 }
