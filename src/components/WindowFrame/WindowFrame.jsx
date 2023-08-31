@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "./WindowFrame.module.css";
 import Draggable from "react-draggable";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import Link from "next/link";
-import { formatDistanceToNowStrict } from "date-fns";
+import CloudBtn from "../Buttons/CloudBtn/CloudBtn";
 
-const WindowFrame = (props) => {
-  const [show, setShow] = useState(props.show);
+const WindowFrame = ({ children, windowName, visible }) => {
+  const [show, setShow] = useState(visible);
   const [notes, setNotes] = useState([]);
 
   // AUTH CUSTOM HOOKS
@@ -15,14 +15,6 @@ const WindowFrame = (props) => {
   const closeWindow = () => {
     setShow(false);
   };
-
-  // WHEN PAGE OPEN, IT CHECKS FOR PREVIOUS LOCAL-STORAGE
-  // useEffect(() => {
-  //   const data = JSON.parse(localStorage.getItem("localNotes"));
-
-  //   setNotes(data);
-  //   console.log(data);
-  // }, []);
 
   return (
     <>
@@ -42,7 +34,7 @@ const WindowFrame = (props) => {
                 <div className={styles.line_4}></div>
               </div>
 
-              <p>Sticky Notes</p>
+              <p>{windowName}</p>
 
               <div className={styles.black_lines}>
                 <div className={styles.line_1}></div>
@@ -54,26 +46,20 @@ const WindowFrame = (props) => {
             </div>
 
             <div className={styles.data_container}>
-              {!user ? (
-                <div className={styles.signin_btn}>
-                  <Link href="/api/auth/login" className={styles.link_sign}>
-                    SIGN IN TO SAVE
-                  </Link>
-                </div>
-              ) : (
-                <>
-                  <div className={styles.notes_list}>
-                    {/* {notes.map((element) => {
+              {
+                !user && <CloudBtn href="/api/auth/login/" txt="SIGN IN" />
+                /* <div className={styles.notes_list}>
+                    {notes.map((element) => {
                       return (
                         <span key={element.id} className={styles.note_item}>
                           <img src="/icons/file_icon.webp" alt="" height={50} />
                           <p>{element.title + ".txt"}</p>
                         </span>
                       );
-                    })} */}
-                  </div>
-                </>
-              )}
+                    })}
+                  </div> */
+              }
+              {user && <>{children}</>}
             </div>
           </section>
         </Draggable>

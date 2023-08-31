@@ -56,7 +56,6 @@ const Notes = () => {
 
         <div className={styles.notes_buttons}>
           <span onClick={clearNotes}>{"{X}"}</span>
-
           <span onClick={saveNotes}>
             {"{"}&#10003;{"}"}
           </span>

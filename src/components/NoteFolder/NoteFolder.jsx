@@ -3,26 +3,26 @@ import styles from "./NoteFolder.module.css";
 import Draggable from "react-draggable";
 import WindowFrame from "../WindowFrame/WindowFrame";
 
-const NoteFolder = ({ values }) => {
-  const [prevData, setPrevData] = useState({ name: "noteFolder", show: false });
+const Note = ({ values }) => {
+  const [prevData, setPrevData] = useState({ name: "Notes", show: false });
 
   const showWindowFrame = () => {
     if (prevData.show === false) {
       values({
-        name: "noteFolder",
+        name: "Notes",
         show: true,
       });
       setPrevData({
-        name: "noteFolder",
+        name: "Notes",
         show: true,
       });
     } else if (prevData.show === true) {
       values({
-        name: "noteFolder",
+        name: "Notes",
         show: false,
       });
       setPrevData({
-        name: "noteFolder",
+        name: "Notes",
         show: false,
       });
     }
@@ -38,11 +38,11 @@ const NoteFolder = ({ values }) => {
             width={"auto"}
             alt="notes icon"
           />
-          <p>Sticky Notes</p>
+          <p>Notes</p>
         </main>
       </Draggable>
     </>
   );
 };
 
-export default NoteFolder;
+export default Note;

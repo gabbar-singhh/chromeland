@@ -1,0 +1,57 @@
+.container_pomofocus {
+    color: #fff;
+    cursor: pointer;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.container_pomofocus:active {
+    cursor: grabbing;
+}
+
+.container_pomofocus p {
+    margin-top: 3px;
+    font-size: 12px;
+    letter-spacing: -2px;
+    color: #cdcdcd;
+}
+
+
+/* CSS FOR PomoFocusApp.jsx */
+.container_pomofocus_app {
+    margin-top: 1.5em;
+    height: 100%;
+    cursor: default;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.pomofocus_topbar {
+    font-size: 14px;
+}
+
+.pomofocus_topbar ul {
+    display: flex;
+    gap: 2em;
+    list-style-type: none;
+}
+
+.pomofocus_topbar .li_pomodoro,
+.pomofocus_topbar .li_longbreak,
+.pomofocus_topbar .li_shortbreak {
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.pomofocus_timer {
+    font-size: 3.2em;
+}
+
+.active_li {
+    text-decoration: rgb(255, 0, 0) underline wavy;
+}

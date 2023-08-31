@@ -4,7 +4,7 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <title>Chromeland.in</title>
+        <title>Chromeland</title>
         <meta
           name="description"
           content="building the homepage that you deserve!"

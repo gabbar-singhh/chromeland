@@ -1,0 +1,77 @@
+.signin_btn {
+    font-size: 25px;
+    color: white;
+    height: auto;
+    margin: 10px;
+
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    text-transform: uppercase;
+
+    cursor: pointer;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.signin_btn:active {
+    top: 2px;
+}
+
+.signin_btn {
+    line-height: 0;
+
+    image-rendering: optimizeSpeed;
+    image-rendering: -moz-crisp-edges;
+    /* Firefox */
+    image-rendering: -o-crisp-edges;
+    /* Opera */
+    image-rendering: -webkit-optimize-contrast;
+    /* Webkit (non-standard naming) */
+    image-rendering: crisp-edges;
+    -ms-interpolation-mode: nearest-neighbor;
+    /* IE (non-standard property) */
+
+    border-style: solid;
+    border-width: 20px;
+    -moz-border-image: url(/icons/pixel_btn.png) 20 stretch;
+    -webkit-border-image: url(/icons/pixel_btn.png) 20 stretch;
+    -o-border-image: url(/icons/pixel_btn.png) 20 stretch;
+    border-image: url(/icons/pixel_btn.png) 20 stretch;
+}
+
+.signin_btn .link_sign {
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    width: auto;
+    text-align: center;
+    margin: -20px -20px;
+    line-height: 20px;
+    padding: 10px 20px;
+
+    text-decoration: none;
+    color: #000;
+    font-size: 0.5em;
+    font-weight: 700;
+
+    background: #fff;
+    background:
+        linear-gradient(135deg, transparent 10px, #fff 0) top left,
+        linear-gradient(225deg, transparent 10px, #fff 0) top right,
+        linear-gradient(315deg, transparent 10px, #fff 0) bottom right,
+        linear-gradient(45deg, transparent 10px, #fff 0) bottom left;
+    background-size: 50% 50%;
+    background-repeat: no-repeat;
+    background-image:
+        radial-gradient(circle at 0 0, rgba(204, 0, 0, 0) 14px, #fff 15px),
+        radial-gradient(circle at 100% 0, rgba(204, 0, 0, 0) 14px, #fff 15px),
+        radial-gradient(circle at 100% 100%, rgba(204, 0, 0, 0) 14px, #fff 15px),
+        radial-gradient(circle at 0 100%, rgba(204, 0, 0, 0) 14px, #fff 15px);
+    font-family: 'Print Char 21';
+}

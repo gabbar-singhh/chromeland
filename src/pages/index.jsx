@@ -7,6 +7,8 @@ import Notes from "@/components/Notes/Notes";
 import NoteFolder from "@/components/NoteFolder/NoteFolder";
 import WindowFrame from "@/components/WindowFrame/WindowFrame";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import PomodoroTimer from "@/components/PomodoroFocus/PomoFocus";
+import PomoFocusApp from "@/components/PomodoroFocus/PomoFocusApp";
 
 export default function Home() {
   const [data, setData] = useState({ name: "", show: false });
@@ -24,9 +26,19 @@ export default function Home() {
       <Time />
       <Todo />
       <Notes />
-      {data.show && <WindowFrame show={true}>we we 🥵</WindowFrame>}
+      {data.show && (
+        <WindowFrame windowName={data.name} visible={true}>
+          {data.name == "Notes" && <p>wewewe 🤯⚡</p>}
+          {data.name == "PomoFocus" && (
+            <section className={styles.wrapper}>
+              <PomoFocusApp />
+            </section>
+          )}
+        </WindowFrame>
+      )}
       <section className={styles.folder_section}>
         <NoteFolder values={check_data} />
+        <PomodoroTimer values={check_data} />
       </section>
     </Layout>
   );
