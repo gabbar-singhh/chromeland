@@ -12,6 +12,8 @@ const FiraMono = Fira_Mono({
 });
 
 export default function App({ Component, pageProps }) {
+  
+
   return (
     <main className={`${NotoSans.className} ${FiraMono.className}`}>
       <Component {...pageProps} />

@@ -1,16 +1,107 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./WindowFrame.module.css";
 import Draggable from "react-draggable";
-import Link from "next/link";
 import CloudBtn from "../Buttons/CloudBtn/CloudBtn";
+import { initFirebase } from "@/lib/firebase/firebase";
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signOut,
+} from "firebase/auth";
 
 const WindowFrame = ({ children, windowName, visible }) => {
   const [show, setShow] = useState(visible);
   const [notes, setNotes] = useState([]);
 
+  const [userData, setUserData] = useState({
+    credential: "",
+    token: "",
+    displayName: "",
+    email: "",
+    photoURL: "",
+    isLoggedIn: false,
+  });
+
   const closeWindow = () => {
     setShow(false);
   };
+
+  // FIREBASE INITIALIZE
+  initFirebase();
+  const provider = new GoogleAuthProvider();
+  const auth = getAuth();
+
+  const signInBtnHandler = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        const user = result.user;
+
+        // user details be saved
+        setUserData({
+          credential: credential,
+          token: token,
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          isLoggedIn: true,
+        });
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            credential: credential,
+            token: token,
+            displayName: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+            isLoggedIn: true,
+          })
+        );
+        window.location.reload();
+      })
+
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        // The email of the user's account used.
+        const email = error.customData.email;
+
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+      });
+  };
+
+  const signOutBtnHandler = () => {
+    signOut(auth)
+      .then(() => {
+        setUserData({
+          credential: "",
+          token: "",
+          displayName: "",
+          email: "",
+          photoURL: "",
+          isLoggedIn: false,
+        });
+        localStorage.removeItem("user");
+        console.log("signed out succesfully");
+        window.location.reload();
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
+
+  useEffect(() => {
+    const prevSignInDetails = JSON.parse(localStorage.getItem("user"));
+    if (prevSignInDetails) {
+      setUserData(prevSignInDetails);
+    }
+  }, []);
 
   return (
     <>
@@ -43,7 +134,15 @@ const WindowFrame = ({ children, windowName, visible }) => {
 
             <div className={styles.data_container}>
               {
-                // !user && <CloudBtn href="/api/auth/login/" txt="SIGN IN" />
+                !userData.isLoggedIn ? (
+                  <CloudBtn href="" onClick={signInBtnHandler} txt="SIGN IN" />
+                ) : (
+                  <CloudBtn
+                    href=""
+                    onClick={signOutBtnHandler}
+                    txt={"SIGN OUT"}
+                  />
+                )
                 /* <div className={styles.notes_list}>
                     {notes.map((element) => {
                       return (
