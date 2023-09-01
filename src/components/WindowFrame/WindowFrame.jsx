@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./WindowFrame.module.css";
 import Draggable from "react-draggable";
 import CloudBtn from "../Buttons/CloudBtn/CloudBtn";
-import { initFirebase } from "@/lib/firebase/firebase";
+import { firebaseApp } from "@/lib/firebase/firebase";
 import {
   getAuth,
   signInWithPopup,
@@ -28,7 +28,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
   };
 
   // FIREBASE INITIALIZE
-  initFirebase();
+
   const provider = new GoogleAuthProvider();
   const auth = getAuth();
 
