@@ -23,6 +23,7 @@
     "swr": "^2.2.2"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "^1.6.0",
     "depcheck": "^1.4.3"
   }
 }
