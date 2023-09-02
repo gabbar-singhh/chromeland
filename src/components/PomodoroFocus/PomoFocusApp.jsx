@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./PomoFocus.module.css";
 import CloudBtn from "../Buttons/CloudBtn/CloudBtn";
+import { Howl } from "howler";
 
 const PomoFocusApp = () => {
   const [timeRemaining, setTimeRemaining] = useState(25 * 60);
@@ -25,7 +26,11 @@ const PomoFocusApp = () => {
       }, 1000);
     } else if (timeRemaining === 0) {
       // THROW YOUR NOTIFICATION CODE HERE!
-
+      const sound = new Howl({
+        src: ["/audio/pomodoro_timer.mp3"],
+        autoplay: true,
+        volume: 0.5,
+      });
       setBtnText("start");
       clearInterval(timerInterval);
     }
@@ -47,7 +52,7 @@ const PomoFocusApp = () => {
       setTimerActive(false);
       setBtnText("start");
     } else if (btnText == "reset" && activeLi == "long") {
-      setTimeRemaining(10 * 60);
+      setTimeRemaining(0.1 * 60);
       setTimerActive(false);
       setBtnText("start");
     }
@@ -67,11 +72,16 @@ const PomoFocusApp = () => {
       setTimeRemaining(5 * 60);
     } else if (elementType == "long") {
       handleItemClick("long");
-      setTimeRemaining(10 * 60);
+      setTimeRemaining(0.1 * 60);
     } else if (elementType == "pomodoro") {
       handleItemClick("pomodoro");
       setTimeRemaining(25 * 60);
     }
+  };
+
+  const sendMessageNotification = (message) => {
+    const channel = new BroadcastChannel("notification-channel");
+    channel.postMessage(message);
   };
 
   return (
