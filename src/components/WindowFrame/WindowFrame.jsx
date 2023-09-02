@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import styles from "./WindowFrame.module.css";
 import Draggable from "react-draggable";
 import CloudBtn from "../Buttons/CloudBtn/CloudBtn";
-import { firebaseApp } from "@/lib/firebase/firebase";
 import {
   getAuth,
   signInWithPopup,
   GoogleAuthProvider,
   signOut,
 } from "firebase/auth";
+import { FirebaseApp } from "firebase/app";
+import app from "@/lib/firebase";
 
 const WindowFrame = ({ children, windowName, visible }) => {
   const [show, setShow] = useState(visible);
@@ -27,9 +28,6 @@ const WindowFrame = ({ children, windowName, visible }) => {
     setShow(false);
   };
 
-  // FIREBASE INITIALIZE
-
-  const provider = new GoogleAuthProvider();
   const auth = getAuth();
 
   const signInBtnHandler = () => {
@@ -134,22 +132,15 @@ const WindowFrame = ({ children, windowName, visible }) => {
 
             <div className={styles.data_container}>
               {
-                !userData.isLoggedIn ? (
-                  <CloudBtn href="" onClick={signInBtnHandler} txt="SIGN IN" />
+                userData.isLoggedIn ? (
+                  <>{children}</>
                 ) : (
-                  <CloudBtn
-                    href=""
-                    onClick={signOutBtnHandler}
-                    txt={"SIGN OUT"}
-                  />
+                  <CloudBtn href="" onClick={signInBtnHandler} txt="SIGN IN" />
                 )
                 /* <div className={styles.notes_list}>
                     {notes.map((element) => {
                       return (
-                        <span key={element.id} className={styles.note_item}>
-                          <img src="/icons/file_icon.webp" alt="" height={50} />
-                          <p>{element.title + ".txt"}</p>
-                        </span>
+                        
                       );
                     })}
                   </div> */
