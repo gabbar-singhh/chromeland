@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "@/styles/Home.module.css";
 import Layout from "@/components/Layout/Layout";
 import Time from "@/components/Time/Time";
@@ -13,14 +13,23 @@ import { connectToDatabase } from "@/lib/mongodb/mongodb";
 // DON'T REMOVE 👇
 import { FirebaseApp } from "firebase/app";
 
-export default function Home({ properties }) {
+export default function Home({ properties, isConnected }) {
   const [data, setData] = useState({ name: "", show: false });
+
+  const [userData, setUserData] = useState([]);
 
   const check_data = (e) => {
     setData(e);
   };
 
-  console.log("🍆🍆", properties);
+  useEffect(() => {
+    (async () => {
+      const data = await fetch("/api/properties");
+      const resultsJSON = await data.json();
+
+      setUserData(resultsJSON);
+    })();
+  }, []);
 
   return (
     <Layout>
@@ -31,7 +40,7 @@ export default function Home({ properties }) {
         <WindowFrame windowName={data.name} visible={true}>
           {data.name == "Notes" && (
             <ul>
-              {properties.map((user) => {
+              {userData.map((user) => {
                 return (
                   <span key={user._id} className={styles.note_item}>
                     <img src="/icons/file_icon.webp" alt="" height={50} />

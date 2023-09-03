@@ -20,7 +20,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-draggable": "^4.4.5",
-    "swr": "^2.2.2"
+    "swr": "^2.2.2",
+    "vercel": "^32.1.0"
   },
   "devDependencies": {
     "@cloudflare/next-on-pages": "^1.6.0",
