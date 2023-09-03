@@ -9,6 +9,7 @@ import WindowFrame from "@/components/WindowFrame/WindowFrame";
 import PomodoroTimer from "@/components/PomodoroFocus/PomoFocus";
 import PomoFocusApp from "@/components/PomodoroFocus/PomoFocusApp";
 import { connectToDatabase } from "@/lib/mongodb/mongodb";
+import axios from "axios";
 
 // DON'T REMOVE 👇
 import { FirebaseApp } from "firebase/app";
@@ -23,12 +24,28 @@ export default function Home({ properties, isConnected }) {
   };
 
   useEffect(() => {
-    (async () => {
-      const data = await fetch("/api/properties");
-      const resultsJSON = await data.json();
-      console.log("💀", resultsJSON);
-      setUserData(resultsJSON);
-    })();
+    // async () => {
+    //   const data = await fetch("/api/properties/");
+    //   const resultsJSON = await data.json();
+    //   console.log("💀", resultsJSON);
+    //   setUserData(resultsJSON);
+    // };
+
+    axios
+      .get("/api/properties")
+      .then(function (response) {
+        // handle success
+        setUserData(response.data);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .finally(function () {
+        // always executed
+      });
+
+    console.log("🐕‍🦺🐕‍🦺", userData);
   }, []);
 
   return (
@@ -66,13 +83,22 @@ export default function Home({ properties, isConnected }) {
 }
 
 export const getServerSideProps = async (context) => {
-  const { db } = await connectToDatabase();
+  // const { db } = await connectToDatabase();
 
-  const data = await db.collection("users").find({}).toArray();
+  // const data = await db.collection("users").find({}).toArray();
 
-  const properties = JSON.parse(JSON.stringify(data));
+  // const properties = JSON.parse(JSON.stringify(data));
 
-  return {
-    props: { properties: properties },
-  };
+  try {
+    await connectToDatabase();
+
+    return {
+      props: { isConnected: true },
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      props: { isConnected: false },
+    };
+  }
 };
