@@ -26,7 +26,7 @@ export default function Home({ properties, isConnected }) {
     (async () => {
       const data = await fetch("/api/properties");
       const resultsJSON = await data.json();
-
+      console.log("💀", resultsJSON);
       setUserData(resultsJSON);
     })();
   }, []);
