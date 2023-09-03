@@ -52,7 +52,7 @@ const PomoFocusApp = () => {
       setTimerActive(false);
       setBtnText("start");
     } else if (btnText == "reset" && activeLi == "long") {
-      setTimeRemaining(0.1 * 60);
+      setTimeRemaining(15 * 60);
       setTimerActive(false);
       setBtnText("start");
     }
@@ -72,7 +72,7 @@ const PomoFocusApp = () => {
       setTimeRemaining(5 * 60);
     } else if (elementType == "long") {
       handleItemClick("long");
-      setTimeRemaining(0.1 * 60);
+      setTimeRemaining(15 * 60);
     } else if (elementType == "pomodoro") {
       handleItemClick("pomodoro");
       setTimeRemaining(25 * 60);

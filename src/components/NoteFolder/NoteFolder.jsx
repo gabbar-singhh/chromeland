@@ -1,29 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styles from "./NoteFolder.module.css";
 import Draggable from "react-draggable";
 import WindowFrame from "../WindowFrame/WindowFrame";
+import WindowStatusContext from "../ContextAPI/WindowStatusContext";
 
 const Note = ({ values }) => {
+  const windowStatus = useContext(WindowStatusContext);
+
   const [prevData, setPrevData] = useState({ name: "Notes", show: false });
 
   const showWindowFrame = () => {
-    if (prevData.show === false) {
-      values({
-        name: "Notes",
-        show: true,
+    if (windowStatus.windowShow.visible === false) {
+      windowStatus.setWindowShow({
+        visible: true,
+        appName: "NotesApp",
       });
-      setPrevData({
-        name: "Notes",
-        show: true,
-      });
-    } else if (prevData.show === true) {
-      values({
-        name: "Notes",
-        show: false,
-      });
-      setPrevData({
-        name: "Notes",
-        show: false,
+    } else if (windowStatus.windowShow.visible === true) {
+      windowStatus.setWindowShow({
+        visible: false,
+        appName: "NotesApp",
       });
     }
   };

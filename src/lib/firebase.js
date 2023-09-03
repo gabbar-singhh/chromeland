@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore/lite";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -13,4 +14,10 @@ const firebaseConfig = {
 // init services
 const app = initializeApp(firebaseConfig);
 
-export default app;
+// AUTH INIT
+const auth = getAuth();
+
+// FIRESTORE INIT
+const useFirestore = getFirestore(app);
+
+export default { auth, useFirestore };
