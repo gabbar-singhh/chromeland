@@ -32,20 +32,18 @@ export default function Home({ properties, isConnected }) {
     // };
 
     axios
-      .get("https://chromeland-v1.vercel.app/api/properties")
+      .get("/api/properties")
       .then(function (response) {
         // handle success
         setUserData(response.data);
+        console.log("🍆⛽", response.data);
       })
       .catch(function (error) {
-        // handle error
         console.log(error);
       })
       .finally(function () {
-        // always executed
+        console.log("🐕‍🦺🐕‍🦺", userData);
       });
-
-    console.log("🐕‍🦺🐕‍🦺", userData);
   }, []);
 
   return (
