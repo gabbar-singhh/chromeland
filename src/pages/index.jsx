@@ -32,7 +32,7 @@ export default function Home({ properties, isConnected }) {
     // };
 
     axios
-      .get("/api/properties")
+      .get("https://chromeland-v1.vercel.app/api/properties")
       .then(function (response) {
         // handle success
         setUserData(response.data);
