@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styles from "./WindowFrame.module.css";
 import Draggable from "react-draggable";
 import CloudBtn from "../Buttons/CloudBtn/CloudBtn";
@@ -10,22 +10,24 @@ import {
 } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
 import app from "@/lib/firebase";
+import UserAuthContext from "../ContextAPI/UserAuthContext";
+import WindowStatusContext from "../ContextAPI/WindowStatusContext";
 
 const WindowFrame = ({ children, windowName, visible }) => {
-  const [show, setShow] = useState(visible);
   const [notes, setNotes] = useState([]);
 
-  const [userData, setUserData] = useState({
-    credential: "",
-    token: "",
-    displayName: "",
-    email: "",
-    photoURL: "",
-    isLoggedIn: false,
-  });
+  const authDetail = useContext(UserAuthContext);
+  const windowStatus = useContext(WindowStatusContext);
+
+  const setAuthDetailsToContext = () => {
+    authDetail.setUserAuthDetail(userData);
+  };
 
   const closeWindow = () => {
-    setShow(false);
+    windowStatus.setWindowShow({
+      visible: false,
+      appName: "none",
+    });
   };
 
   const auth = getAuth();
@@ -39,7 +41,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
         const user = result.user;
 
         // user details be saved
-        setUserData({
+        authDetail.setUserAuthDetail({
           credential: credential,
           token: token,
           displayName: user.displayName,
@@ -47,6 +49,8 @@ const WindowFrame = ({ children, windowName, visible }) => {
           photoURL: user.photoURL,
           isLoggedIn: true,
         });
+
+        console.log(authDetail);
 
         localStorage.setItem(
           "user",
@@ -59,7 +63,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
             isLoggedIn: true,
           })
         );
-        window.location.reload();
+        // window.location.reload();
       })
 
       .catch((error) => {
@@ -77,7 +81,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
   const signOutBtnHandler = () => {
     signOut(auth)
       .then(() => {
-        setUserData({
+        authDetail.setUserAuthDetail({
           credential: "",
           token: "",
           displayName: "",
@@ -85,6 +89,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
           photoURL: "",
           isLoggedIn: false,
         });
+
         localStorage.removeItem("user");
         console.log("signed out succesfully");
         window.location.reload();
@@ -97,13 +102,13 @@ const WindowFrame = ({ children, windowName, visible }) => {
   useEffect(() => {
     const prevSignInDetails = JSON.parse(localStorage.getItem("user"));
     if (prevSignInDetails) {
-      setUserData(prevSignInDetails);
+      authDetail.setUserAuthDetail(prevSignInDetails);
     }
   }, []);
 
   return (
     <>
-      {show && (
+      {windowStatus.windowShow && (
         <Draggable>
           <section className={styles.container_windowframe}>
             <div className={styles.top_frame}>
@@ -132,7 +137,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
 
             <div className={styles.data_container}>
               {
-                userData.isLoggedIn ? (
+                authDetail.userAuthDetail.isLoggedIn ? (
                   <>{children}</>
                 ) : (
                   <CloudBtn href="" onClick={signInBtnHandler} txt="SIGN IN" />
@@ -145,7 +150,6 @@ const WindowFrame = ({ children, windowName, visible }) => {
                     })}
                   </div> */
               }
-              {/* {user && <>{children}</>} */}
             </div>
           </section>
         </Draggable>

@@ -1,28 +1,21 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styles from "./PomoFocus.module.css";
 import Draggable from "react-draggable";
+import WindowStatusContext from "../ContextAPI/WindowStatusContext";
 
-const PomoFocus = ({ values }) => {
-  const [prevData, setPrevData] = useState({ name: "PomoFocus", show: false });
+const PomoFocus = () => {
+  const windowStatus = useContext(WindowStatusContext);
 
   const showWindowFrame = () => {
-    if (prevData.show === false) {
-      values({
-        name: "PomoFocus",
-        show: true,
+    if (windowStatus.windowShow.visible === false) {
+      windowStatus.setWindowShow({
+        visible: true,
+        appName: "PomoFocus",
       });
-      setPrevData({
-        name: "PomoFocus",
-        show: true,
-      });
-    } else if (prevData.show === true) {
-      values({
-        name: "PomoFocus",
-        show: false,
-      });
-      setPrevData({
-        name: "PomoFocus",
-        show: false,
+    } else if (windowStatus.windowShow.visible === true) {
+      windowStatus.setWindowShow({
+        visible: false,
+        appName: "PomoFocus",
       });
     }
   };
