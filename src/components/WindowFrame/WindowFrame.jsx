@@ -8,10 +8,18 @@ import {
   GoogleAuthProvider,
   signOut,
 } from "firebase/auth";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  setDoc,
+  doc,
+} from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
 import app from "@/lib/firebase";
 import UserAuthContext from "../ContextAPI/UserAuthContext";
 import WindowStatusContext from "../ContextAPI/WindowStatusContext";
+import { db } from "@/lib/firebase";
 
 const WindowFrame = ({ children, windowName, visible }) => {
   const [notes, setNotes] = useState([]);
@@ -50,7 +58,20 @@ const WindowFrame = ({ children, windowName, visible }) => {
           isLoggedIn: true,
         });
 
-        console.log(authDetail);
+        // ADD USER TO USERS COLLECTION
+        const usersColRef = collection(db, "users");
+
+        addDoc(
+          usersColRef,
+          {
+            displayName: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+          },
+          "hehe"
+        ).then(()=>{
+          console.log("🫂");
+        })
 
         localStorage.setItem(
           "user",
@@ -71,33 +92,32 @@ const WindowFrame = ({ children, windowName, visible }) => {
         const errorMessage = error.message;
 
         // The email of the user's account used.
-        const email = error.customData.email;
+        // const email = error.customData.email;
 
         // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
       });
   };
 
-  const signOutBtnHandler = () => {
-    signOut(auth)
-      .then(() => {
-        authDetail.setUserAuthDetail({
-          credential: "",
-          token: "",
-          displayName: "",
-          email: "",
-          photoURL: "",
-          isLoggedIn: false,
-        });
+  // const signOutBtnHandler = () => {
+  //   signOut(auth)
+  //     .then(() => {
+  //       authDetail.setUserAuthDetail({
+  //         credential: "",
+  //         token: "",
+  //         displayName: "",
+  //         email: "",
+  //         photoURL: "",
+  //         isLoggedIn: false,
+  //       });
 
-        localStorage.removeItem("user");
-        console.log("signed out succesfully");
-        window.location.reload();
-      })
-      .catch((error) => {
-        // An error happened.
-      });
-  };
+  //       localStorage.removeItem("user");
+  //     })
+  //     .catch((error) => {
+  //       // An error happened.
+  //       console.log("🔴Error in WindowFrame.jsx", error);
+  //     });
+  // };
 
   useEffect(() => {
     const prevSignInDetails = JSON.parse(localStorage.getItem("user"));

@@ -10,6 +10,7 @@ import PomodoroTimer from "@/components/PomodoroFocus/PomoFocus";
 import PomoFocusApp from "@/components/PomodoroFocus/PomoFocusApp";
 import UserAuthContext from "@/components/ContextAPI/UserAuthContext";
 import WindowStatusContext from "@/components/ContextAPI/WindowStatusContext";
+import { signOut, getAuth } from "firebase/auth";
 // DON'T REMOVE 👇
 import { FirebaseApp } from "firebase/app";
 
@@ -17,7 +18,30 @@ export default function Home({}) {
   const authDetail = useContext(UserAuthContext);
   const windowStatus = useContext(WindowStatusContext);
 
-  const check_data = (e) => {};
+  const auth = getAuth();
+
+  // TEMP FUNCTION
+  const signOutBtnHandler = () => {
+    signOut(auth)
+      .then(() => {
+        authDetail.setUserAuthDetail({
+          credential: "",
+          token: "",
+          displayName: "",
+          email: "",
+          photoURL: "",
+          isLoggedIn: false,
+        });
+
+        localStorage.removeItem("user");
+
+        console.log("🟡 LOGOUT SUCCESS!");
+      })
+      .catch((error) => {
+        // An error happened.
+        console.log("🔴Error in WindowFrame.jsx", error);
+      });
+  };
 
   return (
     <Layout>
@@ -52,6 +76,9 @@ export default function Home({}) {
       <section className={styles.folder_section}>
         <NoteFolder />
         <PomodoroTimer />
+        <p style={{ color: "red" }} onClick={signOutBtnHandler}>
+          {authDetail.userAuthDetail.email}
+        </p>
       </section>
     </Layout>
   );
