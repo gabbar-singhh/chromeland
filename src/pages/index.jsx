@@ -10,7 +10,8 @@ import PomodoroTimer from "@/components/PomodoroFocus/PomoFocus";
 import PomoFocusApp from "@/components/PomodoroFocus/PomoFocusApp";
 import UserAuthContext from "@/components/ContextAPI/UserAuthContext";
 import WindowStatusContext from "@/components/ContextAPI/WindowStatusContext";
-import { signOut} from "firebase/auth";
+import { signOut } from "firebase/auth";
+import { auth, getAuth } from "firebase/auth";
 // DON'T REMOVE 👇
 import { FirebaseApp } from "firebase/app";
 import supabase from "@/lib/supabaseClient";
@@ -19,6 +20,7 @@ export default function Home({}) {
   const authDetail = useContext(UserAuthContext);
   const windowStatus = useContext(WindowStatusContext);
 
+  const auth = getAuth();
 
   // TEMP FUNCTION
   const signOutBtnHandler = () => {
