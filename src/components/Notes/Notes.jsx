@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Draggable from "react-draggable";
 import styles from "./Notes.module.css";
 import dateFormat from "dateformat";
+import { getFirestore} from "firebase/firestore";
+import UserAuthContext from "../ContextAPI/UserAuthContext";
+import { db } from "@/lib/firebase";
+import supabase from "@/lib/supabaseClient";
 
 const Notes = () => {
   const [currentTitle, setCurrentTitle] = useState("click to edit title");
   const [currentDesc, setCurrentDesc] = useState("");
   const [notes, setNotes] = useState([]);
+
+  const authDetail = useContext(UserAuthContext);
 
   const clearNotes = () => {
     setCurrentTitle("click to edit title");
@@ -14,16 +20,32 @@ const Notes = () => {
   };
 
   const saveNotes = () => {
+    console.log("clicked!");
+
+    // INIT NEW DATE OBJ
     const timestamp = new Date();
+    const dbm = getFirestore();
 
+    // VALIDATING WHEATHER TITLE & DESC ARE NOT EMPTY
     if (currentTitle && currentDesc) {
-      const newNote = {
-        id: dateFormat(timestamp, "isoDateTime"),
-        title: currentTitle,
-        desc: currentDesc,
-      };
+      console.log(authDetail.userAuthDetail.email);
+      try {
+        // CREATING AN EMPTY COLLECTION FOR USER BASED IN EMAIL-ID
+        // const docRef = doc(dbm, "users", "rocky.balboa@gmail.com");
 
-      localStorage.setItem("localNotes", JSON.stringify(newNote));
+        // setDoc(docRef, {
+        //   title: "steve 101",
+        //   desc: "founder and ceo of apple inc.",
+        // }).then(() => {
+        //   console.log("added succesfully");
+        // });
+
+        localStorage.setItem("localNotes", JSON.stringify({}));
+
+        console.log("👉🏽👉🏽 Documents added with IDs: ");
+      } catch (error) {
+        console.error("Error adding documents: ", error);
+      }
     }
   };
   return (
