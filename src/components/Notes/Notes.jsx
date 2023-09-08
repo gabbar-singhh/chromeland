@@ -2,16 +2,10 @@ import React, { useContext, useState } from "react";
 import Draggable from "react-draggable";
 import styles from "./Notes.module.css";
 import dateFormat from "dateformat";
-import {
-  addDoc,
-  collection,
-  getFirestore,
-  setDoc,
-  doc,
-} from "firebase/firestore";
+import { getFirestore} from "firebase/firestore";
 import UserAuthContext from "../ContextAPI/UserAuthContext";
-// import { setDoc } from "firebase/firestore/lite";
 import { db } from "@/lib/firebase";
+import supabase from "@/lib/supabaseClient";
 
 const Notes = () => {
   const [currentTitle, setCurrentTitle] = useState("click to edit title");
@@ -37,14 +31,14 @@ const Notes = () => {
       console.log(authDetail.userAuthDetail.email);
       try {
         // CREATING AN EMPTY COLLECTION FOR USER BASED IN EMAIL-ID
-        const docRef = doc(dbm, "users", "rocky.balboa@gmail.com");
+        // const docRef = doc(dbm, "users", "rocky.balboa@gmail.com");
 
-        setDoc(docRef, {
-          title: "steve 101",
-          desc: "founder and ceo of apple inc.",
-        }).then(() => {
-          console.log("added succesfully");
-        });
+        // setDoc(docRef, {
+        //   title: "steve 101",
+        //   desc: "founder and ceo of apple inc.",
+        // }).then(() => {
+        //   console.log("added succesfully");
+        // });
 
         localStorage.setItem("localNotes", JSON.stringify({}));
 

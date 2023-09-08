@@ -7,22 +7,17 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   signOut,
+  auth,
 } from "firebase/auth";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  setDoc,
-  doc,
-} from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
-import app from "@/lib/firebase";
 import UserAuthContext from "../ContextAPI/UserAuthContext";
 import WindowStatusContext from "../ContextAPI/WindowStatusContext";
-import { db } from "@/lib/firebase";
+import supabase from "@/lib/supabaseClient";
+// import { auth } from "@/lib/firebase";
 
 const WindowFrame = ({ children, windowName, visible }) => {
   const [notes, setNotes] = useState([]);
+  const [fetchData, setFetchData] = useState();
 
   const authDetail = useContext(UserAuthContext);
   const windowStatus = useContext(WindowStatusContext);
@@ -39,6 +34,21 @@ const WindowFrame = ({ children, windowName, visible }) => {
   };
 
   const auth = getAuth();
+
+  const insertData = async (name, email, profile) => {
+    const insertData = await supabase
+      .from("users")
+      .insert([
+        {
+          name: name,
+          email_id: email,
+          profile_url: profile,
+        },
+      ])
+      .select();
+
+    console.log("🫂", insertData);
+  };
 
   const signInBtnHandler = () => {
     const provider = new GoogleAuthProvider();
@@ -59,19 +69,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
         });
 
         // ADD USER TO USERS COLLECTION
-        const usersColRef = collection(db, "users");
-
-        addDoc(
-          usersColRef,
-          {
-            displayName: user.displayName,
-            email: user.email,
-            photoURL: user.photoURL,
-          },
-          "hehe"
-        ).then(()=>{
-          console.log("🫂");
-        })
+        insertData(user.displayName, user.email, user.photoURL);
 
         localStorage.setItem(
           "user",
@@ -120,10 +118,17 @@ const WindowFrame = ({ children, windowName, visible }) => {
   // };
 
   useEffect(() => {
+    const fetchData = async () => {
+      const data = await supabase.from("users").select();
+      setFetchData(data);
+      console.log("💙", data.data);
+    };
+
     const prevSignInDetails = JSON.parse(localStorage.getItem("user"));
     if (prevSignInDetails) {
       authDetail.setUserAuthDetail(prevSignInDetails);
     }
+    fetchData();
   }, []);
 
   return (
