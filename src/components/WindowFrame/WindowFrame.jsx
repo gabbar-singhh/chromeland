@@ -35,7 +35,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
 
   const auth = getAuth();
 
-  const insertData = async (name, email, profile) => {
+  const sign_in_user_details = async (name, email, profile) => {
     const insertData = await supabase
       .from("users")
       .insert([
@@ -46,8 +46,18 @@ const WindowFrame = ({ children, windowName, visible }) => {
         },
       ])
       .select();
+  };
 
-    console.log("🫂", insertData);
+  const todosTable = async (email) => {
+    const insertData = await supabase
+      .from("todos")
+      .insert([
+        {
+          email_id: email,
+          todos: {},
+        },
+      ])
+      .select();
   };
 
   const signInBtnHandler = () => {
@@ -69,7 +79,11 @@ const WindowFrame = ({ children, windowName, visible }) => {
         });
 
         // ADD USER TO USERS COLLECTION
-        insertData(user.displayName, user.email, user.photoURL);
+        const data = supabase.from("users").select({});
+        console.log("💀", data);
+
+        sign_in_user_details(user.displayName, user.email, user.photoURL);
+        todosTable(user.email);
 
         localStorage.setItem(
           "user",
@@ -82,7 +96,6 @@ const WindowFrame = ({ children, windowName, visible }) => {
             isLoggedIn: true,
           })
         );
-        // window.location.reload();
       })
 
       .catch((error) => {
@@ -96,26 +109,6 @@ const WindowFrame = ({ children, windowName, visible }) => {
         const credential = GoogleAuthProvider.credentialFromError(error);
       });
   };
-
-  // const signOutBtnHandler = () => {
-  //   signOut(auth)
-  //     .then(() => {
-  //       authDetail.setUserAuthDetail({
-  //         credential: "",
-  //         token: "",
-  //         displayName: "",
-  //         email: "",
-  //         photoURL: "",
-  //         isLoggedIn: false,
-  //       });
-
-  //       localStorage.removeItem("user");
-  //     })
-  //     .catch((error) => {
-  //       // An error happened.
-  //       console.log("🔴Error in WindowFrame.jsx", error);
-  //     });
-  // };
 
   useEffect(() => {
     const fetchData = async () => {
