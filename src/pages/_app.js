@@ -3,6 +3,7 @@ import { Noto_Sans, Fira_Mono } from "@next/font/google";
 import { useState } from "react";
 import UserAuthContext from "@/components/ContextAPI/UserAuthContext";
 import WindowStatusContext from "@/components/ContextAPI/WindowStatusContext";
+import NotesDataContext from "@/components/ContextAPI/NotesDataContext";
 
 const NotoSans = Noto_Sans({
   subsets: ["latin"],
@@ -29,11 +30,17 @@ export default function App({ Component, pageProps }) {
     appName: "none",
   });
 
+  const [notes, setNotes] = useState({
+
+  })
+
   return (
     <main className={`${NotoSans.className} ${FiraMono.className}`}>
       <WindowStatusContext.Provider value={{ windowShow, setWindowShow }}>
         <UserAuthContext.Provider value={{ userAuthDetail, setUserAuthDetail }}>
-          <Component {...pageProps} />
+          <NotesDataContext.Provider value={{ notes, setNotes }}>
+            <Component {...pageProps} />
+          </NotesDataContext.Provider>
         </UserAuthContext.Provider>
       </WindowStatusContext.Provider>
     </main>

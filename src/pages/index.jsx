@@ -10,15 +10,17 @@ import PomodoroTimer from "@/components/PomodoroFocus/PomoFocus";
 import PomoFocusApp from "@/components/PomodoroFocus/PomoFocusApp";
 import UserAuthContext from "@/components/ContextAPI/UserAuthContext";
 import WindowStatusContext from "@/components/ContextAPI/WindowStatusContext";
+import NotesDataContext from "@/components/ContextAPI/NotesDataContext";
 import { signOut } from "firebase/auth";
 import { auth, getAuth } from "firebase/auth";
 // DON'T REMOVE 👇
 import { FirebaseApp } from "firebase/app";
 import supabase from "@/lib/supabaseClient";
 
-export default function Home({}) {
+export default function Home({ }) {
   const authDetail = useContext(UserAuthContext);
   const windowStatus = useContext(WindowStatusContext);
+  const notesJson = useContext(NotesDataContext);
 
   const auth = getAuth();
 
@@ -46,7 +48,7 @@ export default function Home({}) {
   };
 
   useEffect(() => {
-    console.log("💀 ", supabase);
+    console.log("💀 ", notesJson.notes.todos);
   }, []);
 
   return (
@@ -61,15 +63,24 @@ export default function Home({}) {
         >
           {windowStatus.windowShow.appName == "NotesFolder" && (
             <ul>
-              {/* {userData.map((user) => {
+
+              {notesJson.notes.todos.map((element) => {
                 return (
-                  <span key={user._id} className={styles.note_item}>
+
+                  <li>
+                    <span className={styles.note_item}>
+                      <img src="/icons/file_icon.webp" alt="" height={50} />
+                      <p>{element.name + ".txt"}</p>
+                    </span>
+                  </li>
+                )
+              })}
+              {/* <li>
+              <span key={user._id} className={styles.note_item}>
                     <img src="/icons/file_icon.webp" alt="" height={50} />
-                    <p>{user.name + ".txt"}</p>
+                    <p>{"user.name" + ".txt"}</p>
                   </span>
-                );
-              })} */}
-              <li>lol</li>
+              </li> */}
             </ul>
           )}
           {windowStatus.windowShow.appName == "PomoFocus" && (

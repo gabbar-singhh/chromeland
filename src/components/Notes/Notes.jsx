@@ -30,15 +30,6 @@ const Notes = () => {
     if (currentTitle && currentDesc) {
       console.log(authDetail.userAuthDetail.email);
       try {
-        // CREATING AN EMPTY COLLECTION FOR USER BASED IN EMAIL-ID
-        // const docRef = doc(dbm, "users", "rocky.balboa@gmail.com");
-
-        // setDoc(docRef, {
-        //   title: "steve 101",
-        //   desc: "founder and ceo of apple inc.",
-        // }).then(() => {
-        //   console.log("added succesfully");
-        // });
 
         localStorage.setItem("localNotes", JSON.stringify({}));
 

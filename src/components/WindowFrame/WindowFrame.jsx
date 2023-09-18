@@ -13,6 +13,7 @@ import { FirebaseApp } from "firebase/app";
 import UserAuthContext from "../ContextAPI/UserAuthContext";
 import WindowStatusContext from "../ContextAPI/WindowStatusContext";
 import supabase from "@/lib/supabaseClient";
+import NotesDataContext from "../ContextAPI/NotesDataContext";
 // import { auth } from "@/lib/firebase";
 
 const WindowFrame = ({ children, windowName, visible }) => {
@@ -21,6 +22,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
 
   const authDetail = useContext(UserAuthContext);
   const windowStatus = useContext(WindowStatusContext);
+  const notesJson = useContext(NotesDataContext);
 
   const setAuthDetailsToContext = () => {
     authDetail.setUserAuthDetail(userData);
@@ -35,14 +37,27 @@ const WindowFrame = ({ children, windowName, visible }) => {
 
   const auth = getAuth();
 
-  const insertData = async (name, email, profile) => {
+
+  const insertDataToUsersTable = async (name, email, profile) => {
     const insertData = await supabase
       .from("users")
       .insert([
         {
           name: name,
           email_id: email,
-          profile_url: profile,
+        },
+      ])
+      .select();
+
+    console.log("🫂", insertData);
+  };
+
+  const insertDataToTodosTable = async (email) => {
+    const insertData = await supabase
+      .from("todos")
+      .insert([
+        {
+          email_id: email,
         },
       ])
       .select();
@@ -58,7 +73,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
         const token = credential.accessToken;
         const user = result.user;
 
-        // user details be saved
+        // USER-DETAILS SAVED IN CONTEXT API
         authDetail.setUserAuthDetail({
           credential: credential,
           token: token,
@@ -68,8 +83,12 @@ const WindowFrame = ({ children, windowName, visible }) => {
           isLoggedIn: true,
         });
 
-        // ADD USER TO USERS COLLECTION
-        insertData(user.displayName, user.email, user.photoURL);
+
+        //   ADD USER TO USERS-TABLE IN SUPABASE
+        insertDataToUsersTable(user.displayName, user.email, user.photoURL);
+
+        //    ADDING USER TO TODOS TABLE
+        insertDataToTodosTable(user.email);
 
         localStorage.setItem(
           "user",
@@ -82,7 +101,6 @@ const WindowFrame = ({ children, windowName, visible }) => {
             isLoggedIn: true,
           })
         );
-        // window.location.reload();
       })
 
       .catch((error) => {
@@ -97,31 +115,13 @@ const WindowFrame = ({ children, windowName, visible }) => {
       });
   };
 
-  // const signOutBtnHandler = () => {
-  //   signOut(auth)
-  //     .then(() => {
-  //       authDetail.setUserAuthDetail({
-  //         credential: "",
-  //         token: "",
-  //         displayName: "",
-  //         email: "",
-  //         photoURL: "",
-  //         isLoggedIn: false,
-  //       });
-
-  //       localStorage.removeItem("user");
-  //     })
-  //     .catch((error) => {
-  //       // An error happened.
-  //       console.log("🔴Error in WindowFrame.jsx", error);
-  //     });
-  // };
-
   useEffect(() => {
     const fetchData = async () => {
-      const data = await supabase.from("users").select();
-      setFetchData(data);
-      console.log("💙", data.data);
+      const data = await supabase.from("todos").select('todos').eq('email_id', authDetail.userAuthDetail.email);
+
+      console.log("🏳️‍🌈", data.data[0]);
+      setFetchData(data.data[0]);
+      notesJson.setNotes(data.data[0]);
     };
 
     const prevSignInDetails = JSON.parse(localStorage.getItem("user"));
@@ -167,17 +167,11 @@ const WindowFrame = ({ children, windowName, visible }) => {
                 ) : (
                   <CloudBtn href="" onClick={signInBtnHandler} txt="SIGN IN" />
                 )
-                /* <div className={styles.notes_list}>
-                    {notes.map((element) => {
-                      return (
-                        
-                      );
-                    })}
-                  </div> */
               }
             </div>
+
           </section>
-        </Draggable>
+        </Draggable >
       )}
     </>
   );
