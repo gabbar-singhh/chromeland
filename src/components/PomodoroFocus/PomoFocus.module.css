@@ -21,13 +21,13 @@
 
 /* CSS FOR PomoFocusApp.jsx */
 .container_pomofocus_app {
-    margin-top: 1.5em;
-    height: 100%;
+    height: 350px;
     cursor: default;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 4em;
 }
 
 .pomofocus_topbar {
@@ -49,7 +49,7 @@
 }
 
 .pomofocus_timer {
-    font-size: 3.2em;
+    font-size: 4.2em;
 }
 
 .active_li {

@@ -12,3 +12,32 @@
 .wrapper {
     height: 100%;
 }
+
+.ul_list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0.4em;
+    list-style-type: none;
+
+
+}
+
+.ul_list li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+    font-size: 10px;
+    gap: 3px;
+    cursor: pointer;
+
+    padding: 0.2em;
+    border: 2px dashed transparent;
+}
+
+.ul_list li:hover {
+    border: 2px dashed #ffffffb1;
+    background-color: #ffffff2f;
+}

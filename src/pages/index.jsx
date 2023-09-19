@@ -17,7 +17,7 @@ import { auth, getAuth } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
 import supabase from "@/lib/supabaseClient";
 
-export default function Home({ }) {
+export default function Home({ children }) {
   const authDetail = useContext(UserAuthContext);
   const windowStatus = useContext(WindowStatusContext);
   const notesJson = useContext(NotesDataContext);
@@ -61,28 +61,21 @@ export default function Home({ }) {
           windowName={windowStatus.windowShow.appName}
           visible={true}
         >
-          {windowStatus.windowShow.appName == "NotesFolder" && (
-            <ul>
-
-              {notesJson.notes.todos.map((element) => {
+          {windowStatus.windowShow.appName == "NotesApp" && (
+            <ul className={styles.ul_list}>
+              {notesJson.notes.todos.map((file) => {
                 return (
 
-                  <li>
-                    <span className={styles.note_item}>
-                      <img src="/icons/file_icon.webp" alt="" height={50} />
-                      <p>{element.name + ".txt"}</p>
-                    </span>
+                  <li key={file.name}>
+                    <img src="/icons/file_icon.webp" alt="" height={50} />
+                    <p>{file.name + ".txt"}</p>
                   </li>
                 )
-              })}
-              {/* <li>
-              <span key={user._id} className={styles.note_item}>
-                    <img src="/icons/file_icon.webp" alt="" height={50} />
-                    <p>{"user.name" + ".txt"}</p>
-                  </span>
-              </li> */}
+              })
+              }
             </ul>
           )}
+
           {windowStatus.windowShow.appName == "PomoFocus" && (
             <section className={styles.wrapper}>
               <PomoFocusApp />
