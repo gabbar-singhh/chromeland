@@ -34,7 +34,7 @@ const Notes = () => {
       return null;
     }
 
-    console.log("data[0].notes", data[0].notes);
+    // console.log("data[0].notes", data[0].notes);
     return data[0].notes || {};
   }
 
@@ -75,11 +75,53 @@ const Notes = () => {
     console.log("updatedData:: ", updatedData);
 
     if (updated) {
-      noteContext.setNotes(updatedData);
+      noteContext.setNotes(
+        updatedData.sort(
+          (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+        )
+      );
       setCurrentTitle("click to edit title");
       setCurrentDesc("");
     }
   }
+
+  const insertDataToNotesTable = async (email) => {
+    const insertData = await supabase
+      .from("notes")
+      .insert([
+        {
+          notes: [],
+          email_id: email,
+        },
+      ])
+      .select();
+
+    console.log("🫂", insertData);
+  };
+
+  // BY ANY CHANCE, IF EMPTY ARRAY JSON IS NOT ADDED DURING SIGN-IN THIS WILL CHECK AND DO AS FOLLOWING
+  const checkAndSendNote = async () => {
+    const { data, error } = await supabase
+      .from("notes")
+      .select("notes")
+      .eq("email_id", authDetail.userAuthDetail.email);
+
+    if (error) {
+      console.error("Error fetching user data:", error.message);
+      return null;
+    }
+
+    console.log("data[0].notes", data.length, data);
+
+    if (data.length === 0) {
+      // IT WILL CREATE A ROW IN notes TABLE WITH EMPTY JSON
+      insertDataToNotesTable(authDetail.userAuthDetail.email);
+
+      fetchAndUpdateNote();
+    } else {
+      fetchAndUpdateNote();
+    }
+  };
 
   return (
     <Draggable>
@@ -111,7 +153,7 @@ const Notes = () => {
 
         <div className={styles.notes_buttons}>
           <span onClick={clearNotes}>{"{X}"}</span>
-          <span onClick={fetchAndUpdateNote}>
+          <span onClick={checkAndSendNote}>
             {"{"}&#10003;{"}"}
           </span>
         </div>

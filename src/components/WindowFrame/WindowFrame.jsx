@@ -122,10 +122,18 @@ const WindowFrame = ({ children, windowName, visible }) => {
 
       try {
         // WHEN THERE IS ALREADY DATA PRESENT IN SUPA
-        notesJson.setNotes(data.data[0].notes);
+        notesJson.setNotes(
+          data.data[0].notes.sort(
+            (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+          )
+        );
       } catch {
         // WHEN DATA ON SUPA IS EMPTY
-        notesJson.setNotes(data.data);
+        notesJson.setNotes(
+          data.data.sort(
+            (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+          )
+        );
       }
 
       // console.log("windowframe: ", data.data[0].notes);
