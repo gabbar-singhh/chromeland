@@ -49,13 +49,18 @@ export default function Home({ children }) {
 
   useEffect(() => {
     const fetchNotes = async (input_email) => {
-
       const data = await supabase
         .from("notes")
         .select("notes")
         .eq("email_id", input_email);
 
-      notesJson.setNotes(data.data[0].todos);
+      try {
+        // WHEN THERE IS ALREADY DATA PRESENT IN SUPA
+        notesJson.setNotes(data.data[0].notes);
+      } catch {
+        // WHEN DATA ON SUPA IS EMPTY
+        notesJson.setNotes(data.data);
+      }
     };
 
     const prevSignInDetails = JSON.parse(localStorage.getItem("user"));
@@ -63,7 +68,6 @@ export default function Home({ children }) {
       authDetail.setUserAuthDetail(prevSignInDetails);
       fetchNotes(prevSignInDetails.email);
     }
-
   }, []);
 
   return (
@@ -95,12 +99,25 @@ export default function Home({ children }) {
                           </li>
                         )
                       })
-
                     }
                   </>
                 )} */}
-                {<>
-                <li>lol</li>
+
+                {notesJson.notes.length === 0 ? (
+                  <>
+                    <p style={{ fontSize: "0.8em" }}>NO FILES FOUND</p>
+                  </>
+                ) : <>
+                  {
+                    notesJson.notes.map((note) => {
+                      return (
+                        <li key={note.id}>
+                          <img src="/icons/file_icon.webp" alt="" height={50} />
+                          <p>{note.title + ".txt"}</p>
+                        </li>
+                      )
+                    })
+                  }
                 </>}
               </ul>
             )}

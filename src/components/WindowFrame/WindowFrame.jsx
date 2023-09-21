@@ -36,8 +36,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
 
   const auth = getAuth();
 
-
-  const insertDataToUsersTable = async (name, email, profile) => {
+  const insertDataToUsersTable = async (name, email) => {
     const insertData = await supabase
       .from("users")
       .insert([
@@ -51,12 +50,12 @@ const WindowFrame = ({ children, windowName, visible }) => {
     console.log("🫂", insertData);
   };
 
-  const insertDataToTodosTable = async (email) => {
+  const insertDataToNotesTable = async (email) => {
     const insertData = await supabase
-      .from("todos")
+      .from("notes")
       .insert([
         {
-          todos: [],
+          notes: [],
           email_id: email,
         },
       ])
@@ -83,12 +82,11 @@ const WindowFrame = ({ children, windowName, visible }) => {
           isLoggedIn: true,
         });
 
-
         //   ADD USER TO USERS-TABLE IN SUPABASE
-        insertDataToUsersTable(user.displayName, user.email, user.photoURL);
+        insertDataToUsersTable(user.displayName, user.email);
 
-        //    ADDING USER TO TODOS TABLE
-        insertDataToTodosTable(user.email);
+        //    ADDING USER TO NOTES TABLE
+        insertDataToNotesTable(user.email);
 
         localStorage.setItem(
           "user",
@@ -122,8 +120,15 @@ const WindowFrame = ({ children, windowName, visible }) => {
         .select("notes")
         .eq("email_id", input_email);
 
-      notesJson.setNotes(data.data);
-      console.log("windowframe: ", data.data);
+      try {
+        // WHEN THERE IS ALREADY DATA PRESENT IN SUPA
+        notesJson.setNotes(data.data[0].notes);
+      } catch {
+        // WHEN DATA ON SUPA IS EMPTY
+        notesJson.setNotes(data.data);
+      }
+
+      // console.log("windowframe: ", data.data[0].notes);
     };
 
     const prevSignInDetails = JSON.parse(localStorage.getItem("user"));
@@ -163,17 +168,25 @@ const WindowFrame = ({ children, windowName, visible }) => {
             </div>
 
             <div className={styles.data_container}>
-              {
-                authDetail.userAuthDetail.isLoggedIn ? (
-                  <>{children}</>
-                ) : (
-                  <CloudBtn href="" customCSS={{ display: "flex", flexDirection: "column", alignItems: "center", justifyItems: "center", height: "300px" }} onClick={signInBtnHandler} txt="SIGN IN" />
-                )
-              }
+              {authDetail.userAuthDetail.isLoggedIn ? (
+                <>{children}</>
+              ) : (
+                <CloudBtn
+                  href=""
+                  customCSS={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyItems: "center",
+                    height: "300px",
+                  }}
+                  onClick={signInBtnHandler}
+                  txt="SIGN IN"
+                />
+              )}
             </div>
-
           </section>
-        </Draggable >
+        </Draggable>
       )}
     </>
   );

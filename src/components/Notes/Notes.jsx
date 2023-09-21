@@ -76,6 +76,8 @@ const Notes = () => {
 
     if (updated) {
       noteContext.setNotes(updatedData);
+      setCurrentTitle("click to edit title");
+      setCurrentDesc("");
     }
   }
 
