@@ -28,6 +28,12 @@ export default function App({ Component, pageProps }) {
   const [windowShow, setWindowShow] = useState({
     visible: false,
     appName: "none",
+    noteDisplay: false,
+    data: {
+      title: "",
+      desc: "",
+      timestamp: ""
+    }
   });
 
   const [notes, setNotes] = useState([{ notes: [] }])

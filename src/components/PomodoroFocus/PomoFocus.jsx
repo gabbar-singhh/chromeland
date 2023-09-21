@@ -11,11 +11,25 @@ const PomoFocus = () => {
       windowStatus.setWindowShow({
         visible: true,
         appName: "PomoFocus",
+
+        noteDisplay: false,
+        data: {
+          title: "",
+          desc: "",
+          timestamp: ""
+        }
       });
     } else if (windowStatus.windowShow.visible === true) {
       windowStatus.setWindowShow({
         visible: false,
         appName: "PomoFocus",
+
+        noteDisplay: false,
+        data: {
+          title: "",
+          desc: "",
+          timestamp: ""
+        }
       });
     }
   };

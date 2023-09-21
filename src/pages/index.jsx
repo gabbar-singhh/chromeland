@@ -47,6 +47,30 @@ export default function Home({ children }) {
       });
   };
 
+  const viewNote = (e) => {
+    const clickedNoteID = e.currentTarget.getAttribute("data-id");
+    const clickedNoteTitle = e.currentTarget.querySelector('p').textContent;
+    // console.log(e.currentTarget);
+    // console.log(clickedNoteTitle);
+
+
+    console.log("clickedNoteID", clickedNoteID);
+    const note = notesJson.notes.filter(note => note.id === clickedNoteID)[0]
+
+    console.log("note", note);
+
+    windowStatus.setWindowShow({
+      visible: true,
+      appName: clickedNoteTitle,
+      noteDisplay: true,
+      data: {
+        title: clickedNoteTitle,
+        desc: note.desc,
+        timestamp: note.timestamp
+      }
+    });
+  };
+
   useEffect(() => {
     const fetchNotes = async (input_email) => {
       const data = await supabase
@@ -99,7 +123,7 @@ export default function Home({ children }) {
                   <>
                     {notesJson.notes.map((note) => {
                       return (
-                        <li key={note.id}>
+                        <li key={note.id} data-id={note.id} onClick={viewNote}>
                           <img src="/icons/file_icon.webp" alt="" height={50} />
                           <p>{note.title + ".txt"}</p>
                         </li>

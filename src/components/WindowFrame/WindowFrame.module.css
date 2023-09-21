@@ -93,5 +93,17 @@
     color: #fff;
     letter-spacing: -1.5px;
     font-weight: 400;
-    padding: 0.5em 0.5em;
+    margin: 0.5em 0.5em;
+    height: 100%;
+}
+
+.data_container .noteDisplay_box {
+    height: 87%;
+    padding: 0.8em 0 0.8em 1em;
+    overflow-y: scroll;
+}
+
+.data_container .noteDisplay_box p {
+    line-height: 1.8;
+    font-size: 14px;
 }

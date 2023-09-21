@@ -31,6 +31,13 @@ const WindowFrame = ({ children, windowName, visible }) => {
     windowStatus.setWindowShow({
       visible: false,
       appName: "none",
+
+      noteDisplay: false,
+      data: {
+        title: "",
+        desc: "",
+        timestamp: "",
+      },
     });
   };
 
@@ -177,7 +184,15 @@ const WindowFrame = ({ children, windowName, visible }) => {
 
             <div className={styles.data_container}>
               {authDetail.userAuthDetail.isLoggedIn ? (
-                <>{children}</>
+                <>
+                  {!windowStatus.windowShow.noteDisplay ? (
+                    <>{children}</>
+                  ) : (
+                    <div className={styles.noteDisplay_box}>
+                      <p>{windowStatus.windowShow.data.desc}</p>
+                    </div>
+                  )}
+                </>
               ) : (
                 <CloudBtn
                   href=""

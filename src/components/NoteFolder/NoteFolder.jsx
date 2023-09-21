@@ -14,11 +14,25 @@ const Note = ({ values }) => {
       windowStatus.setWindowShow({
         visible: true,
         appName: "NotesApp",
+
+        noteDisplay: false,
+        data: {
+          title: "",
+          desc: "",
+          timestamp: ""
+        }
       });
     } else if (windowStatus.windowShow.visible === true) {
       windowStatus.setWindowShow({
         visible: false,
         appName: "NotesApp",
+
+        noteDisplay: false,
+        data: {
+          title: "",
+          desc: "",
+          timestamp: ""
+        }
       });
     }
   };
