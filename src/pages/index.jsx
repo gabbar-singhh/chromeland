@@ -48,7 +48,22 @@ export default function Home({ children }) {
   };
 
   useEffect(() => {
-    console.log("💀 ", notesJson.notes.todos);
+    const fetchNotes = async (input_email) => {
+
+      const data = await supabase
+        .from("notes")
+        .select("notes")
+        .eq("email_id", input_email);
+
+      notesJson.setNotes(data.data[0].todos);
+    };
+
+    const prevSignInDetails = JSON.parse(localStorage.getItem("user"));
+    if (prevSignInDetails) {
+      authDetail.setUserAuthDetail(prevSignInDetails);
+      fetchNotes(prevSignInDetails.email);
+    }
+
   }, []);
 
   return (
@@ -61,20 +76,34 @@ export default function Home({ children }) {
           windowName={windowStatus.windowShow.appName}
           visible={true}
         >
-          {windowStatus.windowShow.appName == "NotesApp" && (
-            <ul className={styles.ul_list}>
-              {notesJson.notes.todos.map((file) => {
-                return (
+          {windowStatus.windowShow.appName == "NotesApp" &&
+            authDetail.userAuthDetail.isLoggedIn && (
+              <ul className={styles.ul_list}>
+                {/* {!notesJson.notes[0].todos.length > 0  ? (
+                  <>
+                    <p style={{ fontSize: "0.8em" }}>NO FILES FOUND</p>
+                  </>
+                ) : (
+                  <>
+                    {
+                      notesJson.notes.map((note) => {
+                        { console.log("note::", notesJson.notes[0].todos) }
+                        return (
+                          <li key={note.name}>
+                            <img src="/icons/file_icon.webp" alt="" height={50} />
+                            <p>{note.name + ".txt"}</p>
+                          </li>
+                        )
+                      })
 
-                  <li key={file.name}>
-                    <img src="/icons/file_icon.webp" alt="" height={50} />
-                    <p>{file.name + ".txt"}</p>
-                  </li>
-                )
-              })
-              }
-            </ul>
-          )}
+                    }
+                  </>
+                )} */}
+                {<>
+                <li>lol</li>
+                </>}
+              </ul>
+            )}
 
           {windowStatus.windowShow.appName == "PomoFocus" && (
             <section className={styles.wrapper}>

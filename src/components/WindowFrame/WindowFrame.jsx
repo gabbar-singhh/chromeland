@@ -18,7 +18,6 @@ import NotesDataContext from "../ContextAPI/NotesDataContext";
 
 const WindowFrame = ({ children, windowName, visible }) => {
   const [notes, setNotes] = useState([]);
-  const [fetchData, setFetchData] = useState();
 
   const authDetail = useContext(UserAuthContext);
   const windowStatus = useContext(WindowStatusContext);
@@ -57,6 +56,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
       .from("todos")
       .insert([
         {
+          todos: [],
           email_id: email,
         },
       ])
@@ -116,19 +116,21 @@ const WindowFrame = ({ children, windowName, visible }) => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await supabase.from("todos").select('todos').eq('email_id', authDetail.userAuthDetail.email);
+    const fetchNotes = async (input_email) => {
+      const data = await supabase
+        .from("notes")
+        .select("notes")
+        .eq("email_id", input_email);
 
-      console.log("🏳️‍🌈", data.data[0]);
-      setFetchData(data.data[0]);
-      notesJson.setNotes(data.data[0]);
+      notesJson.setNotes(data.data);
+      console.log("windowframe: ", data.data);
     };
 
     const prevSignInDetails = JSON.parse(localStorage.getItem("user"));
     if (prevSignInDetails) {
       authDetail.setUserAuthDetail(prevSignInDetails);
+      fetchNotes(prevSignInDetails.email);
     }
-    fetchData();
   }, []);
 
   return (
@@ -165,7 +167,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
                 authDetail.userAuthDetail.isLoggedIn ? (
                   <>{children}</>
                 ) : (
-                  <CloudBtn href="" onClick={signInBtnHandler} txt="SIGN IN" />
+                  <CloudBtn href="" customCSS={{ display: "flex", flexDirection: "column", alignItems: "center", justifyItems: "center", height: "300px" }} onClick={signInBtnHandler} txt="SIGN IN" />
                 )
               }
             </div>

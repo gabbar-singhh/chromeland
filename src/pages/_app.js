@@ -30,9 +30,7 @@ export default function App({ Component, pageProps }) {
     appName: "none",
   });
 
-  const [notes, setNotes] = useState({
-
-  })
+  const [notes, setNotes] = useState([{ todos: [] }])
 
   return (
     <main className={`${NotoSans.className} ${FiraMono.className}`}>

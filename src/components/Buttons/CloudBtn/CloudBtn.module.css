@@ -1,8 +1,12 @@
+.cloud_main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .signin_btn {
     font-size: 25px;
     color: white;
-    height: auto;
-    margin: 10px;
 
     position: relative;
     display: inline-block;
