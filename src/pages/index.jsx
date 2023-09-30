@@ -17,7 +17,7 @@ import { auth, getAuth } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
 import supabase from "@/lib/supabaseClient";
 
-export default function Home({ }) {
+export default function Home({ children }) {
   const authDetail = useContext(UserAuthContext);
   const windowStatus = useContext(WindowStatusContext);
   const notesJson = useContext(NotesDataContext);
@@ -47,8 +47,62 @@ export default function Home({ }) {
       });
   };
 
+  const viewNote = (e) => {
+    const clickedNoteID = e.currentTarget.getAttribute("data-id");
+    const clickedNoteTitle = e.currentTarget.querySelector('p').textContent;
+    // console.log(e.currentTarget);
+    // console.log(clickedNoteTitle);
+
+
+    console.log("clickedNoteID", clickedNoteID);
+    const note = notesJson.notes.filter(note => note.id === clickedNoteID)[0]
+
+    console.log("note", note);
+
+    windowStatus.setWindowShow({
+      visible: true,
+      appName: clickedNoteTitle,
+      noteDisplay: true,
+      data: {
+        id: note.id,
+        title: clickedNoteTitle,
+        desc: note.desc,
+        timestamp: note.timestamp
+      }
+    });
+  };
+
   useEffect(() => {
-    console.log("💀 ", notesJson.notes.todos);
+    const fetchNotes = async (input_email) => {
+      const data = await supabase
+        .from("notes")
+        .select("notes")
+        .eq("email_id", input_email);
+
+      try {
+        // WHEN THERE IS ALREADY DATA PRESENT IN SUPA
+        notesJson.setNotes(
+          data.data[0].notes.sort(
+            (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+          )
+        );
+      } catch {
+        // WHEN DATA ON SUPA IS EMPTY
+        notesJson.setNotes(
+          data.data.sort(
+            (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+          )
+        );
+      }
+    };
+
+    const prevSignInDetails = JSON.parse(localStorage.getItem("user"));
+    if (prevSignInDetails) {
+      authDetail.setUserAuthDetail(prevSignInDetails);
+      fetchNotes(prevSignInDetails.email);
+    }
+
+    console.log("index.js windowStatus: ", windowStatus.windowShow);
   }, []);
 
   return (
@@ -61,28 +115,28 @@ export default function Home({ }) {
           windowName={windowStatus.windowShow.appName}
           visible={true}
         >
-          {windowStatus.windowShow.appName == "NotesFolder" && (
-            <ul>
+          {windowStatus.windowShow.appName == "NotesApp" &&
+            authDetail.userAuthDetail.isLoggedIn && (
+              <ul className={styles.ul_list}>
+                {notesJson.notes.length === 0 ? (
+                  <>
+                    <p style={{ fontSize: "0.8em" }}>NO FILES FOUND</p>
+                  </>
+                ) : (
+                  <>
+                    {notesJson.notes.map((note) => {
+                      return (
+                        <li key={note.id} data-id={note.id} onClick={viewNote}>
+                          <img src="/icons/file_icon.webp" alt="" height={50} />
+                          <p>{note.title + ".txt"}</p>
+                        </li>
+                      );
+                    })}
+                  </>
+                )}
+              </ul>
+            )}
 
-              {notesJson.notes.todos.map((element) => {
-                return (
-
-                  <li>
-                    <span className={styles.note_item}>
-                      <img src="/icons/file_icon.webp" alt="" height={50} />
-                      <p>{element.name + ".txt"}</p>
-                    </span>
-                  </li>
-                )
-              })}
-              {/* <li>
-              <span key={user._id} className={styles.note_item}>
-                    <img src="/icons/file_icon.webp" alt="" height={50} />
-                    <p>{"user.name" + ".txt"}</p>
-                  </span>
-              </li> */}
-            </ul>
-          )}
           {windowStatus.windowShow.appName == "PomoFocus" && (
             <section className={styles.wrapper}>
               <PomoFocusApp />

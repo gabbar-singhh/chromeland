@@ -8,7 +8,6 @@
     position: absolute;
     top: 20%;
     left: 35%;
-
 }
 
 .top_frame {
@@ -92,36 +91,47 @@
 
 .data_container {
     color: #fff;
-    padding: 0.8em 1em;
-    font-size: 1.2em;
-    letter-spacing: -1px;
-    word-spacing: -4px;
-
-    height: 80%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.data_container .notes_list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 1em;
-}
-
-.notes_list .note_item {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-
-    cursor: pointer;
-}
-
-.notes_list .note_item p {
-    font-size: 10px;
-    font-weight: 400;
     letter-spacing: -1.5px;
+    font-weight: 400;
+    height: 100%;
+}
+
+.data_container .noteDisplay_box {
+    height: 325px;
+    margin: 0.8em 0 0.5em 1em;
+    overflow-y: scroll;
+    line-height: 1.4;
+}
+
+/* SCROLL CSS */
+.noteDisplay_box::-webkit-scrollbar {
+    width: 10px;
+
+}
+
+.noteDisplay_box::-webkit-scrollbar-track {
+    background-color: #000;
+}
+
+.noteDisplay_box::-webkit-scrollbar-thumb {
+    background-color: #3e3e3e;
+}
+
+.options {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+}
+
+.options span {
+    cursor: pointer;
+    color: rgb(255, 0, 0);
+}
+
+.options span:hover {
+    color: rgba(255, 0, 0, 0.615);
+    transition: all 200ms ease-in;
 }

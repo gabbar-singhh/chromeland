@@ -86,41 +86,45 @@ const PomoFocusApp = () => {
 
   return (
     <div className={styles.container_pomofocus_app}>
-      <div className={styles.pomofocus_topbar}>
-        <ul>
-          <li
-            className={`${styles.li_pomodoro} ${
-              activeLi === "pomodoro" ? styles.active_li : ""
-            }`}
-            data-type="pomodoro"
-            onClick={SWITCH_MODE}
-          >
-            Pomodoro
-          </li>
-          <li
-            className={`${styles.li_shortbreak} ${
-              activeLi === "short" ? styles.active_li : ""
-            }`}
-            data-type="short"
-            onClick={SWITCH_MODE}
-          >
-            Short Break
-          </li>
-          <li
-            className={`${styles.li_longbreak} ${
-              activeLi === "long" ? styles.active_li : ""
-            }`}
-            data-type="long"
-            onClick={SWITCH_MODE}
-          >
-            Long Break
-          </li>
-        </ul>
-      </div>
-      <div className={styles.pomofocus_timer}>{formatTime(timeRemaining)}</div>
-      <div className={styles.pomofocus_btn}>
-        <CloudBtn txt={btnText} onClick={startTimer} href="" />
-      </div>
+      <>
+        <div className={styles.pomofocus_topbar}>
+          <ul>
+            <li
+              className={`${styles.li_pomodoro} ${activeLi === "pomodoro" ? styles.active_li : ""
+                }`}
+              data-type="pomodoro"
+              onClick={SWITCH_MODE}
+            >
+              Pomodoro
+            </li>
+            <li
+              className={`${styles.li_shortbreak} ${activeLi === "short" ? styles.active_li : ""
+                }`}
+              data-type="short"
+              onClick={SWITCH_MODE}
+            >
+              Short Break
+            </li>
+            <li
+              className={`${styles.li_longbreak} ${activeLi === "long" ? styles.active_li : ""
+                }`}
+              data-type="long"
+              onClick={SWITCH_MODE}
+            >
+              Long Break
+            </li>
+          </ul>
+        </div>
+
+        <div className={styles.pomofocus_timer}>
+          {formatTime(timeRemaining)}
+        </div>
+
+        <div className={styles.pomofocus_btn}>
+          <CloudBtn txt={btnText} onClick={startTimer} href="" />
+
+        </div>
+      </>
     </div>
   );
 };

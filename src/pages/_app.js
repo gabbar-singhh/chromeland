@@ -28,11 +28,16 @@ export default function App({ Component, pageProps }) {
   const [windowShow, setWindowShow] = useState({
     visible: false,
     appName: "none",
+    noteDisplay: false,
+    data: {
+      id: "",
+      title: "",
+      desc: "",
+      timestamp: ""
+    }
   });
 
-  const [notes, setNotes] = useState({
-
-  })
+  const [notes, setNotes] = useState([{ notes: [] }])
 
   return (
     <main className={`${NotoSans.className} ${FiraMono.className}`}>
