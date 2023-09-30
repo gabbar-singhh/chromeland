@@ -14,6 +14,7 @@ const PomoFocus = () => {
 
         noteDisplay: false,
         data: {
+          id: "",
           title: "",
           desc: "",
           timestamp: ""
@@ -26,6 +27,7 @@ const PomoFocus = () => {
 
         noteDisplay: false,
         data: {
+          id: "",
           title: "",
           desc: "",
           timestamp: ""

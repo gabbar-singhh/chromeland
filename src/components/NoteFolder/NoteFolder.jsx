@@ -17,10 +17,11 @@ const Note = ({ values }) => {
 
         noteDisplay: false,
         data: {
+          id: "",
           title: "",
           desc: "",
-          timestamp: ""
-        }
+          timestamp: "",
+        },
       });
     } else if (windowStatus.windowShow.visible === true) {
       windowStatus.setWindowShow({
@@ -29,10 +30,11 @@ const Note = ({ values }) => {
 
         noteDisplay: false,
         data: {
+          id: "",
           title: "",
           desc: "",
-          timestamp: ""
-        }
+          timestamp: "",
+        },
       });
     }
   };

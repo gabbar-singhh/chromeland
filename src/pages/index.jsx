@@ -64,6 +64,7 @@ export default function Home({ children }) {
       appName: clickedNoteTitle,
       noteDisplay: true,
       data: {
+        id: note.id,
         title: clickedNoteTitle,
         desc: note.desc,
         timestamp: note.timestamp
@@ -100,6 +101,8 @@ export default function Home({ children }) {
       authDetail.setUserAuthDetail(prevSignInDetails);
       fetchNotes(prevSignInDetails.email);
     }
+
+    console.log("index.js windowStatus: ", windowStatus.windowShow);
   }, []);
 
   return (

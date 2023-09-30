@@ -12,6 +12,7 @@ import {
 import { FirebaseApp } from "firebase/app";
 import UserAuthContext from "../ContextAPI/UserAuthContext";
 import WindowStatusContext from "../ContextAPI/WindowStatusContext";
+
 import supabase from "@/lib/supabaseClient";
 import NotesDataContext from "../ContextAPI/NotesDataContext";
 // import { auth } from "@/lib/firebase";
@@ -21,7 +22,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
 
   const authDetail = useContext(UserAuthContext);
   const windowStatus = useContext(WindowStatusContext);
-  const notesJson = useContext(NotesDataContext);
+  const noteContext = useContext(NotesDataContext);
 
   const setAuthDetailsToContext = () => {
     authDetail.setUserAuthDetail(userData);
@@ -34,6 +35,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
 
       noteDisplay: false,
       data: {
+        id: "",
         title: "",
         desc: "",
         timestamp: "",
@@ -120,6 +122,21 @@ const WindowFrame = ({ children, windowName, visible }) => {
       });
   };
 
+  const sendNote = async (updatedData) => {
+    const { error } = await supabase
+      .from("notes")
+      .update({ notes: updatedData })
+      .eq("email_id", authDetail.userAuthDetail.email);
+
+    if (error) {
+      console.error("Error updating user data:", error.message);
+      return false;
+    }
+
+    return true;
+  };
+
+
   useEffect(() => {
     const fetchNotes = async (input_email) => {
       const data = await supabase
@@ -129,14 +146,14 @@ const WindowFrame = ({ children, windowName, visible }) => {
 
       try {
         // WHEN THERE IS ALREADY DATA PRESENT IN SUPA
-        notesJson.setNotes(
+        noteContext.setNotes(
           data.data[0].notes.sort(
             (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
           )
         );
       } catch {
         // WHEN DATA ON SUPA IS EMPTY
-        notesJson.setNotes(
+        noteContext.setNotes(
           data.data.sort(
             (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
           )
@@ -153,66 +170,103 @@ const WindowFrame = ({ children, windowName, visible }) => {
     }
   }, []);
 
-  return (
-    <>
-      {windowStatus.windowShow && (
-        <Draggable>
-          <section className={styles.container_windowframe}>
-            <div className={styles.top_frame}>
-              <p onClick={closeWindow} className={styles.close_program}>
-                <img src="/icons/x.png" height={15} alt="" />
-              </p>
+  const editNoteHandler = () => { };
+  const deleteNoteHandler = async (note) => {
 
-              <div className={styles.black_lines}>
-                <div className={styles.line_1}></div>
-                <div className={styles.line_2}></div>
-                <div className={styles.line_3}></div>
-                <div className={styles.line_4}></div>
-                <div className={styles.line_4}></div>
+    const note_id_to_delete = windowStatus.windowShow.data.id;
+
+    const removed_note = noteContext.notes.filter(note => note.id !== note_id_to_delete)
+
+    const updated = await sendNote(removed_note);
+
+    windowStatus.setWindowShow({
+      visible: true,
+      appName: "none",
+
+      noteDisplay: false,
+      data: {
+        id: "",
+        title: "",
+        desc: "",
+        timestamp: "",
+      },
+    });
+    if (updated) {
+      noteContext.setNotes(
+        updatedData.sort(
+          (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+        )
+      );
+
+    };
+
+    return (
+      <>
+        {windowStatus.windowShow && (
+          <Draggable>
+            <section className={styles.container_windowframe}>
+              <div className={styles.top_frame}>
+                <p onClick={closeWindow} className={styles.close_program}>
+                  <img src="/icons/x.png" height={15} alt="" />
+                </p>
+
+                <div className={styles.black_lines}>
+                  <div className={styles.line_1}></div>
+                  <div className={styles.line_2}></div>
+                  <div className={styles.line_3}></div>
+                  <div className={styles.line_4}></div>
+                  <div className={styles.line_4}></div>
+                </div>
+
+                <p>{windowName}</p>
+
+                <div className={styles.black_lines}>
+                  <div className={styles.line_1}></div>
+                  <div className={styles.line_2}></div>
+                  <div className={styles.line_3}></div>
+                  <div className={styles.line_4}></div>
+                  <div className={styles.line_4}></div>
+                </div>
               </div>
 
-              <p>{windowName}</p>
+              <div className={styles.data_container}>
+                {authDetail.userAuthDetail.isLoggedIn ? (
+                  <>
+                    {!windowStatus.windowShow.noteDisplay ? (
+                      <>{children}</>
+                    ) : (
+                      <section className={styles.note_display_frame}>
+                        <div className={styles.noteDisplay_box}>
+                          <p>{windowStatus.windowShow.data.desc}</p>
+                        </div>
 
-              <div className={styles.black_lines}>
-                <div className={styles.line_1}></div>
-                <div className={styles.line_2}></div>
-                <div className={styles.line_3}></div>
-                <div className={styles.line_4}></div>
-                <div className={styles.line_4}></div>
+                        <div className={styles.options}>
+                          <span onClick={deleteNoteHandler}>{"{ delete }"}</span>
+                        </div>
+                      </section>
+                    )}
+                  </>
+                ) : (
+                  <CloudBtn
+                    href=""
+                    customCSS={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyItems: "center",
+                      height: "300px",
+                    }}
+                    onClick={signInBtnHandler}
+                    txt="SIGN IN"
+                  />
+                )}
               </div>
-            </div>
+            </section>
+          </Draggable>
+        )}
+      </>
+    );
+  };
 
-            <div className={styles.data_container}>
-              {authDetail.userAuthDetail.isLoggedIn ? (
-                <>
-                  {!windowStatus.windowShow.noteDisplay ? (
-                    <>{children}</>
-                  ) : (
-                    <div className={styles.noteDisplay_box}>
-                      <p>{windowStatus.windowShow.data.desc}</p>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <CloudBtn
-                  href=""
-                  customCSS={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyItems: "center",
-                    height: "300px",
-                  }}
-                  onClick={signInBtnHandler}
-                  txt="SIGN IN"
-                />
-              )}
-            </div>
-          </section>
-        </Draggable>
-      )}
-    </>
-  );
-};
-
+}
 export default WindowFrame;

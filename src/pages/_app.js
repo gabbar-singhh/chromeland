@@ -30,6 +30,7 @@ export default function App({ Component, pageProps }) {
     appName: "none",
     noteDisplay: false,
     data: {
+      id: "",
       title: "",
       desc: "",
       timestamp: ""

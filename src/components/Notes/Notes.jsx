@@ -5,6 +5,7 @@ import dateFormat from "dateformat";
 import { getFirestore } from "firebase/firestore";
 import UserAuthContext from "../ContextAPI/UserAuthContext";
 import NotesDataContext from "../ContextAPI/NotesDataContext";
+import WindowStatusContext from "../ContextAPI/WindowStatusContext";
 import { db } from "@/lib/firebase";
 import supabase from "@/lib/supabaseClient";
 import { v4 as uuid } from "uuid";
@@ -16,6 +17,7 @@ const Notes = () => {
   // USING CONTEXT
   const authDetail = useContext(UserAuthContext);
   const noteContext = useContext(NotesDataContext);
+  const windowStatus = useState(WindowStatusContext);
 
   const clearNotes = () => {
     setCurrentTitle("click to edit title");
@@ -44,17 +46,17 @@ const Notes = () => {
   }
 
   const sendNote = async (updatedData) => {
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("notes")
       .update({ notes: updatedData })
-      .eq("email_id", authDetail.userAuthDetail.email);
+      .eq("email_id", authDetail.userAuthDetail.email).select();
 
     if (error) {
       console.error("Error updating user data:", error.message);
       return false;
     }
 
-    return true;
+    return data[0].notes;
   };
 
   async function fetchAndUpdateNote() {
@@ -72,11 +74,11 @@ const Notes = () => {
 
     const updated = await sendNote(updatedData);
 
-    console.log("updatedData:: ", updatedData);
+    console.log("::: ", updated);
 
     if (updated) {
       noteContext.setNotes(
-        updatedData.sort(
+        updated.sort(
           (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
         )
       );
@@ -101,25 +103,32 @@ const Notes = () => {
 
   // BY ANY CHANCE, IF EMPTY ARRAY JSON IS NOT ADDED DURING SIGN-IN THIS WILL CHECK AND DO AS FOLLOWING
   const checkAndSendNote = async () => {
-    const { data, error } = await supabase
-      .from("notes")
-      .select("notes")
-      .eq("email_id", authDetail.userAuthDetail.email);
 
-    if (error) {
-      console.error("Error fetching user data:", error.message);
-      return null;
-    }
+    if (currentDesc.length === 0 || currentTitle === "click to edit title") {
+      console.log("values empty");
+      console.log("noteContext: ", noteContext.notes);
+      console.log("windowStatus: ", windowStatus);
 
-    console.log("data[0].notes", data.length, data);
-
-    if (data.length === 0) {
-      // IT WILL CREATE A ROW IN notes TABLE WITH EMPTY JSON
-      insertDataToNotesTable(authDetail.userAuthDetail.email);
-
-      fetchAndUpdateNote();
     } else {
-      fetchAndUpdateNote();
+      const { data, error } = await supabase
+        .from("notes")
+        .select("notes")
+        .eq("email_id", authDetail.userAuthDetail.email);
+
+      if (error) {
+        console.error("Error fetching user data:", error.message);
+        return null;
+      }
+
+      console.log("data[0].notes", data.length, data);
+
+      if (data.length === 0) {
+        // IT WILL CREATE A ROW IN notes TABLE WITH EMPTY JSON
+        insertDataToNotesTable(authDetail.userAuthDetail.email);
+        fetchAndUpdateNote();
+      } else {
+        fetchAndUpdateNote();
+      }
     }
   };
 
