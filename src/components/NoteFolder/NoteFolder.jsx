@@ -10,11 +10,11 @@ const Note = ({ values }) => {
   const [prevData, setPrevData] = useState({ name: "Notes", show: false });
 
   const showWindowFrame = () => {
+    console.log(windowStatus.windowShow);
     if (windowStatus.windowShow.visible === false) {
       windowStatus.setWindowShow({
         visible: true,
         appName: "NotesApp",
-
         noteDisplay: false,
         data: {
           id: "",
@@ -27,7 +27,6 @@ const Note = ({ values }) => {
       windowStatus.setWindowShow({
         visible: false,
         appName: "NotesApp",
-
         noteDisplay: false,
         data: {
           id: "",

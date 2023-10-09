@@ -12,7 +12,7 @@ import UserAuthContext from "@/components/ContextAPI/UserAuthContext";
 import WindowStatusContext from "@/components/ContextAPI/WindowStatusContext";
 import NotesDataContext from "@/components/ContextAPI/NotesDataContext";
 import { signOut } from "firebase/auth";
-import { auth, getAuth } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 // DON'T REMOVE 👇
 import { FirebaseApp } from "firebase/app";
 import supabase from "@/lib/supabaseClient";
@@ -22,7 +22,7 @@ export default function Home({ children }) {
   const windowStatus = useContext(WindowStatusContext);
   const notesJson = useContext(NotesDataContext);
 
-  const auth = getAuth();
+  // const auth = getAuth()
 
   // TEMP FUNCTION
   const signOutBtnHandler = () => {
@@ -39,6 +39,7 @@ export default function Home({ children }) {
 
         localStorage.removeItem("user");
 
+        notesJson.notes([{ notes: [] }])
         console.log("🟡 LOGOUT SUCCESS!");
       })
       .catch((error) => {

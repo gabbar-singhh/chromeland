@@ -6,7 +6,7 @@ import { getFirestore } from "firebase/firestore";
 import UserAuthContext from "../ContextAPI/UserAuthContext";
 import NotesDataContext from "../ContextAPI/NotesDataContext";
 import WindowStatusContext from "../ContextAPI/WindowStatusContext";
-import { db } from "@/lib/firebase";
+// import { db } from "@/lib/firebase";
 import supabase from "@/lib/supabaseClient";
 import { v4 as uuid } from "uuid";
 
@@ -107,7 +107,9 @@ const Notes = () => {
     if (currentDesc.length === 0 || currentTitle === "click to edit title") {
       console.log("values empty");
       console.log("noteContext: ", noteContext.notes);
-      console.log("windowStatus: ", windowStatus);
+      console.log("windowStatus: ", windowStatus.windowShow);
+      console.log("userAuth: ", authDetail);
+
 
     } else {
       const { data, error } = await supabase

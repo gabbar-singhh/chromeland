@@ -7,18 +7,15 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   signOut,
-  auth,
 } from "firebase/auth";
-import { FirebaseApp } from "firebase/app";
 import UserAuthContext from "../ContextAPI/UserAuthContext";
 import WindowStatusContext from "../ContextAPI/WindowStatusContext";
-
 import supabase from "@/lib/supabaseClient";
 import NotesDataContext from "../ContextAPI/NotesDataContext";
-// import { auth } from "@/lib/firebase";
 
 const WindowFrame = ({ children, windowName, visible }) => {
   const [notes, setNotes] = useState([]);
+  const auth = getAuth()
 
   const authDetail = useContext(UserAuthContext);
   const windowStatus = useContext(WindowStatusContext);
@@ -42,8 +39,6 @@ const WindowFrame = ({ children, windowName, visible }) => {
       },
     });
   };
-
-  const auth = getAuth();
 
   const insertDataToUsersTable = async (name, email) => {
     const insertData = await supabase
@@ -74,7 +69,10 @@ const WindowFrame = ({ children, windowName, visible }) => {
   };
 
   const signInBtnHandler = () => {
+
+    console.log("signInBtnHandler ✅");
     const provider = new GoogleAuthProvider();
+    console.log("signin popup ✅");
     signInWithPopup(auth, provider)
       .then((result) => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -109,7 +107,6 @@ const WindowFrame = ({ children, windowName, visible }) => {
           })
         );
       })
-
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -120,6 +117,8 @@ const WindowFrame = ({ children, windowName, visible }) => {
         // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
       });
+
+
   };
 
   const sendNote = async (updatedData) => {
@@ -171,18 +170,18 @@ const WindowFrame = ({ children, windowName, visible }) => {
   }, []);
 
   const editNoteHandler = () => { };
+
   const deleteNoteHandler = async (note) => {
 
     const note_id_to_delete = windowStatus.windowShow.data.id;
 
-    const removed_note = noteContext.notes.filter(note => note.id !== note_id_to_delete)
+    const updated_array = noteContext.notes.filter(note => note.id !== note_id_to_delete)
 
-    const updated = await sendNote(removed_note);
+    const ifUpdated = await sendNote(updated_array);
 
     windowStatus.setWindowShow({
       visible: true,
-      appName: "none",
-
+      appName: "NotesApp",
       noteDisplay: false,
       data: {
         id: "",
@@ -191,82 +190,87 @@ const WindowFrame = ({ children, windowName, visible }) => {
         timestamp: "",
       },
     });
-    if (updated) {
+
+    // console.log("updated: ", updated);
+    // console.log("removed_note: ", removed_note);
+
+    if (ifUpdated) {
       noteContext.setNotes(
-        updatedData.sort(
+        updated_array.sort(
           (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
         )
       );
 
     };
+  }
 
-    return (
-      <>
-        {windowStatus.windowShow && (
-          <Draggable>
-            <section className={styles.container_windowframe}>
-              <div className={styles.top_frame}>
-                <p onClick={closeWindow} className={styles.close_program}>
-                  <img src="/icons/x.png" height={15} alt="" />
-                </p>
+  return (
+    <>
+      {windowStatus.windowShow && (
+        <Draggable>
+          <section className={styles.container_windowframe}>
+            <div className={styles.top_frame}>
+              <p onClick={closeWindow} className={styles.close_program}>
+                <img src="/icons/x.png" height={15} alt="" />
+              </p>
 
-                <div className={styles.black_lines}>
-                  <div className={styles.line_1}></div>
-                  <div className={styles.line_2}></div>
-                  <div className={styles.line_3}></div>
-                  <div className={styles.line_4}></div>
-                  <div className={styles.line_4}></div>
-                </div>
-
-                <p>{windowName}</p>
-
-                <div className={styles.black_lines}>
-                  <div className={styles.line_1}></div>
-                  <div className={styles.line_2}></div>
-                  <div className={styles.line_3}></div>
-                  <div className={styles.line_4}></div>
-                  <div className={styles.line_4}></div>
-                </div>
+              <div className={styles.black_lines}>
+                <div className={styles.line_1}></div>
+                <div className={styles.line_2}></div>
+                <div className={styles.line_3}></div>
+                <div className={styles.line_4}></div>
+                <div className={styles.line_4}></div>
               </div>
 
-              <div className={styles.data_container}>
-                {authDetail.userAuthDetail.isLoggedIn ? (
-                  <>
-                    {!windowStatus.windowShow.noteDisplay ? (
-                      <>{children}</>
-                    ) : (
-                      <section className={styles.note_display_frame}>
-                        <div className={styles.noteDisplay_box}>
-                          <p>{windowStatus.windowShow.data.desc}</p>
-                        </div>
+              <p>{windowName}</p>
 
-                        <div className={styles.options}>
-                          <span onClick={deleteNoteHandler}>{"{ delete }"}</span>
-                        </div>
-                      </section>
-                    )}
-                  </>
-                ) : (
-                  <CloudBtn
-                    href=""
-                    customCSS={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyItems: "center",
-                      height: "300px",
-                    }}
-                    onClick={signInBtnHandler}
-                    txt="SIGN IN"
-                  />
-                )}
+              <div className={styles.black_lines}>
+                <div className={styles.line_1}></div>
+                <div className={styles.line_2}></div>
+                <div className={styles.line_3}></div>
+                <div className={styles.line_4}></div>
+                <div className={styles.line_4}></div>
               </div>
-            </section>
-          </Draggable>
-        )}
-      </>
-    );
-  };
+            </div>
 
-}
+            <div className={styles.data_container}>
+              {authDetail.userAuthDetail.isLoggedIn ? (
+                <>
+                  {!windowStatus.windowShow.noteDisplay ? (
+                    <>{children}</>
+                  ) : (
+                    <section className={styles.note_display_frame}>
+                      <div className={styles.noteDisplay_box}>
+                        <p>{windowStatus.windowShow.data.desc}</p>
+                      </div>
+
+                      <div className={styles.options}>
+                        <span onClick={deleteNoteHandler}>{"{ delete }"}</span>
+                      </div>
+                    </section>
+                  )}
+                </>
+              ) : (
+                <CloudBtn
+                  href=""
+                  customCSS={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyItems: "center",
+                    height: "300px",
+                  }}
+                  onClick={signInBtnHandler}
+                  txt="SIGN IN"
+                />
+              )}
+            </div>
+          </section>
+        </Draggable>
+      )}
+    </>
+  );
+};
+
+
 export default WindowFrame;
