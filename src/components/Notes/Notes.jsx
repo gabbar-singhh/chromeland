@@ -2,11 +2,9 @@ import React, { useContext, useState } from "react";
 import Draggable from "react-draggable";
 import styles from "./Notes.module.css";
 import dateFormat from "dateformat";
-import { getFirestore } from "firebase/firestore";
 import UserAuthContext from "../ContextAPI/UserAuthContext";
 import NotesDataContext from "../ContextAPI/NotesDataContext";
 import WindowStatusContext from "../ContextAPI/WindowStatusContext";
-// import { db } from "@/lib/firebase";
 import supabase from "@/lib/supabaseClient";
 import { v4 as uuid } from "uuid";
 

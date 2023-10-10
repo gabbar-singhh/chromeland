@@ -11,41 +11,25 @@ import PomoFocusApp from "@/components/PomodoroFocus/PomoFocusApp";
 import UserAuthContext from "@/components/ContextAPI/UserAuthContext";
 import WindowStatusContext from "@/components/ContextAPI/WindowStatusContext";
 import NotesDataContext from "@/components/ContextAPI/NotesDataContext";
-import { signOut } from "firebase/auth";
-import { getAuth } from "firebase/auth";
-// DON'T REMOVE 👇
-import { FirebaseApp } from "firebase/app";
 import supabase from "@/lib/supabaseClient";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 export default function Home({ children }) {
   const authDetail = useContext(UserAuthContext);
   const windowStatus = useContext(WindowStatusContext);
   const notesJson = useContext(NotesDataContext);
 
-  // const auth = getAuth()
+  // AUTH0 
+  const { user, error, isLoading } = useUser();
 
   // TEMP FUNCTION
-  const signOutBtnHandler = () => {
-    signOut(auth)
-      .then(() => {
-        authDetail.setUserAuthDetail({
-          credential: "",
-          token: "",
-          displayName: "",
-          email: "",
-          photoURL: "",
-          isLoggedIn: false,
-        });
+  const signOutBtnHandler = async () => {
+    console.log("SIGN OUT FXN IN CALLED!");
 
-        localStorage.removeItem("user");
+    const isFinished = await window.open('/api/auth/logout');
 
-        notesJson.notes([{ notes: [] }])
-        console.log("🟡 LOGOUT SUCCESS!");
-      })
-      .catch((error) => {
-        // An error happened.
-        console.log("🔴Error in WindowFrame.jsx", error);
-      });
+    notesJson.notes([{ notes: [] }])
+
   };
 
   const viewNote = (e) => {
@@ -117,7 +101,7 @@ export default function Home({ children }) {
           visible={true}
         >
           {windowStatus.windowShow.appName == "NotesApp" &&
-            authDetail.userAuthDetail.isLoggedIn && (
+            user && (
               <ul className={styles.ul_list}>
                 {notesJson.notes.length === 0 ? (
                   <>
@@ -126,6 +110,7 @@ export default function Home({ children }) {
                 ) : (
                   <>
                     {notesJson.notes.map((note) => {
+                      { console.log("notesJson ", notesJson.notes) }
                       return (
                         <li key={note.id} data-id={note.id} onClick={viewNote}>
                           <img src="/icons/file_icon.webp" alt="" height={50} />
@@ -149,7 +134,9 @@ export default function Home({ children }) {
         <NoteFolder />
         <PomodoroTimer />
         <p style={{ color: "red" }} onClick={signOutBtnHandler}>
-          {authDetail.userAuthDetail.email}
+          {user &&
+            user.email
+          }
         </p>
       </section>
     </Layout>

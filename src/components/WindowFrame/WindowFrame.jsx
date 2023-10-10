@@ -2,24 +2,21 @@ import React, { useState, useEffect, useContext } from "react";
 import styles from "./WindowFrame.module.css";
 import Draggable from "react-draggable";
 import CloudBtn from "../Buttons/CloudBtn/CloudBtn";
-import {
-  getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
-  signOut,
-} from "firebase/auth";
 import UserAuthContext from "../ContextAPI/UserAuthContext";
 import WindowStatusContext from "../ContextAPI/WindowStatusContext";
 import supabase from "@/lib/supabaseClient";
 import NotesDataContext from "../ContextAPI/NotesDataContext";
+import Link from "next/link";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 const WindowFrame = ({ children, windowName, visible }) => {
   const [notes, setNotes] = useState([]);
-  const auth = getAuth()
 
   const authDetail = useContext(UserAuthContext);
   const windowStatus = useContext(WindowStatusContext);
   const noteContext = useContext(NotesDataContext);
+
+  const { user, error, isLoading } = useUser()
 
   const setAuthDetailsToContext = () => {
     authDetail.setUserAuthDetail(userData);
@@ -68,57 +65,23 @@ const WindowFrame = ({ children, windowName, visible }) => {
     console.log("🫂", insertData);
   };
 
-  const signInBtnHandler = () => {
+  const signInBtnHandler = async () => {
+    console.log("SIGN IN FXN IN CALLED!");
 
-    console.log("signInBtnHandler ✅");
-    const provider = new GoogleAuthProvider();
-    console.log("signin popup ✅");
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        const user = result.user;
+    // const isFinished = await window.open('/api/auth/login');
 
-        // USER-DETAILS SAVED IN CONTEXT API
-        authDetail.setUserAuthDetail({
-          credential: credential,
-          token: token,
-          displayName: user.displayName,
-          email: user.email,
-          photoURL: user.photoURL,
-          isLoggedIn: true,
-        });
-
-        //   ADD USER TO USERS-TABLE IN SUPABASE
-        insertDataToUsersTable(user.displayName, user.email);
-
-        //    ADDING USER TO NOTES TABLE
-        insertDataToNotesTable(user.email);
-
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            credential: credential,
-            token: token,
-            displayName: user.displayName,
-            email: user.email,
-            photoURL: user.photoURL,
-            isLoggedIn: true,
-          })
-        );
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-
-        // The email of the user's account used.
-        // const email = error.customData.email;
-
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-      });
+    const isFinished = await window.open('/api/auth/login', "", "toolbar=no,status=no,menubar=no,location=center,scrollbars=no,resizable=no,height=500,width=657");
 
 
+    // USER-DETAILS SAVED IN CONTEXT API
+    console.log(user);
+    console.log("isFinished: ", isFinished);
+
+    //   ADD USER TO USERS-TABLE IN SUPABASE
+    insertDataToUsersTable(user.name, user.email);
+
+    //    ADDING USER TO NOTES TABLE
+    insertDataToNotesTable(user.email);
   };
 
   const sendNote = async (updatedData) => {
@@ -134,7 +97,6 @@ const WindowFrame = ({ children, windowName, visible }) => {
 
     return true;
   };
-
 
   useEffect(() => {
     const fetchNotes = async (input_email) => {
@@ -172,10 +134,11 @@ const WindowFrame = ({ children, windowName, visible }) => {
   const editNoteHandler = () => { };
 
   const deleteNoteHandler = async (note) => {
-
     const note_id_to_delete = windowStatus.windowShow.data.id;
 
-    const updated_array = noteContext.notes.filter(note => note.id !== note_id_to_delete)
+    const updated_array = noteContext.notes.filter(
+      (note) => note.id !== note_id_to_delete
+    );
 
     const ifUpdated = await sendNote(updated_array);
 
@@ -200,9 +163,8 @@ const WindowFrame = ({ children, windowName, visible }) => {
           (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
         )
       );
-
-    };
-  }
+    }
+  };
 
   return (
     <>
@@ -234,7 +196,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
             </div>
 
             <div className={styles.data_container}>
-              {authDetail.userAuthDetail.isLoggedIn ? (
+              {user ? (
                 <>
                   {!windowStatus.windowShow.noteDisplay ? (
                     <>{children}</>
@@ -260,8 +222,8 @@ const WindowFrame = ({ children, windowName, visible }) => {
                     justifyItems: "center",
                     height: "300px",
                   }}
-                  onClick={signInBtnHandler}
                   txt="SIGN IN"
+                  onClick={signInBtnHandler}
                 />
               )}
             </div>
@@ -271,6 +233,5 @@ const WindowFrame = ({ children, windowName, visible }) => {
     </>
   );
 };
-
 
 export default WindowFrame;
