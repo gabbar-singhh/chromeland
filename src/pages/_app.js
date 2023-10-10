@@ -4,6 +4,7 @@ import { useState } from "react";
 import UserAuthContext from "@/components/ContextAPI/UserAuthContext";
 import WindowStatusContext from "@/components/ContextAPI/WindowStatusContext";
 import NotesDataContext from "@/components/ContextAPI/NotesDataContext";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
 
 const NotoSans = Noto_Sans({
   subsets: ["latin"],
@@ -33,21 +34,25 @@ export default function App({ Component, pageProps }) {
       id: "",
       title: "",
       desc: "",
-      timestamp: ""
-    }
+      timestamp: "",
+    },
   });
 
-  const [notes, setNotes] = useState([{ notes: [] }])
+  const [notes, setNotes] = useState([{ notes: [] }]);
 
   return (
     <main className={`${NotoSans.className} ${FiraMono.className}`}>
-      <WindowStatusContext.Provider value={{ windowShow, setWindowShow }}>
-        <UserAuthContext.Provider value={{ userAuthDetail, setUserAuthDetail }}>
-          <NotesDataContext.Provider value={{ notes, setNotes }}>
-            <Component {...pageProps} />
-          </NotesDataContext.Provider>
-        </UserAuthContext.Provider>
-      </WindowStatusContext.Provider>
-    </main>
+        <UserProvider>
+        <WindowStatusContext.Provider value={{ windowShow, setWindowShow }}>
+          <UserAuthContext.Provider
+            value={{ userAuthDetail, setUserAuthDetail }}
+          >
+            <NotesDataContext.Provider value={{ notes, setNotes }}>
+              <Component {...pageProps} />
+            </NotesDataContext.Provider>
+          </UserAuthContext.Provider>
+        </WindowStatusContext.Provider>
+    </UserProvider>
+      </main>
   );
 }
