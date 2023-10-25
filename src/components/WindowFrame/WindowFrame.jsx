@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import styles from "./WindowFrame.module.css";
 import Draggable from "react-draggable";
 import CloudBtn from "../Buttons/CloudBtn/CloudBtn";
-import UserAuthContext from "../ContextAPI/UserAuthContext";
 import WindowStatusContext from "../ContextAPI/WindowStatusContext";
 import supabase from "@/lib/supabaseClient";
 import NotesDataContext from "../ContextAPI/NotesDataContext";
@@ -12,15 +11,10 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 const WindowFrame = ({ children, windowName, visible }) => {
   const [notes, setNotes] = useState([]);
 
-  const authDetail = useContext(UserAuthContext);
   const windowStatus = useContext(WindowStatusContext);
   const noteContext = useContext(NotesDataContext);
 
-  const { user, error, isLoading } = useUser()
-
-  const setAuthDetailsToContext = () => {
-    authDetail.setUserAuthDetail(userData);
-  };
+  const { user, error, isLoading } = useUser();
 
   const closeWindow = () => {
     windowStatus.setWindowShow({
@@ -37,58 +31,32 @@ const WindowFrame = ({ children, windowName, visible }) => {
     });
   };
 
-  const insertDataToUsersTable = async (name, email) => {
-    const insertData = await supabase
-      .from("users")
+  const insertDataToTodosTable = async (email) => {
+    const insertEmptyData = await supabase
+      .from("todos")
       .insert([
         {
-          name: name,
+          todos: [],
           email_id: email,
         },
       ])
       .select();
 
-    console.log("🫂", insertData);
-  };
-
-  const insertDataToNotesTable = async (email) => {
-    const insertData = await supabase
-      .from("notes")
-      .insert([
-        {
-          notes: [],
-          email_id: email,
-        },
-      ])
-      .select();
-
-    console.log("🫂", insertData);
+    console.log("😂😂😂", insertEmptyData.data[0].todos);
   };
 
   const signInBtnHandler = async () => {
     console.log("SIGN IN FXN IN CALLED!");
+    const isFinished = window.open("/api/auth/login", "_self");
 
-    // const isFinished = await window.open('/api/auth/login');
-
-    const isFinished = await window.open('/api/auth/login', "", "toolbar=no,status=no,menubar=no,location=center,scrollbars=no,resizable=no,height=500,width=657");
-
-
-    // USER-DETAILS SAVED IN CONTEXT API
-    console.log(user);
-    console.log("isFinished: ", isFinished);
-
-    //   ADD USER TO USERS-TABLE IN SUPABASE
-    insertDataToUsersTable(user.name, user.email);
-
-    //    ADDING USER TO NOTES TABLE
-    insertDataToNotesTable(user.email);
+    return { isFinished: true };
   };
 
   const sendNote = async (updatedData) => {
     const { error } = await supabase
       .from("notes")
       .update({ notes: updatedData })
-      .eq("email_id", authDetail.userAuthDetail.email);
+      .eq("email_id", user.email);
 
     if (error) {
       console.error("Error updating user data:", error.message);
@@ -120,14 +88,10 @@ const WindowFrame = ({ children, windowName, visible }) => {
           )
         );
       }
-
-      // console.log("windowframe: ", data.data[0].notes);
     };
 
-    const prevSignInDetails = JSON.parse(localStorage.getItem("user"));
-    if (prevSignInDetails) {
-      authDetail.setUserAuthDetail(prevSignInDetails);
-      fetchNotes(prevSignInDetails.email);
+    if (user) {
+      fetchNotes(user.email);
     }
   }, []);
 
@@ -153,9 +117,6 @@ const WindowFrame = ({ children, windowName, visible }) => {
         timestamp: "",
       },
     });
-
-    // console.log("updated: ", updated);
-    // console.log("removed_note: ", removed_note);
 
     if (ifUpdated) {
       noteContext.setNotes(
@@ -223,7 +184,12 @@ const WindowFrame = ({ children, windowName, visible }) => {
                     height: "300px",
                   }}
                   txt="SIGN IN"
-                  onClick={signInBtnHandler}
+                  onClick={() => {
+                    signInBtnHandler().then((x) => {
+                      // insertDataToTodosTable(user.email)
+                      console.log("x@@: ", x);
+                    });
+                  }}
                 />
               )}
             </div>

@@ -1,46 +1,120 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styles from "./Todo.module.css";
 import Draggable from "react-draggable";
+import supabase from "@/lib/supabaseClient";
+import { useUser } from "@auth0/nextjs-auth0/client";
+import TodosDataContext from "../ContextAPI/TodosDataContext";
+import { da } from "date-fns/locale";
+import { isValid } from "@/utility/isValid";
+import { isEmpty } from "lodash";
 
 const Todo = () => {
   const [task, setTask] = useState("");
-  const [tasks, setTasks] = useState([]);
 
-  // WHEN PAGE OPEN, IT CHECKS FOR PREVIOUS LOCAL-STORAGE
-  useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("localTask"));
-    console.log(data);
+  const todoContext = useContext(TodosDataContext);
+  const { user, error, isLoading } = useUser();
 
-    if (data !== null) {
-      setTasks(data);
+  const insertDataToTodosTable = async (email) => {
+    const insertEmptyData = await supabase
+      .from("todos")
+      .insert([
+        {
+          todos: [],
+          email_id: email,
+        },
+      ])
+      .select();
+
+    console.log("😂😂😂", insertEmptyData.data[0].todos);
+  };
+
+  // GETTING LATEST UPADTED NOTES JSON
+  async function fetchLatestTodos() {
+    const { data, error } = await supabase
+      .from("todos")
+      .select("todos")
+      .eq("email_id", user.email);
+
+    if (error) {
+      console.error("Error fetching user data:", error.message);
+      return null;
     }
-  }, []);
+
+    return data[0].todos || {};
+  }
+
+  async function appendTasksToJSON(existingTasks, newTask) {
+    const updatedData = [...existingTasks, { ...newTask }];
+    return updatedData;
+  }
+
+  async function fetchAndUpdateTodo() {
+    const timestamp = new Date().toISOString();
+
+    const existingTasks = await fetchLatestTodos();
+
+    const newTask = {
+      id: new Date().getTime().toString(),
+      title: task.trim(),
+    };
+
+    const updatedData = await appendTasksToJSON(existingTasks, newTask);
+
+    const updated = await sendTodo(updatedData);
+
+    console.log(":: ", updated);
+
+    if (updated) {
+      todoContext.setTodos(updated);
+      setTask("");
+    }
+  }
+
+  const sendTodo = async (updatedData) => {
+    const { data, error } = await supabase
+      .from("todos")
+      .update({ todos: updatedData })
+      .eq("email_id", user.email)
+      .select();
+
+    if (error) {
+      console.error("Error updating user todos:", error.message);
+      return false;
+    }
+
+    return data[0].todos;
+  };
 
   // WHEN ENTER KEY IS PRESSED
-  const keyDownHandler = (event) => {
+  const keyDownHandler = async (event) => {
+    console.log("todoContext.todos: ", todoContext.todos.length);
+    // if enterkey is pressed!
     if (event.keyCode === 13) {
-      if (task) {
+      if (!isEmpty(task) && !isEmpty(task.trim())) {
+        // CHECKING IF AN EMPTY JSON OBJ EXISTS OR NOT, IF NOT IT WILL CREATE ONE
+        const { data, error } = await supabase
+          .from("todos")
+          .select("todos")
+          .eq("email_id", user.email);
 
-        console.log("-->", task);
+        if (error) {
+          console.error("Error fetching user todos:", error.message);
+          return null;
+        }
 
-        const newTask = { id: new Date().getTime().toString(), title: task };
+        console.log("data[0].todos", data.length, data);
 
-        setTasks([...tasks, newTask]);
-
-        localStorage.setItem("localTask", JSON.stringify([...tasks, newTask]));
-        
-        setTask("");
-
+        if (data.length === 0) {
+          // IT WILL CREATE A ROW IN notes TABLE WITH EMPTY JSON
+          insertDataToTodosTable(user.email);
+          fetchAndUpdateTodo();
+        } else {
+          fetchAndUpdateTodo();
+        }
       }
     }
   };
 
-  // WHEN DELETE-BTN IS PRESSED
-  const deleteItemHandler = (task) => {
-    const deleted = tasks.filter((t) => t.id !== task);
-    setTasks(deleted);
-    localStorage.setItem("localTask", JSON.stringify(deleted));
-  };
   return (
     <Draggable>
       <main className={styles.container_todo}>
@@ -52,21 +126,22 @@ const Todo = () => {
             onChange={(event) => setTask(event.target.value)}
             placeholder="Add a task here..."
           />
+
           <p>
             You have{" "}
-            {!tasks.length
-              ? " 0 task"
-              : tasks.length === 1
+            {!todoContext.todos.length
+              ? "no tasks"
+              : todoContext.todos.length === 1
               ? "only 1 task"
-              : tasks.length > 1
-              ? `${tasks.length} tasks`
+              : todoContext.todos.length > 1
+              ? `${todoContext.todos.length} tasks`
               : null}{" "}
-            pending!
+            to perform
           </p>
         </div>
 
         <div className={styles.todo_list}>
-          {tasks.map((task) => {
+          {todoContext.todos.map((task) => {
             return (
               <span key={task.id} className={styles.todo_item}>
                 <p className={styles.todo_title}>{task.title}</p>

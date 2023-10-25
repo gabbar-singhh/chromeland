@@ -22,6 +22,8 @@
     gap: 0.4em;
     list-style-type: none;
     width: 100%;
+
+    margin: 1em;
 }
 
 .ul_list li {
@@ -33,10 +35,8 @@
     font-size: 10px;
     gap: 3px;
     cursor: pointer;
-
     padding: 0.5em;
     border: 2px dashed transparent;
-
     width: 18%;
 }
 
