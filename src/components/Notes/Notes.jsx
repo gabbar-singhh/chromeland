@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Draggable from "react-draggable";
 import styles from "./Notes.module.css";
 import dateFormat from "dateformat";
@@ -8,9 +8,10 @@ import TodosDataContext from "../ContextAPI/TodosDataContext";
 import supabase from "@/lib/supabaseClient";
 import { v4 as uuid } from "uuid";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { trim } from "lodash";
 
 const Notes = () => {
-  const [currentTitle, setCurrentTitle] = useState("click to edit title");
+  const [currentTitle, setCurrentTitle] = useState("");
   const [currentDesc, setCurrentDesc] = useState("");
 
   // USING CONTEXT
@@ -21,8 +22,10 @@ const Notes = () => {
   const { user, error, isLoading } = useUser();
 
   const clearNotes = () => {
-    setCurrentTitle("click to edit title");
+    setCurrentTitle("");
     setCurrentDesc("");
+
+    localStorageSetTempNote();
   };
 
   // GETTING LATEST UPADTED NOTES JSON
@@ -81,7 +84,7 @@ const Notes = () => {
       noteContext.setNotes(
         updated.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
       );
-      setCurrentTitle("click to edit title");
+      setCurrentTitle("");
       setCurrentDesc("");
     }
   }
@@ -102,7 +105,7 @@ const Notes = () => {
 
   // BY ANY CHANCE, IF EMPTY ARRAY JSON IS NOT ADDED DURING SIGN-IN THIS WILL CHECK AND DO AS FOLLOWING
   const checkAndSendNote = async () => {
-    if (currentDesc.length === 0 || currentTitle === "click to edit title") {
+    if (currentDesc.trim().length === 0 || currentTitle.trim() === "") {
       console.log("values empty");
       console.log("noteContext: ", noteContext.notes);
       console.log("windowStatus: ", windowStatus.windowShow);
@@ -125,29 +128,57 @@ const Notes = () => {
         // IT WILL CREATE A ROW IN notes TABLE WITH EMPTY JSON
         insertDataToNotesTable(user.email);
         fetchAndUpdateNote();
+        localStorageSetTempNote();
       } else {
         fetchAndUpdateNote();
+        localStorageSetTempNote();
       }
     }
   };
 
+  function localStorageSetTempNote() {
+    localStorage.setItem("temp_notes_title", JSON.stringify(""));
 
+    localStorage.setItem("temp_notes_desc", JSON.stringify(""));
+  }
+
+  useEffect(() => {
+    const notes_title = JSON.parse(localStorage.getItem("temp_notes_title"));
+    const notes_desc = JSON.parse(localStorage.getItem("temp_notes_desc"));
+
+    setCurrentDesc(notes_desc);
+    setCurrentTitle(notes_title);
+  }, []);
 
   return (
     <Draggable>
       <main className={styles.container_notes}>
-        <p
-          className={styles.title_textarea}
-          contentEditable="true"
-          onBlur={(e) => {
+        <textarea
+          name=""
+          id=""
+          cols="auto"
+          placeholder="click to edit title"
+          rows="1"
+          value={currentTitle}
+          onChange={(e) => {
             if (e.target.innerText.length > 30) {
-              setCurrentTitle(e.target.innerText.substring(0, 30));
+              setCurrentTitle(e.target.value.substring(0, 30));
+
+              localStorage.setItem(
+                "temp_notes_title",
+                JSON.stringify(e.target.value.substring(0, 30))
+              );
             } else {
-              setCurrentTitle(e.target.innerText);
+              setCurrentTitle(e.target.value);
+
+              localStorage.setItem(
+                "temp_notes_title",
+                JSON.stringify(e.target.value)
+              );
             }
           }}
-          dangerouslySetInnerHTML={{ __html: currentTitle }}
-        ></p>
+          className={styles.title_textarea}
+        ></textarea>
         <textarea
           name=""
           id=""
@@ -157,6 +188,11 @@ const Notes = () => {
           value={currentDesc}
           onChange={(e) => {
             setCurrentDesc(e.target.value);
+
+            localStorage.setItem(
+              "temp_notes_desc",
+              JSON.stringify(e.target.value)
+            );
           }}
           className={styles.notes_textarea}
         ></textarea>

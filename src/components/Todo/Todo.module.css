@@ -6,7 +6,6 @@
     display: flex;
     flex-direction: column;
     gap: 0.5em;
-    cursor: grab;
 }
 
 .container_todo:active {
@@ -36,6 +35,21 @@
     font-size: 10px;
     font-weight: 400;
     letter-spacing: -1px;
+}
+
+.sync_box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.sync_box p:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.sync_box:hover {
 }
 
 .todo_list {

@@ -4,20 +4,13 @@
     top: 1em;
     right: 0;
     cursor: default;
+
+    display: flex;
+    flex-direction: column;
 }
 
 .container_notes p {
-    font-size: 12px;
-    padding: 0.8em 0.8em;
-    text-align: center;
-    color: #fff;
-    background-color: #100c1b;
-    letter-spacing: -2px;
-    cursor: grab;
-    border-top-left-radius: 0.1em;
-    border-top-right-radius: 0.1em;
-    outline: none;
-
+   
 }
 
 .container_notes p::-webkit-scrollbar {
@@ -38,6 +31,30 @@
     cursor: grabbing;
 }
 
+.container_notes .title_textarea {
+    border: none;
+    cursor: grab;    
+    resize: none;
+    
+    color: #fff;
+    background-color: #100c1b;
+    padding: 0.8em 0.8em;
+    text-align: center;    
+    letter-spacing: -2px;
+    outline: none;
+    border-top-left-radius: 0.1em;
+    border-top-right-radius: 0.1em;
+    font-size: 12px;
+    font-family: 'Print Char 21';
+
+}
+
+.container_notes .title_textarea::placeholder{
+    color: #fff;
+    font-family: 'Print Char 21';
+    font-size: 12px;
+}
+
 .container_notes .notes_textarea {
     outline: none;
     padding: 0.5em 0.5em;
@@ -47,6 +64,7 @@
     background-color: #221a38;
     border: none;
     color: #fff;
+    cursor: text;
 }
 
 .container_notes .notes_textarea::-webkit-scrollbar {
