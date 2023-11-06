@@ -3,21 +3,29 @@
     display: flex;
     align-items: center;
     font-size: 0.8em;
-    gap: 0.4em;
+    gap: 1em;
 
     background-color: #100c1b;
+    /* background-color: #895eff; */
     position: absolute;
     bottom: 35px;
     left: 0;
-    padding: 0.7em 0.8em;
+    padding: 0.7em 1em;
+    border-radius: 0.2em;
+    cursor: pointer;
+}
+
+.main p {
     cursor: pointer;
 }
 
 .main:hover {
-    transition: all 500ms ease-in;
+    transition: all 200ms ease-in;
     background-color: #1d172e;
+    transform: scale(1.01);
 }
 
 .main .main_img {
-    height: 35px;
+    height: 40px;
+    cursor: pointer;
 }

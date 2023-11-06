@@ -1,99 +1,83 @@
 .container_todo {
-    position: absolute;
-    bottom: 1em;
-    right: 0;
+  position: absolute;
+  bottom: 1em;
+  right: 0;
 
-    display: flex;
-    flex-direction: column;
-    gap: 0.5em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
 }
 
 .container_todo:active {
-    cursor: grabbing;
+  cursor: grabbing;
 }
 
 .input_box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.7em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7em;
 }
 
 .input_box input {
-    font-size: 0.85em;
-    outline: none;
-    border: none;
-    padding: 0.5em 0.8em;
-    border-radius: 0.1em;
-    border-radius: 0.1em;
+  font-size: 0.85em;
+  outline: none;
+  border: none;
+  padding: 0.5em 0.8em;
+  border-radius: 0.1em;
+  border-radius: 0.1em;
+  cursor: text;
 }
-
-.input_box input::placeholder {}
 
 .input_box p {
-    color: #fff;
-    font-size: 10px;
-    font-weight: 400;
-    letter-spacing: -1px;
-}
-
-.sync_box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-}
-
-.sync_box p:hover{
-    cursor: pointer;
-    text-decoration: underline;
-}
-
-.sync_box:hover {
+  color: #fff;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: -1px;
 }
 
 .todo_list {
-    font-size: 0.8em;
-    color: #fff;
-    height: 12em;
-    width: 20em;
-    overflow-y: auto;
-    margin-top: 0.8em;
+  font-size: 0.8em;
+  color: #fff;
+  height: 12em;
+  width: 20em;
+  overflow-y: auto;
+  margin-top: 0.8em;
 }
 
 .todo_list .todo_item {
-    display: flex;
-    justify-content: space-between;
-    background-color: #221a38;
+  display: flex;
+  justify-content: space-between;
+  background-color: #221a38;
 
-    margin-bottom: 0.4em;
-    padding: 0.5em 0.8em;
-    border-radius: 0.1em;
+  margin-bottom: 0.4em;
+  padding: 0.5em 0.8em;
+  border-radius: 0.1em;
 
-    word-spacing: -2px;
-    font-size: 10px;
-    font-weight: 400;
-    letter-spacing: -1px;
+  word-spacing: -2px;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: -1px;
 }
 
 .todo_list .todo_item .todo_title {
-    cursor: default;
+  cursor: default;
 }
 
 .todo_list .todo_item .todo_del {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .todo_list::-webkit-scrollbar {
-    width: 4px;
+  width: 4px;
 }
 
 .todo_list::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 0 grey;
-    background-color: #292a2d;
+  box-shadow: inset 0 0 0 grey;
+  background-color: #292a2d;
 }
 
 .todo_list::-webkit-scrollbar-thumb {
-    background-color: rgba(168, 168, 168, 0.542);
-    border-radius: 5px;
+  background-color: rgba(168, 168, 168, 0.542);
+  border-radius: 5px;
 }

@@ -65,6 +65,8 @@
     border: none;
     color: #fff;
     cursor: text;
+
+    resize: none;
 }
 
 .container_notes .notes_textarea::-webkit-scrollbar {
