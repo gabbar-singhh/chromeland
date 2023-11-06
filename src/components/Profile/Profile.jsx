@@ -7,13 +7,23 @@ const Profile = ({ name, profile_url, signOut }) => {
 
     useEffect(() => {
         console.log("user", user);
+        console.log(profile_url);
     }, []);
 
     return (
-        <section className={styles.main} onClick={signOut}>
-            <img className={styles.main_img} src={profile_url} alt="profile image" />
+        <section className={styles.main}>
+            {/* <section className={styles.main} onClick={signOut}> */}
 
-            <p className={styles.main_name}>{name}</p>
+            <div className={styles.profile_box}>
+                <img className={styles.profile_img} src={profile_url} alt="profile image" />
+
+                <span className={styles.profile_text}>
+                    <p>{name}</p>
+                    <p>{'logged in'}</p>
+                </span>
+
+            </div>
+
         </section>
     );
 };
