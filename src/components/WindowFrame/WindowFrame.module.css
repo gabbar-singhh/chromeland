@@ -24,11 +24,11 @@
 }
 
 .top_frame:active {
-    cursor: grabbing;
+    cursor: grab;
 }
 
 .top_frame:hover {
-    cursor: grabbing;
+    cursor: grab;
 }
 
 .top_frame .close_program {

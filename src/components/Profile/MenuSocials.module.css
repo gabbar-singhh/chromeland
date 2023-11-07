@@ -1,0 +1,14 @@
+.main {
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #fff;
+    text-decoration: none;
+}
+
+.main p {
+    color: #fff;
+    text-decoration: none;
+}

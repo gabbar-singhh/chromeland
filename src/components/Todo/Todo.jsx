@@ -1,87 +1,91 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styles from "./Todo.module.css";
-import Draggable from "react-draggable";
+import { useUser } from "@auth0/nextjs-auth0/client";
+import TodosDataContext from "../ContextAPI/TodosDataContext";
 
 const Todo = () => {
-  const [task, setTask] = useState("");
-  const [tasks, setTasks] = useState([]);
+  const todoContext = useContext(TodosDataContext);
+
+  const { user, error, isLoading } = useUser();
+
+  const [todo, setTodo] = useState("");
+  const [todos, setTodos] = useState([]);
 
   // WHEN PAGE OPEN, IT CHECKS FOR PREVIOUS LOCAL-STORAGE
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("localTask"));
-    console.log(data);
+    if (!isLoading) {
+      const data = JSON.parse(localStorage.getItem(`localTodo_${user.email}`));
+      console.log(data);
 
-    if (data !== null) {
-      setTasks(data);
+      if (data !== null) {
+        setTodos(data);
+      }
     }
   }, []);
 
   // WHEN ENTER KEY IS PRESSED
   const keyDownHandler = (event) => {
     if (event.keyCode === 13) {
-      if (task) {
-
-        console.log("-->", task);
-
-        const newTask = { id: new Date().getTime().toString(), title: task };
-
-        setTasks([...tasks, newTask]);
-
-        localStorage.setItem("localTask", JSON.stringify([...tasks, newTask]));
-        
-        setTask("");
-
+      if (todo) {
+        console.log("-->", todo);
+        const newTodo = { id: new Date().getTime().toString(), title: todo };
+        setTodos([...todos, newTodo]);
+        localStorage.setItem(
+          `localTodo_${user.email}`,
+          JSON.stringify([...todos, newTodo])
+        );
+        setTodo("");
       }
     }
   };
 
   // WHEN DELETE-BTN IS PRESSED
-  const deleteItemHandler = (task) => {
-    const deleted = tasks.filter((t) => t.id !== task);
-    setTasks(deleted);
-    localStorage.setItem("localTask", JSON.stringify(deleted));
+  const deleteItemHandler = (todo) => {
+    const deleted = todos.filter((t) => t.id !== todo);
+    setTodos(deleted);
+    localStorage.setItem(`localTodo_${user.email}`, JSON.stringify(deleted));
   };
-  return (
-    <Draggable>
-      <main className={styles.container_todo}>
-        <div className={styles.input_box}>
-          <input
-            type="text"
-            value={task}
-            onKeyDown={keyDownHandler}
-            onChange={(event) => setTask(event.target.value)}
-            placeholder="Add a task here..."
-          />
-          <p>
-            You have{" "}
-            {!tasks.length
-              ? " 0 task"
-              : tasks.length === 1
-              ? "only 1 task"
-              : tasks.length > 1
-              ? `${tasks.length} tasks`
-              : null}{" "}
-            pending!
-          </p>
-        </div>
 
-        <div className={styles.todo_list}>
-          {tasks.map((task) => {
-            return (
-              <span key={task.id} className={styles.todo_item}>
-                <p className={styles.todo_title}>{task.title}</p>
-                <p
-                  className={styles.todo_del}
-                  onClick={() => deleteItemHandler(task.id)}
-                >
-                  {"🟥"}
-                </p>
-              </span>
-            );
-          })}
-        </div>
-      </main>
-    </Draggable>
+  return (
+    <main className={styles.container_todo}>
+      <div className={styles.input_box}>
+        <input
+          type="text"
+          value={todo}
+          onKeyDown={keyDownHandler}
+          onChange={(event) => setTodo(event.target.value)}
+          placeholder="Add a task here..."
+        />
+
+        <p>
+          you've{" "}
+          {!todos.length
+            ? "0 task"
+            : todos.length === 1
+            ? "1 task"
+            : todos.length > 1
+            ? `${todos.length} tasks`
+            : null}{" "}
+          to perform
+        </p>
+      </div>
+
+      <div className={styles.todo_list}>
+        {todos.map((todo) => {
+          return (
+            <span key={todo.id} className={styles.todo_item}>
+              <p className={styles.todo_title}>{todo.title}</p>
+              <p
+                className={styles.todo_del}
+                onClick={() => deleteItemHandler(todo.id)}
+              >
+                {"🟥"}
+              </p>
+            </span>
+          );
+        })}
+      </div>
+    </main>
   );
 };
 

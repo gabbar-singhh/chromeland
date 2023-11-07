@@ -8,39 +8,48 @@ import NoteFolder from "@/components/NoteFolder/NoteFolder";
 import WindowFrame from "@/components/WindowFrame/WindowFrame";
 import PomodoroTimer from "@/components/PomodoroFocus/PomoFocus";
 import PomoFocusApp from "@/components/PomodoroFocus/PomoFocusApp";
-import UserAuthContext from "@/components/ContextAPI/UserAuthContext";
 import WindowStatusContext from "@/components/ContextAPI/WindowStatusContext";
 import NotesDataContext from "@/components/ContextAPI/NotesDataContext";
+import TodosDataContext from "@/components/ContextAPI/TodosDataContext";
 import supabase from "@/lib/supabaseClient";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import Profile from "@/components/Profile/Profile";
+import MenuProfile from "@/components/Profile/MenuProfile";
+import MenuSocials from '@/components/Profile/MenuSocials'
+import MenuFeedback from '@/components/Profile/MenuFeedback'
 
 export default function Home({ children }) {
-  const authDetail = useContext(UserAuthContext);
   const windowStatus = useContext(WindowStatusContext);
   const notesJson = useContext(NotesDataContext);
+  const todoContext = useContext(TodosDataContext);
 
-  // AUTH0 
+  // AUTH0
   const { user, error, isLoading } = useUser();
 
   // TEMP FUNCTION
   const signOutBtnHandler = async () => {
     console.log("SIGN OUT FXN IN CALLED!");
 
-    const isFinished = await window.open('/api/auth/logout');
+    const isFinished = await window.open("/api/auth/logout");
 
-    notesJson.notes([{ notes: [] }])
+    notesJson.setNotes([{ notes: [] }]);
 
+    window.close();
+  };
+
+  const signInBtnHandler = async () => {
+    console.log("SIGN IN FXN IN CALLED!");
+    const isFinished = window.open("/api/auth/login", "_self");
+
+    return { isFinished: true };
   };
 
   const viewNote = (e) => {
     const clickedNoteID = e.currentTarget.getAttribute("data-id");
-    const clickedNoteTitle = e.currentTarget.querySelector('p').textContent;
-    // console.log(e.currentTarget);
-    // console.log(clickedNoteTitle);
-
+    const clickedNoteTitle = e.currentTarget.querySelector("p").textContent;
 
     console.log("clickedNoteID", clickedNoteID);
-    const note = notesJson.notes.filter(note => note.id === clickedNoteID)[0]
+    const note = notesJson.notes.filter((note) => note.id === clickedNoteID)[0];
 
     console.log("note", note);
 
@@ -52,17 +61,17 @@ export default function Home({ children }) {
         id: note.id,
         title: clickedNoteTitle,
         desc: note.desc,
-        timestamp: note.timestamp
-      }
+        timestamp: note.timestamp,
+      },
     });
   };
 
   useEffect(() => {
-    const fetchNotes = async (input_email) => {
+    const fetchNotes = async () => {
       const data = await supabase
         .from("notes")
         .select("notes")
-        .eq("email_id", input_email);
+        .eq("email_id", user.email);
 
       try {
         // WHEN THERE IS ALREADY DATA PRESENT IN SUPA
@@ -81,13 +90,22 @@ export default function Home({ children }) {
       }
     };
 
-    const prevSignInDetails = JSON.parse(localStorage.getItem("user"));
-    if (prevSignInDetails) {
-      authDetail.setUserAuthDetail(prevSignInDetails);
-      fetchNotes(prevSignInDetails.email);
+    const fetchTodos = async () => {
+      const data = await supabase
+        .from("todos")
+        .select("todos")
+        .eq("email_id", user.email);
+
+      todoContext.setTodos(data.data[0].todos);
+    };
+
+    if (user) {
+      fetchNotes(user.email);
+      fetchTodos();
+      console.log("done 💄");
     }
 
-    console.log("index.js windowStatus: ", windowStatus.windowShow);
+    console.log("index.js windowStatus: ", windowStatus.windowShow, user);
   }, []);
 
   return (
@@ -100,45 +118,85 @@ export default function Home({ children }) {
           windowName={windowStatus.windowShow.appName}
           visible={true}
         >
-          {windowStatus.windowShow.appName == "NotesApp" &&
-            user && (
-              <ul className={styles.ul_list}>
-                {notesJson.notes.length === 0 ? (
-                  <>
-                    <p style={{ fontSize: "0.8em" }}>NO FILES FOUND</p>
-                  </>
-                ) : (
-                  <>
-                    {notesJson.notes.map((note) => {
-                      { console.log("notesJson ", notesJson.notes) }
+          {windowStatus.windowShow.appName == "NotesApp" && user && (
+            <ul className={styles.ul_list}>
+              {notesJson.notes.length === 0 ? (
+                <>
+                  <p style={{ fontSize: "0.8em" }}>NO FILES FOUND</p>
+                </>
+              ) : (
+                <>
+                  {notesJson.notes.map((note) => {
+                    if (note.title === undefined) {
+                      return (
+                        <>
+                          <p style={{ fontSize: "0.8em" }}>NO FILES FOUND</p>
+                        </>
+                      );
+                    } else {
                       return (
                         <li key={note.id} data-id={note.id} onClick={viewNote}>
                           <img src="/icons/file_icon.webp" alt="" height={50} />
                           <p>{note.title + ".txt"}</p>
                         </li>
                       );
-                    })}
-                  </>
-                )}
-              </ul>
-            )}
+                    }
+                  })}
+                </>
+              )}
+            </ul>
+          )}
 
           {windowStatus.windowShow.appName == "PomoFocus" && (
             <section className={styles.wrapper}>
               <PomoFocusApp />
             </section>
           )}
+
+          {windowStatus.windowShow.appName == "user profile" && (
+            <section className={styles.wrapper}>
+              <MenuProfile />
+            </section>
+          )}
+
+          {windowStatus.windowShow.appName == "social handles" && (
+            <section className={styles.wrapper}>
+              <MenuSocials />
+            </section>
+          )}
+
+          {windowStatus.windowShow.appName == "feedback" && (
+            <section className={styles.wrapper}>
+              <MenuFeedback />
+            </section>
+          )}
+
         </WindowFrame>
       )}
       <section className={styles.folder_section}>
         <NoteFolder />
         <PomodoroTimer />
-        <p style={{ color: "red" }} onClick={signOutBtnHandler}>
-          {user &&
-            user.email
-          }
-        </p>
       </section>
+
+      {user ? (
+        <Profile
+          signOut={signOutBtnHandler}
+          signIn={signInBtnHandler}
+          name={user && user.nickname}
+          profile_url={user && user.picture}
+          status={"logged in"}
+          statusColor="#99FF00"
+        />
+      ) : (
+        <Profile
+          signOut={signOutBtnHandler}
+          signIn={signInBtnHandler}
+          name={'unknown'}
+          status={'not logged in'}
+          profile_url={'/assets/default_profile.svg'}
+          statusColor="#ff0000"
+        />
+      )}
     </Layout>
   );
 }
