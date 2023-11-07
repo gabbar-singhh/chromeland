@@ -13,7 +13,7 @@ const Todo = () => {
 
   // WHEN PAGE OPEN, IT CHECKS FOR PREVIOUS LOCAL-STORAGE
   useEffect(() => {
-    if (!isLoading && user) {
+    if (!isLoading) {
       const data = JSON.parse(localStorage.getItem(`localTodo_${user.email}`));
       console.log(data);
 
