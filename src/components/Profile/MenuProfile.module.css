@@ -1,0 +1,25 @@
+.main {
+  margin: 1.5em 1em; 
+  display: flex;
+  align-items: center;
+  justify-content: first baseline;
+  gap: 2em;
+}
+
+.main .pfp {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  filter: grayscale(100%) brightness(0.8) contrast(1.2) sepia(1);
+}
+
+.main .details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 0.9em;
+}
+
+.main .details span {
+  color: #fff;
+}

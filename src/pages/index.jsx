@@ -14,6 +14,9 @@ import TodosDataContext from "@/components/ContextAPI/TodosDataContext";
 import supabase from "@/lib/supabaseClient";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import Profile from "@/components/Profile/Profile";
+import MenuProfile from "@/components/Profile/MenuProfile";
+import MenuSocials from '@/components/Profile/MenuSocials'
+import MenuFeedback from '@/components/Profile/MenuFeedback'
 
 export default function Home({ children }) {
   const windowStatus = useContext(WindowStatusContext);
@@ -32,6 +35,13 @@ export default function Home({ children }) {
     notesJson.setNotes([{ notes: [] }]);
 
     window.close();
+  };
+
+  const signInBtnHandler = async () => {
+    console.log("SIGN IN FXN IN CALLED!");
+    const isFinished = window.open("/api/auth/login", "_self");
+
+    return { isFinished: true };
   };
 
   const viewNote = (e) => {
@@ -142,6 +152,25 @@ export default function Home({ children }) {
               <PomoFocusApp />
             </section>
           )}
+
+          {windowStatus.windowShow.appName == "user profile" && (
+            <section className={styles.wrapper}>
+              <MenuProfile />
+            </section>
+          )}
+
+          {windowStatus.windowShow.appName == "social handles" && (
+            <section className={styles.wrapper}>
+              <MenuSocials />
+            </section>
+          )}
+
+          {windowStatus.windowShow.appName == "feedback" && (
+            <section className={styles.wrapper}>
+              <MenuFeedback />
+            </section>
+          )}
+
         </WindowFrame>
       )}
       <section className={styles.folder_section}>
@@ -149,10 +178,25 @@ export default function Home({ children }) {
         <PomodoroTimer />
       </section>
 
-      {user &&
-
-        <Profile signOut={signOutBtnHandler} name={user && user.nickname} profile_url={user && user.picture} />
-      }
+      {user ? (
+        <Profile
+          signOut={signOutBtnHandler}
+          signIn={signInBtnHandler}
+          name={user && user.nickname}
+          profile_url={user && user.picture}
+          status={"logged in"}
+          statusColor="#99FF00"
+        />
+      ) : (
+        <Profile
+          signOut={signOutBtnHandler}
+          signIn={signInBtnHandler}
+          name={'unknown'}
+          status={'not logged in'}
+          profile_url={'/assets/default_profile.svg'}
+          statusColor="#ff0000"
+        />
+      )}
     </Layout>
   );
 }
