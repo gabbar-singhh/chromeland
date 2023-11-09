@@ -90,7 +90,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
       }
     };
 
-    if (user) {
+    if (user && windowStatus.windowShow.appName == "NotesApp") {
       fetchNotes(user.email);
     }
   }, []);
