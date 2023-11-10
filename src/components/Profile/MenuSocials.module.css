@@ -1,14 +1,36 @@
 .main {
-    height: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    color: #fff;
-    text-decoration: none;
+  height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1.5em;
+  color: #fff;
+  text-decoration: none;
 }
 
-.main p {
-    color: #fff;
-    text-decoration: none;
+.main .cta {
+  color: #fff;
+  text-decoration: none;
+}
+
+.main .cta p {
+    margin-top: 8px;
+  text-align: center;
+  text-decoration: #ff0027 underline wavy;
+}
+
+.main .cta p:hover {
+  transition: all 400ms ease-in;
+  color: #adadad;
+}
+
+.main span {
+  display: flex;
+  gap: 10px;
+}
+
+.main span img {
+  border-radius: 3px;
+  filter: grayscale(100%);
 }
