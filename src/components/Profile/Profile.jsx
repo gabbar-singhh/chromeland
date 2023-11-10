@@ -90,7 +90,7 @@ const Profile = ({ name, profile_url, signOut, signIn, status, statusColor }) =>
                             <Link
                                 onClick={closeDropdown}
                                 className={styles.dropdown_item}
-                                href="#"
+                                href=""
                             >
                                 profile
                             </Link>
@@ -101,7 +101,7 @@ const Profile = ({ name, profile_url, signOut, signIn, status, statusColor }) =>
                             <Link
                                 onClick={closeDropdown}
                                 className={styles.dropdown_item}
-                                href="#"
+                                href=""
                             >
                                 social
                             </Link>
@@ -112,7 +112,7 @@ const Profile = ({ name, profile_url, signOut, signIn, status, statusColor }) =>
                             <Link
                                 onClick={closeDropdown}
                                 className={styles.dropdown_item}
-                                href="#"
+                                href=""
                             >
                                 {"feedback"}
                             </Link>
