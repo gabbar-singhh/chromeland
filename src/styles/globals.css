@@ -1,3 +1,25 @@
+@font-face {
+  font-family: "Print Char 21";
+  src: url("/fonts/PrintChar21.eot");
+
+  src: url("/fonts/PrintChar21.woff2") format("woff2"),
+    url("/fonts/PrintChar21.woff") format("woff"),
+    url("/fonts/PrintChar21.ttf") format("truetype"),
+    url("/fonts/PrintChar21.eot?#iefix") format("embedded-opentype");
+
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Print Char 21';
+  src: url('/fonts/PrintChar21.ttf') format('ttf');
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+}
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -10,5 +32,14 @@ body {
 
   overflow-y: hidden;
   overflow-x: hidden;
+  font-family: 'Print Char 21';
 
 }
+
+/*
+
+https://framerusercontent.com/assets/8nVKNv5WLcC69L1OkK6WndsRsrw.otf
+
+<link rel="preload" href="https://framerusercontent.com/assets/uIrQy45otGD5u123ptPZYBKgaMg.ttf" as="font" crossorigin="">
+
+*/
