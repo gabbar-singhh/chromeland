@@ -1,24 +1,6 @@
-@font-face {
-  font-family: "Print Char 21";
-  src: url("/fonts/PrintChar21.eot");
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=Press+Start+2P&family=VT323&display=swap');
 
-  src: url("/fonts/PrintChar21.woff2") format("woff2"),
-    url("/fonts/PrintChar21.woff") format("woff"),
-    url("/fonts/PrintChar21.ttf") format("truetype"),
-    url("/fonts/PrintChar21.eot?#iefix") format("embedded-opentype");
 
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Print Char 21';
-  src: url('/fonts/PrintChar21.ttf') format('ttf');
-  font-style: normal;
-  font-weight: normal;
-  font-display: swap;
-}
 
 * {
   box-sizing: border-box;

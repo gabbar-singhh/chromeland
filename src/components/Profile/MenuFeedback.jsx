@@ -12,8 +12,8 @@ const MenuProfile = () => {
     const [btnText, setBtnText] = useState("submit")
     const [feedbackPlaceholder, setFeedbackPlaceholder] = useState("here you go!");
 
-    const [name, setName] = useState(user.name || "Monkey D. Luffy");
-    const [email, setEmail] = useState(user.eail || "luffy.monkey@pirate.com");
+    const [name, setName] = useState("Monkey D. Luffy");
+    const [email, setEmail] = useState("luffy.monkey@pirate.com");
     const [feedback, setFeedback] = useState("");
 
     const submitHandler = () => {
