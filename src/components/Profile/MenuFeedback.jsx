@@ -13,7 +13,7 @@ const MenuProfile = () => {
     const [feedbackPlaceholder, setFeedbackPlaceholder] = useState("here you go!");
 
     const [name, setName] = useState(user.name || "Monkey D. Luffy");
-    const [email, setEmail] = useState(user.eail || "luffy.monkey@pirate.com");
+    const [email, setEmail] = useState(user.email || "luffy.monkey@pirate.com");
     const [feedback, setFeedback] = useState("");
 
     const submitHandler = () => {
