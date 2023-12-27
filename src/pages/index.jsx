@@ -24,7 +24,7 @@ export default function Home({ children }) {
   const notesJson = useContext(NotesDataContext);
   const todoContext = useContext(TodosDataContext);
 
-  const windowStatus = useSelector((state) => state.windowStatus);
+  const windowStatus = useSelector((state) => state.window.windowStatus);
   const dispatch = useDispatch();
 
   // AUTH0
@@ -72,6 +72,7 @@ export default function Home({ children }) {
   };
 
   useEffect(() => {
+    console.log("notesJson.notes", notesJson.notes)
     const fetchNotes = async () => {
       const data = await supabase
         .from("notes")
@@ -107,10 +108,7 @@ export default function Home({ children }) {
     if (user) {
       fetchNotes(user.email);
       fetchTodos();
-      console.log("done 💄");
     }
-
-    console.log("index.js windowStatus: ", windowStatus, user);
   }, []);
 
   return (
@@ -132,7 +130,9 @@ export default function Home({ children }) {
                     if (note.title === undefined) {
                       return (
                         <>
-                          <p key={514} style={{ fontSize: "0.8em" }}>NO FILES FOUND</p>
+                          <p key={514} style={{ fontSize: "0.8em" }}>
+                            NO FILES FOUND
+                          </p>
                         </>
                       );
                     } else {

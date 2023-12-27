@@ -1,6 +1,6 @@
-import windowReducer from "@/feature/windowFrame/windowStatusSlice";
 import { configureStore } from "@reduxjs/toolkit";
+import rootReducer from "./rootReducer";
 
 export const store = configureStore({
-reducer: windowReducer
+    reducer: rootReducer
 });

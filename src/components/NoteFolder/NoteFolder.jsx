@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { showWindow } from "@/feature/windowFrame/windowStatusSlice";
 
 const Note = ({ values }) => {
-  const windowStatus = useSelector((state) => state.windowStatus);
+  const windowStatus = useSelector((state) => state.window.windowStatus);
 
   const [prevData, setPrevData] = useState({ name: "Notes", show: false });
   const dispatch = useDispatch();

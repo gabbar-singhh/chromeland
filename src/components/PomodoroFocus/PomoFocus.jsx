@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { showWindow } from "@/feature/windowFrame/windowStatusSlice";
 
 const PomoFocus = () => {
-  const windowStatus = useSelector((state) => state.windowStatus);
+  const windowStatus = useSelector((state) => state.window.windowStatus);
   const dispatch = useDispatch();
 
   const showWindowFrame = () => {
@@ -44,7 +44,6 @@ const PomoFocus = () => {
   };
   return (
     <>
-      <Draggable>
         <main className={styles.container_pomofocus} onClick={showWindowFrame}>
           <img
             src="/icons/timer.png"
@@ -54,7 +53,6 @@ const PomoFocus = () => {
           />
           <p>Pomo Focus</p>
         </main>
-      </Draggable>
     </>
   );
 };

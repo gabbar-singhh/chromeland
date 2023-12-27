@@ -39,13 +39,11 @@ export default function App({ Component, pageProps }) {
     <main className={`${NotoSans.className} ${FiraMono.className}`}>
       <Provider store={store}>
       <UserProvider>
-          {/* <WindowStatusContext.Provider value={{ windowShow, setWindowShow }}> */}
             <NotesDataContext.Provider value={{ notes, setNotes }}>
               <TodosDataContext.Provider value={{ todos, setTodos }}>
                 <Component {...pageProps} />
               </TodosDataContext.Provider>
             </NotesDataContext.Provider>
-          {/* </WindowStatusContext.Provider> */}
       </UserProvider>
       </Provider>
     </main>

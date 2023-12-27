@@ -9,45 +9,16 @@ import Link from "next/link";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useDispatch, useSelector } from "react-redux";
 import { showWindow } from "@/feature/windowFrame/windowStatusSlice";
+import { closeWindow } from "@/feature/windowFrame/windowStatusSlice";
 
 const WindowFrame = ({ children, windowName, visible }) => {
   const [notes, setNotes] = useState([]);
 
-  const windowStatus = useSelector((state) => state.windowStatus);
+  const windowStatus = useSelector((state) => state.window.windowStatus);
   const dispatch = useDispatch();
   const noteContext = useContext(NotesDataContext);
 
   const { user, error, isLoading } = useUser();
-
-  const closeWindow = () => {
-    // windowStatus.setWindowShow({
-    //   visible: false,
-    //   appName: "none",
-
-    //   noteDisplay: false,
-    //   data: {
-    //     id: "",
-    //     title: "",
-    //     desc: "",
-    //     timestamp: "",
-    //   },
-    // });
-
-    dispatch(
-      showWindow({
-        visible: false,
-        appName: "none",
-
-        noteDisplay: false,
-        data: {
-          id: "",
-          title: "",
-          desc: "",
-          timestamp: "",
-        },
-      })
-    );
-  };
 
   const insertDataToTodosTable = async (email) => {
     const insertEmptyData = await supabase
@@ -124,18 +95,6 @@ const WindowFrame = ({ children, windowName, visible }) => {
 
     const ifUpdated = await sendNote(updated_array);
 
-    // windowStatus.setWindowShow({
-    //   visible: true,
-    //   appName: "NotesApp",
-    //   noteDisplay: false,
-    //   data: {
-    //     id: "",
-    //     title: "",
-    //     desc: "",
-    //     timestamp: "",
-    //   },
-    // });
-
     dispatch(
       showWindow({
         visible: true,
@@ -166,7 +125,12 @@ const WindowFrame = ({ children, windowName, visible }) => {
         <Draggable>
           <section className={styles.container_windowframe}>
             <div className={styles.top_frame}>
-              <p onClick={closeWindow} className={styles.close_program}>
+              <p
+                onClick={() => {
+                  dispatch(closeWindow());
+                }}
+                className={styles.close_program}
+              >
                 <img src="/icons/x.png" height={15} alt="" />
               </p>
 

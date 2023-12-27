@@ -16,7 +16,7 @@ const Notes = () => {
   const [currentDesc, setCurrentDesc] = useState("");
 
   // USING CONTEXT
-  const windowStatus = useSelector((state) => state.windowStatus);
+  const windowStatus = useSelector((state) => state.window.windowStatus);
   const noteContext = useContext(NotesDataContext);
   const todoContext = useContext(TodosDataContext);
 

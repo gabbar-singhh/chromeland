@@ -16,7 +16,7 @@ const Profile = ({
   const { user, error, isLoading } = useUser();
   const [isOpen, setIsOpen] = useState(false);
 
-  const windowStatus = useSelector((state) => state.windowStatus);
+  const windowStatus = useSelector((state) => state.window.windowStatus);
   const dispatch = useDispatch();
 
   const toggleDropdown = () => {

@@ -1,17 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    windowStatus: {
-        visible: false,
-        appName: "none",
-        noteDisplay: false,
-        data: {
-            id: "",
-            title: "",
-            desc: "",
-            timestamp: "",
-        },
-    }
+  windowStatus: {
+    visible: false,
+    appName: "none",
+    noteDisplay: false,
+    data: {
+      id: "",
+      title: "",
+      desc: "",
+      timestamp: "",
+    },
+  },
 };
 
 export const windowStatusSlice = createSlice({
@@ -34,10 +34,24 @@ export const windowStatusSlice = createSlice({
       state.windowStatus = windowStatus;
     },
 
-    closeWindow: () => {},
+    closeWindow: (state, action) => {
+      const windowStatus = {
+        visible: false,
+        appName: "none",
+        noteDisplay: false,
+        data: {
+          id: "",
+          title: "",
+          desc: "",
+          timestamp: "",
+        },
+      };
+
+      state.windowStatus = windowStatus;
+    },
   },
 });
 
-export const {showWindow, closeWindow} = windowStatusSlice.actions;
+export const { showWindow, closeWindow } = windowStatusSlice.actions;
 
 export default windowStatusSlice.reducer;
