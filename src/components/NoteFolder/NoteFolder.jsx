@@ -13,58 +13,19 @@ const Note = ({ values }) => {
   const dispatch = useDispatch();
 
   const showWindowFrame = () => {
-    if (windowStatus.visible === false) {
-      // windowStatus.setWindowShow({
-      //   visible: true,
-      //   appName: "NotesApp",
-      //   noteDisplay: false,
-      //   data: {
-      //     id: "",
-      //     title: "",
-      //     desc: "",
-      //     timestamp: "",
-      //   },
-      // });
-
-      dispatch(
-        showWindow({
-          visible: true,
-          appName: "NotesApp",
-          noteDisplay: false,
-          data: {
-            id: "",
-            title: "",
-            desc: "",
-            timestamp: "",
-          },
-        })
-      );
-    } else if (windowStatus.visible === true) {
-      // windowStatus.setWindowShow({
-      //   visible: false,
-      //   appName: "NotesApp",
-      //   noteDisplay: false,
-      //   data: {
-      //     id: "",
-      //     title: "",
-      //     desc: "",
-      //     timestamp: "",
-      //   },
-      // });
-      dispatch(
-        showWindow({
-          visible: false,
-          appName: "NotesApp",
-          noteDisplay: false,
-          data: {
-            id: "",
-            title: "",
-            desc: "",
-            timestamp: "",
-          },
-        })
-      );
-    }
+    dispatch(
+      showWindow({
+        visible: true,
+        appName: "NotesApp",
+        noteDisplay: false,
+        data: {
+          id: "",
+          title: "",
+          desc: "",
+          timestamp: "",
+        },
+      })
+    );
   };
 
   return (

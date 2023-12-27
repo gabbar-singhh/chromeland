@@ -55,20 +55,6 @@ export default function Home({ children }) {
     console.log("clickedNoteID", clickedNoteID);
     const note = notesJson.notes.filter((note) => note.id === clickedNoteID)[0];
 
-    console.log("note", note);
-
-    // windowStatus.setWindowShow({
-    //   visible: true,
-    //   appName: clickedNoteTitle,
-    //   noteDisplay: true,
-    //   data: {
-    //     id: note.id,
-    //     title: clickedNoteTitle,
-    //     desc: note.desc,
-    //     timestamp: note.timestamp,
-    //   },
-    // });
-
     dispatch(
       showWindow({
         visible: true,
@@ -146,7 +132,7 @@ export default function Home({ children }) {
                     if (note.title === undefined) {
                       return (
                         <>
-                          <p style={{ fontSize: "0.8em" }}>NO FILES FOUND</p>
+                          <p key={514} style={{ fontSize: "0.8em" }}>NO FILES FOUND</p>
                         </>
                       );
                     } else {

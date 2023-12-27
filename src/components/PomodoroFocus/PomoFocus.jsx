@@ -11,19 +11,6 @@ const PomoFocus = () => {
 
   const showWindowFrame = () => {
     if (windowStatus.visible === false) {
-      // windowStatus.setWindowShow({
-      //   visible: true,
-      //   appName: "PomoFocus",
-
-      //   noteDisplay: false,
-      //   data: {
-      //     id: "",
-      //     title: "",
-      //     desc: "",
-      //     timestamp: ""
-      //   }
-      // });
-
       dispatch(
         showWindow({
           visible: true,
@@ -39,21 +26,9 @@ const PomoFocus = () => {
         })
       );
     } else if (windowStatus.visible === true) {
-      // windowStatus.setWindowShow({
-      //   visible: false,
-      //   appName: "PomoFocus",
-      //   noteDisplay: false,
-      //   data: {
-      //     id: "",
-      //     title: "",
-      //     desc: "",
-      //     timestamp: ""
-      //   }
-      // });
-
       dispatch(
         showWindow({
-          visible: false,
+          visible: true,
           appName: "PomoFocus",
 
           noteDisplay: false,
