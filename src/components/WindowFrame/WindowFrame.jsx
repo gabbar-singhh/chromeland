@@ -7,11 +7,14 @@ import supabase from "@/lib/supabaseClient";
 import NotesDataContext from "../ContextAPI/NotesDataContext";
 import Link from "next/link";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { useDispatch, useSelector } from "react-redux";
+import { showWindow } from "@/feature/windowFrame/windowStatusSlice";
 
 const WindowFrame = ({ children, windowName, visible }) => {
   const [notes, setNotes] = useState([]);
 
-  const windowStatus = useContext(WindowStatusContext);
+  const windowStatus = useSelector((state) => state.windowStatus);
+  const dispatch = useDispatch();
   const noteContext = useContext(NotesDataContext);
 
   const { user, error, isLoading } = useUser();
@@ -29,6 +32,21 @@ const WindowFrame = ({ children, windowName, visible }) => {
     //     timestamp: "",
     //   },
     // });
+
+    dispatch(
+      showWindow({
+        visible: false,
+        appName: "none",
+
+        noteDisplay: false,
+        data: {
+          id: "",
+          title: "",
+          desc: "",
+          timestamp: "",
+        },
+      })
+    );
   };
 
   const insertDataToTodosTable = async (email) => {
@@ -90,15 +108,15 @@ const WindowFrame = ({ children, windowName, visible }) => {
       }
     };
 
-    // if (user && windowStatus.windowShow.appName == "NotesApp") {
-    //   fetchNotes(user.email);
-    // }
+    if (user && windowStatus.appName == "NotesApp") {
+      fetchNotes(user.email);
+    }
   }, []);
 
   const editNoteHandler = () => {};
 
   const deleteNoteHandler = async (note) => {
-    // const note_id_to_delete = windowStatus.windowShow.data.id;
+    const note_id_to_delete = windowStatus.data.id;
 
     const updated_array = noteContext.notes.filter(
       (note) => note.id !== note_id_to_delete
@@ -118,6 +136,21 @@ const WindowFrame = ({ children, windowName, visible }) => {
     //   },
     // });
 
+    dispatch(
+      showWindow({
+        visible: true,
+        appName: "NotesApp",
+
+        noteDisplay: false,
+        data: {
+          id: "",
+          title: "",
+          desc: "",
+          timestamp: "",
+        },
+      })
+    );
+
     if (ifUpdated) {
       noteContext.setNotes(
         updated_array.sort(
@@ -129,7 +162,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
 
   return (
     <>
-      {/* {windowStatus.windowShow && (
+      {windowStatus && (
         <Draggable>
           <section className={styles.container_windowframe}>
             <div className={styles.top_frame}>
@@ -159,12 +192,12 @@ const WindowFrame = ({ children, windowName, visible }) => {
             <div className={styles.data_container}>
               {user ? (
                 <>
-                  {!windowStatus.windowShow.noteDisplay ? (
+                  {!windowStatus.noteDisplay ? (
                     <>{children}</>
                   ) : (
                     <section className={styles.note_display_frame}>
                       <div className={styles.noteDisplay_box}>
-                        <p>{windowStatus.windowShow.data.desc}</p>
+                        <p>{windowStatus.data.desc}</p>
                       </div>
 
                       <div className={styles.options}>
@@ -195,7 +228,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
             </div>
           </section>
         </Draggable>
-      )} */}
+      )}
     </>
   );
 };

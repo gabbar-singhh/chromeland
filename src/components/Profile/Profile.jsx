@@ -2,14 +2,16 @@ import React, { useEffect, useState, useContext } from "react";
 import styles from "./Profile.module.css";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import Link from "next/link";
-import WindowStatusContext from "../ContextAPI/WindowStatusContext";
+import { useSelector, useDispatch } from "react-redux";
+import { showWindow } from "@/feature/windowFrame/windowStatusSlice";
 
 
 const Profile = ({ name, profile_url, signOut, signIn, status, statusColor }) => {
     const { user, error, isLoading } = useUser();
     const [isOpen, setIsOpen] = useState(false);
 
-    const windowStatus = useContext(WindowStatusContext);
+  const windowStatus = useSelector((state) => state.windowStatus);
+  const dispatch = useDispatch();
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
@@ -29,7 +31,7 @@ const Profile = ({ name, profile_url, signOut, signIn, status, statusColor }) =>
 
         */
        
-        // if (windowStatus.windowShow.visible === false) {
+        if (windowStatus.visible === false) {
             // windowStatus.setWindowShow({
             //     visible: true,
             //     appName: appType,
@@ -42,7 +44,21 @@ const Profile = ({ name, profile_url, signOut, signIn, status, statusColor }) =>
             //         timestamp: ""
             //     }
             // });
-        // } else if (windowStatus.windowShow.visible === true) {
+            dispatch(
+                showWindow({
+                  visible: true,
+                  appName: appType,
+        
+                  noteDisplay: false,
+                  data: {
+                    id: "",
+                    title: "",
+                    desc: "",
+                    timestamp: "",
+                  },
+                })
+              );
+        } else if (windowStatus.visible === true) {
             // windowStatus.setWindowShow({
             //     visible: false,
             //     appName: appType,
@@ -55,9 +71,23 @@ const Profile = ({ name, profile_url, signOut, signIn, status, statusColor }) =>
             //         timestamp: ""
             //     }
             // });
-        // }
+            dispatch(
+                showWindow({
+                  visible: false,
+                  appName: appType,
+        
+                  noteDisplay: false,
+                  data: {
+                    id: "",
+                    title: "",
+                    desc: "",
+                    timestamp: "",
+                  },
+                })
+              );
+        }
 
-        // console.log("👾👾", windowStatus.windowShow);
+        console.log("👾👾", windowStatus);
 
     }
 
