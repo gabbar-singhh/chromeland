@@ -15,13 +15,17 @@ import supabase from "@/lib/supabaseClient";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import Profile from "@/components/Profile/Profile";
 import MenuProfile from "@/components/Profile/MenuProfile";
-import MenuSocials from '@/components/Profile/MenuSocials'
-import MenuFeedback from '@/components/Profile/MenuFeedback'
+import MenuSocials from "@/components/Profile/MenuSocials";
+import MenuFeedback from "@/components/Profile/MenuFeedback";
+import { useSelector, useDispatch } from "react-redux";
+import { showWindow } from "@/feature/windowFrame/windowStatusSlice";
 
 export default function Home({ children }) {
-  const windowStatus = useContext(WindowStatusContext);
   const notesJson = useContext(NotesDataContext);
   const todoContext = useContext(TodosDataContext);
+
+  const windowStatus = useSelector((state) => state.window.windowStatus);
+  const dispatch = useDispatch();
 
   // AUTH0
   const { user, error, isLoading } = useUser();
@@ -51,22 +55,24 @@ export default function Home({ children }) {
     console.log("clickedNoteID", clickedNoteID);
     const note = notesJson.notes.filter((note) => note.id === clickedNoteID)[0];
 
-    console.log("note", note);
+    dispatch(
+      showWindow({
+        visible: true,
+        appName: clickedNoteTitle,
 
-    windowStatus.setWindowShow({
-      visible: true,
-      appName: clickedNoteTitle,
-      noteDisplay: true,
-      data: {
-        id: note.id,
-        title: clickedNoteTitle,
-        desc: note.desc,
-        timestamp: note.timestamp,
-      },
-    });
+        noteDisplay: true,
+        data: {
+          id: note.id,
+          title: clickedNoteTitle,
+          desc: note.desc,
+          timestamp: note.timestamp,
+        },
+      })
+    );
   };
 
   useEffect(() => {
+    console.log("notesJson.notes", notesJson.notes)
     const fetchNotes = async () => {
       const data = await supabase
         .from("notes")
@@ -102,10 +108,7 @@ export default function Home({ children }) {
     if (user) {
       fetchNotes(user.email);
       fetchTodos();
-      console.log("done 💄");
     }
-
-    console.log("index.js windowStatus: ", windowStatus.windowShow, user);
   }, []);
 
   return (
@@ -113,12 +116,9 @@ export default function Home({ children }) {
       <Time />
       <Todo />
       <Notes />
-      {windowStatus.windowShow.visible && (
-        <WindowFrame
-          windowName={windowStatus.windowShow.appName}
-          visible={true}
-        >
-          {windowStatus.windowShow.appName == "NotesApp" && user && (
+      {windowStatus.visible && (
+        <WindowFrame windowName={windowStatus.appName} visible={true}>
+          {windowStatus.appName == "NotesApp" && user && (
             <ul className={styles.ul_list}>
               {notesJson.notes.length === 0 ? (
                 <>
@@ -130,7 +130,9 @@ export default function Home({ children }) {
                     if (note.title === undefined) {
                       return (
                         <>
-                          <p style={{ fontSize: "0.8em" }}>NO FILES FOUND</p>
+                          <p key={514} style={{ fontSize: "0.8em" }}>
+                            NO FILES FOUND
+                          </p>
                         </>
                       );
                     } else {
@@ -147,30 +149,29 @@ export default function Home({ children }) {
             </ul>
           )}
 
-          {windowStatus.windowShow.appName == "PomoFocus" && (
+          {windowStatus.appName == "PomoFocus" && (
             <section className={styles.wrapper}>
               <PomoFocusApp />
             </section>
           )}
 
-          {windowStatus.windowShow.appName == "user profile" && (
+          {windowStatus.appName == "user profile" && (
             <section className={styles.wrapper}>
               <MenuProfile />
             </section>
           )}
 
-          {windowStatus.windowShow.appName == "social handles" && (
+          {windowStatus.appName == "social handles" && (
             <section className={styles.wrapper}>
               <MenuSocials />
             </section>
           )}
 
-          {windowStatus.windowShow.appName == "feedback" && (
+          {windowStatus.appName == "feedback" && (
             <section className={styles.wrapper}>
               <MenuFeedback />
             </section>
           )}
-
         </WindowFrame>
       )}
       <section className={styles.folder_section}>
@@ -191,9 +192,9 @@ export default function Home({ children }) {
         <Profile
           signOut={signOutBtnHandler}
           signIn={signInBtnHandler}
-          name={'unknown'}
-          status={'not logged in'}
-          profile_url={'/assets/default_profile.svg'}
+          name={"unknown"}
+          status={"not logged in"}
+          profile_url={"/assets/default_profile.svg"}
           statusColor="#ff0000"
         />
       )}

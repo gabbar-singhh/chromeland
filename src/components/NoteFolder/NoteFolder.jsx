@@ -3,16 +3,18 @@ import styles from "./NoteFolder.module.css";
 import Draggable from "react-draggable";
 import WindowFrame from "../WindowFrame/WindowFrame";
 import WindowStatusContext from "../ContextAPI/WindowStatusContext";
+import { useDispatch, useSelector } from "react-redux";
+import { showWindow } from "@/feature/windowFrame/windowStatusSlice";
 
 const Note = ({ values }) => {
-  const windowStatus = useContext(WindowStatusContext);
+  const windowStatus = useSelector((state) => state.window.windowStatus);
 
   const [prevData, setPrevData] = useState({ name: "Notes", show: false });
+  const dispatch = useDispatch();
 
   const showWindowFrame = () => {
-    console.log(windowStatus.windowShow);
-    if (windowStatus.windowShow.visible === false) {
-      windowStatus.setWindowShow({
+    dispatch(
+      showWindow({
         visible: true,
         appName: "NotesApp",
         noteDisplay: false,
@@ -22,20 +24,8 @@ const Note = ({ values }) => {
           desc: "",
           timestamp: "",
         },
-      });
-    } else if (windowStatus.windowShow.visible === true) {
-      windowStatus.setWindowShow({
-        visible: false,
-        appName: "NotesApp",
-        noteDisplay: false,
-        data: {
-          id: "",
-          title: "",
-          desc: "",
-          timestamp: "",
-        },
-      });
-    }
+      })
+    );
   };
 
   return (

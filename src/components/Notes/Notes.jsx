@@ -9,14 +9,15 @@ import supabase from "@/lib/supabaseClient";
 import { v4 as uuid } from "uuid";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { trim } from "lodash";
+import { useSelector, useDispatch } from "react-redux";
 
 const Notes = () => {
   const [currentTitle, setCurrentTitle] = useState("");
   const [currentDesc, setCurrentDesc] = useState("");
 
   // USING CONTEXT
+  const windowStatus = useSelector((state) => state.window.windowStatus);
   const noteContext = useContext(NotesDataContext);
-  const windowStatus = useState(WindowStatusContext);
   const todoContext = useContext(TodosDataContext);
 
   const { user, error, isLoading } = useUser();
@@ -108,7 +109,7 @@ const Notes = () => {
     if (currentDesc.trim().length === 0 || currentTitle.trim() === "") {
       console.log("values empty");
       console.log("noteContext: ", noteContext.notes);
-      console.log("windowStatus: ", windowStatus.windowShow);
+      console.log("windowStatus: ", windowStatus);
       console.log("todoContext: ", todoContext.todos);
     } else {
       // CHECKING IF AN EMPTY JSON OBJ EXISTS OR NOT, IF NOT IT WILL CREATE ONE
