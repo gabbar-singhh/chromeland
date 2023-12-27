@@ -108,7 +108,7 @@ const Notes = () => {
     if (currentDesc.trim().length === 0 || currentTitle.trim() === "") {
       console.log("values empty");
       console.log("noteContext: ", noteContext.notes);
-      console.log("windowStatus: ", windowStatus.windowShow);
+      // console.log("windowStatus: ", windowStatus.windowShow);
       console.log("todoContext: ", todoContext.todos);
     } else {
       // CHECKING IF AN EMPTY JSON OBJ EXISTS OR NOT, IF NOT IT WILL CREATE ONE

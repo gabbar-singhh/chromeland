@@ -29,35 +29,35 @@ const Profile = ({ name, profile_url, signOut, signIn, status, statusColor }) =>
 
         */
        
-        if (windowStatus.windowShow.visible === false) {
-            windowStatus.setWindowShow({
-                visible: true,
-                appName: appType,
+        // if (windowStatus.windowShow.visible === false) {
+            // windowStatus.setWindowShow({
+            //     visible: true,
+            //     appName: appType,
 
-                noteDisplay: false,
-                data: {
-                    id: "",
-                    title: "",
-                    desc: "",
-                    timestamp: ""
-                }
-            });
-        } else if (windowStatus.windowShow.visible === true) {
-            windowStatus.setWindowShow({
-                visible: false,
-                appName: appType,
+            //     noteDisplay: false,
+            //     data: {
+            //         id: "",
+            //         title: "",
+            //         desc: "",
+            //         timestamp: ""
+            //     }
+            // });
+        // } else if (windowStatus.windowShow.visible === true) {
+            // windowStatus.setWindowShow({
+            //     visible: false,
+            //     appName: appType,
 
-                noteDisplay: false,
-                data: {
-                    id: "",
-                    title: "",
-                    desc: "",
-                    timestamp: ""
-                }
-            });
-        }
+            //     noteDisplay: false,
+            //     data: {
+            //         id: "",
+            //         title: "",
+            //         desc: "",
+            //         timestamp: ""
+            //     }
+            // });
+        // }
 
-        console.log("👾👾", windowStatus.windowShow);
+        // console.log("👾👾", windowStatus.windowShow);
 
     }
 

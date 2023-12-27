@@ -7,33 +7,33 @@ const PomoFocus = () => {
   const windowStatus = useContext(WindowStatusContext);
 
   const showWindowFrame = () => {
-    if (windowStatus.windowShow.visible === false) {
-      windowStatus.setWindowShow({
-        visible: true,
-        appName: "PomoFocus",
+    // if (windowStatus.windowShow.visible === false) {
+      // windowStatus.setWindowShow({
+      //   visible: true,
+      //   appName: "PomoFocus",
 
-        noteDisplay: false,
-        data: {
-          id: "",
-          title: "",
-          desc: "",
-          timestamp: ""
-        }
-      });
-    } else if (windowStatus.windowShow.visible === true) {
-      windowStatus.setWindowShow({
-        visible: false,
-        appName: "PomoFocus",
+      //   noteDisplay: false,
+      //   data: {
+      //     id: "",
+      //     title: "",
+      //     desc: "",
+      //     timestamp: ""
+      //   }
+      // });
+    // } else if (windowStatus.windowShow.visible === true) {
+    //   windowStatus.setWindowShow({
+    //     visible: false,
+    //     appName: "PomoFocus",
 
-        noteDisplay: false,
-        data: {
-          id: "",
-          title: "",
-          desc: "",
-          timestamp: ""
-        }
-      });
-    }
+    //     noteDisplay: false,
+    //     data: {
+    //       id: "",
+    //       title: "",
+    //       desc: "",
+    //       timestamp: ""
+    //     }
+    //   });
+    // }
   };
   return (
     <>

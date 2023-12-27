@@ -10,32 +10,32 @@ const Note = ({ values }) => {
   const [prevData, setPrevData] = useState({ name: "Notes", show: false });
 
   const showWindowFrame = () => {
-    console.log(windowStatus.windowShow);
-    if (windowStatus.windowShow.visible === false) {
-      windowStatus.setWindowShow({
-        visible: true,
-        appName: "NotesApp",
-        noteDisplay: false,
-        data: {
-          id: "",
-          title: "",
-          desc: "",
-          timestamp: "",
-        },
-      });
-    } else if (windowStatus.windowShow.visible === true) {
-      windowStatus.setWindowShow({
-        visible: false,
-        appName: "NotesApp",
-        noteDisplay: false,
-        data: {
-          id: "",
-          title: "",
-          desc: "",
-          timestamp: "",
-        },
-      });
-    }
+    // console.log(windowStatus.windowShow);
+    // if (windowStatus.windowShow.visible === false) {
+      // windowStatus.setWindowShow({
+      //   visible: true,
+      //   appName: "NotesApp",
+      //   noteDisplay: false,
+      //   data: {
+      //     id: "",
+      //     title: "",
+      //     desc: "",
+      //     timestamp: "",
+      //   },
+      // });
+    // } else if (windowStatus.windowShow.visible === true) {
+      // windowStatus.setWindowShow({
+      //   visible: false,
+      //   appName: "NotesApp",
+      //   noteDisplay: false,
+      //   data: {
+      //     id: "",
+      //     title: "",
+      //     desc: "",
+      //     timestamp: "",
+      //   },
+      // });
+  // }
   };
 
   return (

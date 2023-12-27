@@ -17,18 +17,18 @@ const WindowFrame = ({ children, windowName, visible }) => {
   const { user, error, isLoading } = useUser();
 
   const closeWindow = () => {
-    windowStatus.setWindowShow({
-      visible: false,
-      appName: "none",
+    // windowStatus.setWindowShow({
+    //   visible: false,
+    //   appName: "none",
 
-      noteDisplay: false,
-      data: {
-        id: "",
-        title: "",
-        desc: "",
-        timestamp: "",
-      },
-    });
+    //   noteDisplay: false,
+    //   data: {
+    //     id: "",
+    //     title: "",
+    //     desc: "",
+    //     timestamp: "",
+    //   },
+    // });
   };
 
   const insertDataToTodosTable = async (email) => {
@@ -90,15 +90,15 @@ const WindowFrame = ({ children, windowName, visible }) => {
       }
     };
 
-    if (user && windowStatus.windowShow.appName == "NotesApp") {
-      fetchNotes(user.email);
-    }
+    // if (user && windowStatus.windowShow.appName == "NotesApp") {
+    //   fetchNotes(user.email);
+    // }
   }, []);
 
-  const editNoteHandler = () => { };
+  const editNoteHandler = () => {};
 
   const deleteNoteHandler = async (note) => {
-    const note_id_to_delete = windowStatus.windowShow.data.id;
+    // const note_id_to_delete = windowStatus.windowShow.data.id;
 
     const updated_array = noteContext.notes.filter(
       (note) => note.id !== note_id_to_delete
@@ -106,17 +106,17 @@ const WindowFrame = ({ children, windowName, visible }) => {
 
     const ifUpdated = await sendNote(updated_array);
 
-    windowStatus.setWindowShow({
-      visible: true,
-      appName: "NotesApp",
-      noteDisplay: false,
-      data: {
-        id: "",
-        title: "",
-        desc: "",
-        timestamp: "",
-      },
-    });
+    // windowStatus.setWindowShow({
+    //   visible: true,
+    //   appName: "NotesApp",
+    //   noteDisplay: false,
+    //   data: {
+    //     id: "",
+    //     title: "",
+    //     desc: "",
+    //     timestamp: "",
+    //   },
+    // });
 
     if (ifUpdated) {
       noteContext.setNotes(
@@ -129,7 +129,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
 
   return (
     <>
-      {windowStatus.windowShow && (
+      {/* {windowStatus.windowShow && (
         <Draggable>
           <section className={styles.container_windowframe}>
             <div className={styles.top_frame}>
@@ -195,7 +195,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
             </div>
           </section>
         </Draggable>
-      )}
+      )} */}
     </>
   );
 };

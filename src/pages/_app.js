@@ -5,6 +5,8 @@ import WindowStatusContext from "@/components/ContextAPI/WindowStatusContext";
 import NotesDataContext from "@/components/ContextAPI/NotesDataContext";
 import TodosDataContext from "@/components/ContextAPI/TodosDataContext";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
+import { Provider } from "react-redux";
+import { store } from "@/app/store";
 
 const NotoSans = Noto_Sans({
   subsets: ["latin"],
@@ -35,15 +37,17 @@ export default function App({ Component, pageProps }) {
 
   return (
     <main className={`${NotoSans.className} ${FiraMono.className}`}>
+      <Provider store={store}>
       <UserProvider>
-          <WindowStatusContext.Provider value={{ windowShow, setWindowShow }}>
+          {/* <WindowStatusContext.Provider value={{ windowShow, setWindowShow }}> */}
             <NotesDataContext.Provider value={{ notes, setNotes }}>
               <TodosDataContext.Provider value={{ todos, setTodos }}>
                 <Component {...pageProps} />
               </TodosDataContext.Provider>
             </NotesDataContext.Provider>
-          </WindowStatusContext.Provider>
+          {/* </WindowStatusContext.Provider> */}
       </UserProvider>
+      </Provider>
     </main>
   );
 }

@@ -53,17 +53,17 @@ export default function Home({ children }) {
 
     console.log("note", note);
 
-    windowStatus.setWindowShow({
-      visible: true,
-      appName: clickedNoteTitle,
-      noteDisplay: true,
-      data: {
-        id: note.id,
-        title: clickedNoteTitle,
-        desc: note.desc,
-        timestamp: note.timestamp,
-      },
-    });
+    // windowStatus.setWindowShow({
+    //   visible: true,
+    //   appName: clickedNoteTitle,
+    //   noteDisplay: true,
+    //   data: {
+    //     id: note.id,
+    //     title: clickedNoteTitle,
+    //     desc: note.desc,
+    //     timestamp: note.timestamp,
+    //   },
+    // });
   };
 
   useEffect(() => {
@@ -105,7 +105,7 @@ export default function Home({ children }) {
       console.log("done 💄");
     }
 
-    console.log("index.js windowStatus: ", windowStatus.windowShow, user);
+    // console.log("index.js windowStatus: ", windowStatus.windowShow, user);
   }, []);
 
   return (
@@ -113,7 +113,7 @@ export default function Home({ children }) {
       <Time />
       <Todo />
       <Notes />
-      {windowStatus.windowShow.visible && (
+      {/* {windowStatus.windowShow.visible && (
         <WindowFrame
           windowName={windowStatus.windowShow.appName}
           visible={true}
@@ -172,7 +172,7 @@ export default function Home({ children }) {
           )}
 
         </WindowFrame>
-      )}
+      )} */}
       <section className={styles.folder_section}>
         <NoteFolder />
         <PomodoroTimer />
