@@ -17,7 +17,8 @@ const Notes = () => {
 
   // USING CONTEXT
   const windowStatus = useSelector((state) => state.window.windowStatus);
-  const noteContext = useContext(NotesDataContext);
+
+  // const noteContext = useContext(NotesDataContext);
   const todoContext = useContext(TodosDataContext);
 
   const { user, error, isLoading } = useUser();
@@ -82,9 +83,9 @@ const Notes = () => {
     console.log(":: ", updated);
 
     if (updated) {
-      noteContext.setNotes(
-        updated.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-      );
+      // noteContext.setNotes(
+      //   updated.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+      // );
       setCurrentTitle("");
       setCurrentDesc("");
     }
@@ -108,7 +109,7 @@ const Notes = () => {
   const checkAndSendNote = async () => {
     if (currentDesc.trim().length === 0 || currentTitle.trim() === "") {
       console.log("values empty");
-      console.log("noteContext: ", noteContext.notes);
+      // console.log("noteContext: ", noteContext.notes);
       console.log("windowStatus: ", windowStatus);
       console.log("todoContext: ", todoContext.todos);
     } else {

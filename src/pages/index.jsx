@@ -8,8 +8,6 @@ import NoteFolder from "@/components/NoteFolder/NoteFolder";
 import WindowFrame from "@/components/WindowFrame/WindowFrame";
 import PomodoroTimer from "@/components/PomodoroFocus/PomoFocus";
 import PomoFocusApp from "@/components/PomodoroFocus/PomoFocusApp";
-import WindowStatusContext from "@/components/ContextAPI/WindowStatusContext";
-import NotesDataContext from "@/components/ContextAPI/NotesDataContext";
 import TodosDataContext from "@/components/ContextAPI/TodosDataContext";
 import supabase from "@/lib/supabaseClient";
 import { useUser } from "@auth0/nextjs-auth0/client";
@@ -19,12 +17,15 @@ import MenuSocials from "@/components/Profile/MenuSocials";
 import MenuFeedback from "@/components/Profile/MenuFeedback";
 import { useSelector, useDispatch } from "react-redux";
 import { showWindow } from "@/feature/windowFrame/windowStatusSlice";
+import { fetchNotes } from "@/feature/notes/notesDataSlice";
+import Spinner from "@/components/Extras/AppleSpinner/Spinner";
+import CloudBtn from "@/components/Extras/CloudBtn/CloudBtn";
 
 export default function Home({ children }) {
-  const notesJson = useContext(NotesDataContext);
   const todoContext = useContext(TodosDataContext);
 
   const windowStatus = useSelector((state) => state.window.windowStatus);
+  const notesData = useSelector((state) => state.notes.notesData);
   const dispatch = useDispatch();
 
   // AUTH0
@@ -35,8 +36,6 @@ export default function Home({ children }) {
     console.log("SIGN OUT FXN IN CALLED!");
 
     const isFinished = await window.open("/api/auth/logout");
-
-    notesJson.setNotes([{ notes: [] }]);
 
     window.close();
   };
@@ -53,13 +52,12 @@ export default function Home({ children }) {
     const clickedNoteTitle = e.currentTarget.querySelector("p").textContent;
 
     console.log("clickedNoteID", clickedNoteID);
-    const note = notesJson.notes.filter((note) => note.id === clickedNoteID)[0];
+    const note = notesData.data.filter((note) => note.id === clickedNoteID)[0];
 
     dispatch(
       showWindow({
         visible: true,
         appName: clickedNoteTitle,
-
         noteDisplay: true,
         data: {
           id: note.id,
@@ -72,30 +70,6 @@ export default function Home({ children }) {
   };
 
   useEffect(() => {
-    console.log("notesJson.notes", notesJson.notes)
-    const fetchNotes = async () => {
-      const data = await supabase
-        .from("notes")
-        .select("notes")
-        .eq("email_id", user.email);
-
-      try {
-        // WHEN THERE IS ALREADY DATA PRESENT IN SUPA
-        notesJson.setNotes(
-          data.data[0].notes.sort(
-            (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-          )
-        );
-      } catch {
-        // WHEN DATA ON SUPA IS EMPTY
-        notesJson.setNotes(
-          data.data.sort(
-            (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-          )
-        );
-      }
-    };
-
     const fetchTodos = async () => {
       const data = await supabase
         .from("todos")
@@ -105,10 +79,7 @@ export default function Home({ children }) {
       todoContext.setTodos(data.data[0].todos);
     };
 
-    if (user) {
-      fetchNotes(user.email);
-      fetchTodos();
-    }
+    if (user) fetchTodos();
   }, []);
 
   return (
@@ -120,30 +91,45 @@ export default function Home({ children }) {
         <WindowFrame windowName={windowStatus.appName} visible={true}>
           {windowStatus.appName == "NotesApp" && user && (
             <ul className={styles.ul_list}>
-              {notesJson.notes.length === 0 ? (
-                <>
-                  <p style={{ fontSize: "0.8em" }}>NO FILES FOUND</p>
-                </>
+              {/* UNITIL IT'S FETCHING NOTES */}
+              {notesData.isLoading && (
+                <span
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Spinner />
+                </span>
+              )}
+              {/* IF THERE'S AN ERROR */}
+              {notesData.isError && (
+                <div className={styles.notesError}>
+                  <p>Something Went Wrong! </p>
+                  <CloudBtn
+                    txt="try again"
+                    href=""
+                    onClick={() => {
+                      dispatch(fetchNotes(user.email));
+                    }}
+                  />
+                </div>
+              )}
+              {/* IF LENGTH OF DATA IS 0 */}
+              {notesData.data && notesData.data.length === 0 ? (
+                <p style={{ fontSize: "0.8em" }}>NO FILES FOUND</p>
               ) : (
                 <>
-                  {notesJson.notes.map((note) => {
-                    if (note.title === undefined) {
-                      return (
-                        <>
-                          <p key={514} style={{ fontSize: "0.8em" }}>
-                            NO FILES FOUND
-                          </p>
-                        </>
-                      );
-                    } else {
+                  {notesData.data &&
+                    notesData.data.map((note) => {
                       return (
                         <li key={note.id} data-id={note.id} onClick={viewNote}>
                           <img src="/icons/file_icon.webp" alt="" height={50} />
                           <p>{note.title + ".txt"}</p>
                         </li>
                       );
-                    }
-                  })}
+                    })}
                 </>
               )}
             </ul>

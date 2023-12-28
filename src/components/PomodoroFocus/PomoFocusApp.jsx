@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./PomoFocus.module.css";
-import CloudBtn from "../Buttons/CloudBtn/CloudBtn";
+import CloudBtn from "../Extras/CloudBtn/CloudBtn";
 import { Howl } from "howler";
 
 const PomoFocusApp = () => {
