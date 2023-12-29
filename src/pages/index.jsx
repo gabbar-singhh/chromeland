@@ -132,6 +132,7 @@ export default function Home({ children }) {
                     })}
                 </>
               )}
+              {notesData.data === undefined && <p>DATA IS UNDEFINED</p>}
             </ul>
           )}
 

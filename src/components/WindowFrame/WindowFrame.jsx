@@ -55,10 +55,13 @@ const WindowFrame = ({ children, windowName, visible }) => {
   };
 
   useEffect(() => {
+    setTimeout(() => {
+      console.log("🏳️‍🌈notesData: ", notesData);
+    }, 5000);
+    
     if (user && windowStatus.appName == "NotesApp") {
       dispatch(fetchNotes(user.email));
     }
-
   }, []);
 
   const editNoteHandler = () => {};
@@ -88,9 +91,9 @@ const WindowFrame = ({ children, windowName, visible }) => {
     );
 
     if (ifUpdated) {
-        updated_array.sort(
-          (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-        )
+      updated_array.sort(
+        (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+      );
     }
   };
 
