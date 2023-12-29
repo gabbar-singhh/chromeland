@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Draggable from "react-draggable";
 import styles from "./Notes.module.css";
 import { useUser } from "@auth0/nextjs-auth0/client";
@@ -15,7 +15,22 @@ const Notes = () => {
   const clearNotes = () => {
     setCurrentTitle("");
     setCurrentDesc("");
+
+    localStorage.removeItem("TEMP_TITLE");
+    localStorage.removeItem("TEMP_CONTENT");
   };
+
+  useEffect(() => {
+    try {
+      const TEMP_TITLE = JSON.parse(localStorage.getItem("TEMP_TITLE"));
+      const TEMP_CONTENT = JSON.parse(localStorage.getItem("TEMP_CONTENT"));
+      setCurrentTitle(TEMP_TITLE);
+      setCurrentDesc(TEMP_CONTENT);
+    } catch {
+      setCurrentTitle("");
+      setCurrentDesc("");
+    }
+  }, []);
 
   return (
     <Draggable>
@@ -32,14 +47,14 @@ const Notes = () => {
               setCurrentTitle(e.target.value.substring(0, 30));
 
               localStorage.setItem(
-                "temp_notes_title",
+                "TEMP_TITLE",
                 JSON.stringify(e.target.value.substring(0, 30))
               );
             } else {
               setCurrentTitle(e.target.value);
 
               localStorage.setItem(
-                "temp_notes_title",
+                "TEMP_TITLE",
                 JSON.stringify(e.target.value)
               );
             }
@@ -57,7 +72,7 @@ const Notes = () => {
             setCurrentDesc(e.target.value);
 
             localStorage.setItem(
-              "temp_notes_desc",
+              "TEMP_CONTENT",
               JSON.stringify(e.target.value)
             );
           }}
