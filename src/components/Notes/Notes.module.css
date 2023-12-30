@@ -4,14 +4,11 @@
     top: 1em;
     right: 0;
     cursor: default;
-
     display: flex;
     flex-direction: column;
 }
 
-.container_notes p {
-   
-}
+.container_notes p {}
 
 .container_notes p::-webkit-scrollbar {
     width: 4px;
@@ -33,24 +30,22 @@
 
 .container_notes .title_textarea {
     border: none;
-    cursor: grab;    
+    cursor: grab;
     resize: none;
-    
-    color: #fff;
-    background-color: #100c1b;
+    color: rgb(203, 203, 203);
+    background-color: #08060c;
     padding: 0.8em 0.8em;
-    text-align: center;    
+    text-align: center;
     letter-spacing: -2px;
     outline: none;
     border-top-left-radius: 0.1em;
     border-top-right-radius: 0.1em;
     font-size: 12px;
     font-family: 'Print Char 21';
-
 }
 
-.container_notes .title_textarea::placeholder{
-    color: #fff;
+.container_notes .title_textarea::placeholder {
+    color: rgb(203, 203, 203);
     font-family: 'Print Char 21';
     font-size: 12px;
 }
@@ -61,12 +56,18 @@
     border-radius: 0.1em;
     margin-bottom: -1.5px;
     font-size: 1.2em;
-    background-color: #221a38;
+    background-color: #0e0b17;
     border: none;
-    color: #fff;
+    color: rgb(203, 203, 203);
     cursor: text;
-
     resize: none;
+    letter-spacing: -2px;
+    word-spacing: -4px;
+    line-height: 1.5;
+    font-family: "Print Char 21";
+    font-size: 0.9em;
+    width: 300px;
+    height:250px;
 }
 
 .container_notes .notes_textarea::-webkit-scrollbar {
@@ -88,12 +89,12 @@
 }
 
 .container_notes .notes_buttons {
-    background-color: #100c1b;
+    background-color: #08060c;
     padding: 0.5em 0.5em;
     border-bottom-left-radius: 0.1em;
     border-bottom-right-radius: 0.1em;
     font-size: 12px;
-
+    color: rgb(203, 203, 203);
     display: flex;
     align-items: center;
     justify-content: space-around;

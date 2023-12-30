@@ -39,7 +39,7 @@ const Notes = () => {
           name=""
           id=""
           cols="auto"
-          placeholder="click to edit title"
+          placeholder="add title"
           rows="1"
           value={currentTitle}
           onChange={(e) => {

@@ -26,7 +26,6 @@
 .feedback_feedback textarea {
     background-color: #0e0e0e;
     border: 1px solid #fff;
-    font-size: 0.9em;
     outline: none;
     color: #fff;
     width: 300px;
@@ -35,6 +34,7 @@
     letter-spacing: -2px;
     word-spacing: -4px;
     font-family: "Print Char 21";
+    font-size: 0.9em;
 }
 
 .feedback_feedback textarea {
