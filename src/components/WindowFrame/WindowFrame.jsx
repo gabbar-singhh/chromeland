@@ -10,7 +10,7 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import { useDispatch, useSelector } from "react-redux";
 import { showWindow } from "@/feature/windowFrame/windowStatusSlice";
 import { closeWindow } from "@/feature/windowFrame/windowStatusSlice";
-import { fetchNotes } from "@/feature/notes/notesDataSlice";
+import { fetchNotes, saveNotes } from "@/feature/notes/notesDataSlice";
 
 const WindowFrame = ({ children, windowName, visible }) => {
   const windowStatus = useSelector((state) => state.window.windowStatus);
@@ -18,20 +18,6 @@ const WindowFrame = ({ children, windowName, visible }) => {
   const dispatch = useDispatch();
 
   const { user, error, isLoading } = useUser();
-
-  const insertDataToTodosTable = async (email) => {
-    const insertEmptyData = await supabase
-      .from("todos")
-      .insert([
-        {
-          todos: [],
-          email_id: email,
-        },
-      ])
-      .select();
-
-    console.log("😂😂😂", insertEmptyData.data[0].todos);
-  };
 
   const signInBtnHandler = async () => {
     console.log("SIGN IN FXN IN CALLED!");
@@ -55,16 +41,10 @@ const WindowFrame = ({ children, windowName, visible }) => {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      console.log("🏳️‍🌈notesData: ", notesData);
-    }, 5000);
-    
     if (user && windowStatus.appName == "NotesApp") {
       dispatch(fetchNotes(user.email));
     }
   }, []);
-
-  const editNoteHandler = () => {};
 
   const deleteNoteHandler = async (note) => {
     const note_id_to_delete = windowStatus.data.id;
@@ -74,6 +54,8 @@ const WindowFrame = ({ children, windowName, visible }) => {
     );
 
     const ifUpdated = await sendNote(updated_array);
+
+    dispatch(fetchNotes(user.email));
 
     dispatch(
       showWindow({
