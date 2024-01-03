@@ -1,16 +1,13 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect  } from "react";
 import styles from "./WindowFrame.module.css";
 import Draggable from "react-draggable";
 import CloudBtn from "../Extras/CloudBtn/CloudBtn";
-import WindowStatusContext from "../ContextAPI/WindowStatusContext";
 import supabase from "@/lib/supabaseClient";
-import NotesDataContext from "../ContextAPI/NotesDataContext";
-import Link from "next/link";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useDispatch, useSelector } from "react-redux";
 import { showWindow } from "@/feature/windowFrame/windowStatusSlice";
 import { closeWindow } from "@/feature/windowFrame/windowStatusSlice";
-import { fetchNotes, saveNotes } from "@/feature/notes/notesDataSlice";
+import { fetchNotes } from "@/feature/notes/notesDataSlice";
 
 const WindowFrame = ({ children, windowName, visible }) => {
   const windowStatus = useSelector((state) => state.window.windowStatus);

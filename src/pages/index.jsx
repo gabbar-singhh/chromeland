@@ -1,4 +1,3 @@
-import React, { useState, useEffect, useContext } from "react";
 import styles from "@/styles/Home.module.css";
 import Layout from "@/components/Layout/Layout";
 import Time from "@/components/Time/Time";
@@ -8,8 +7,6 @@ import NoteFolder from "@/components/NoteFolder/NoteFolder";
 import WindowFrame from "@/components/WindowFrame/WindowFrame";
 import PomodoroTimer from "@/components/PomodoroFocus/PomoFocus";
 import PomoFocusApp from "@/components/PomodoroFocus/PomoFocusApp";
-import TodosDataContext from "@/components/ContextAPI/TodosDataContext";
-import supabase from "@/lib/supabaseClient";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import Profile from "@/components/Profile/Profile";
 import MenuProfile from "@/components/Profile/MenuProfile";
@@ -22,10 +19,9 @@ import Spinner from "@/components/Extras/AppleSpinner/Spinner";
 import CloudBtn from "@/components/Extras/CloudBtn/CloudBtn";
 
 export default function Home({ children }) {
-  const todoContext = useContext(TodosDataContext);
-
   const windowStatus = useSelector((state) => state.window.windowStatus);
   const notesData = useSelector((state) => state.notes.notesData);
+  const todos = useSelector((state) => state.notes.notesData);
   const dispatch = useDispatch();
 
   // AUTH0
@@ -68,19 +64,6 @@ export default function Home({ children }) {
       })
     );
   };
-
-  useEffect(() => {
-    const fetchTodos = async () => {
-      const data = await supabase
-        .from("todos")
-        .select("todos")
-        .eq("email_id", user.email);
-
-      todoContext.setTodos(data.data[0].todos);
-    };
-
-    if (user) fetchTodos();
-  }, []);
 
   return (
     <Layout>
