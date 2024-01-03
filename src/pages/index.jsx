@@ -17,6 +17,7 @@ import { showWindow } from "@/feature/windowFrame/windowStatusSlice";
 import { fetchNotes } from "@/feature/notes/notesDataSlice";
 import Spinner from "@/components/Extras/AppleSpinner/Spinner";
 import CloudBtn from "@/components/Extras/CloudBtn/CloudBtn";
+import SearchBar from "@/components/SearchBar/SearchBar";
 
 export default function Home({ children }) {
   const windowStatus = useSelector((state) => state.window.windowStatus);
@@ -70,6 +71,7 @@ export default function Home({ children }) {
       <Time />
       <Todo />
       <Notes />
+      <SearchBar/>
       {windowStatus.visible && (
         <WindowFrame windowName={windowStatus.appName} visible={true}>
           {windowStatus.appName == "NotesApp" && user && (
