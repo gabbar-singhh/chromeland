@@ -1,59 +1,38 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Todo.module.css";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import TodosDataContext from "../ContextAPI/TodosDataContext";
+import { useDispatch, useSelector } from "react-redux";
+import { saveTodo, deleteTodo } from "@/feature/todos/todosSlice";
+import { fetchTodosFromLocalStorage } from "@/feature/todos/todosSlice";
 
 const Todo = () => {
-  const todoContext = useContext(TodosDataContext);
+  const todos = useSelector((state) => state.todos.todos);
+  const dispatch = useDispatch();
 
   const { user, error, isLoading } = useUser();
 
-  const [todo, setTodo] = useState("");
-  const [todos, setTodos] = useState([]);
+  const [currentTodo, setCurrentTodo] = useState("");
 
-  // WHEN PAGE OPEN, IT CHECKS FOR PREVIOUS LOCAL-STORAGE
-  useEffect(() => {
-    if (!isLoading) {
-      const data = JSON.parse(localStorage.getItem(`localTodo_${user.email}`));
-      console.log(data);
-
-      if (data !== null) {
-        setTodos(data);
-      }
-    }
-  }, []);
-
-  // WHEN ENTER KEY IS PRESSED
   const keyDownHandler = (event) => {
     if (event.keyCode === 13) {
-      if (todo) {
-        console.log("-->", todo);
-        const newTodo = { id: new Date().getTime().toString(), title: todo };
-        setTodos([...todos, newTodo]);
-        localStorage.setItem(
-          `localTodo_${user.email}`,
-          JSON.stringify([...todos, newTodo])
-        );
-        setTodo("");
-      }
+      dispatch(saveTodo({ todo: currentTodo }));
+      setCurrentTodo("");
     }
   };
 
-  // WHEN DELETE-BTN IS PRESSED
-  const deleteItemHandler = (todo) => {
-    const deleted = todos.filter((t) => t.id !== todo);
-    setTodos(deleted);
-    localStorage.setItem(`localTodo_${user.email}`, JSON.stringify(deleted));
-  };
+  useEffect(() => {
+    dispatch(fetchTodosFromLocalStorage());
+  }, [])
+  
 
   return (
     <main className={styles.container_todo}>
       <div className={styles.input_box}>
         <input
           type="text"
-          value={todo}
+          value={currentTodo}
           onKeyDown={keyDownHandler}
-          onChange={(event) => setTodo(event.target.value)}
+          onChange={(event) => setCurrentTodo(event.target.value)}
           placeholder="Add a task here..."
         />
 
@@ -77,7 +56,7 @@ const Todo = () => {
               <p className={styles.todo_title}>{todo.title}</p>
               <p
                 className={styles.todo_del}
-                onClick={() => deleteItemHandler(todo.id)}
+                onClick={() => dispatch(deleteTodo({ todoID: todo.id }))}
               >
                 {"🟥"}
               </p>

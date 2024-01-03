@@ -7,12 +7,10 @@
 .signin_btn {
     font-size: 25px;
     color: white;
-
     position: relative;
     display: inline-block;
     vertical-align: top;
     text-transform: uppercase;
-
     cursor: pointer;
 
     -webkit-touch-callout: none;
@@ -32,14 +30,10 @@
 
     image-rendering: optimizeSpeed;
     image-rendering: -moz-crisp-edges;
-    /* Firefox */
     image-rendering: -o-crisp-edges;
-    /* Opera */
     image-rendering: -webkit-optimize-contrast;
-    /* Webkit (non-standard naming) */
     image-rendering: crisp-edges;
     -ms-interpolation-mode: nearest-neighbor;
-    /* IE (non-standard property) */
 
     border-style: solid;
     border-width: 20px;
@@ -58,12 +52,10 @@
     margin: -20px -20px;
     line-height: 20px;
     padding: 10px 20px;
-
     text-decoration: none;
     color: #000;
     font-size: 0.5em;
-    font-weight: 700;
-
+    font-weight: 600;
     background: #fff;
     background:
         linear-gradient(135deg, transparent 10px, #fff 0) top left,
@@ -77,5 +69,4 @@
         radial-gradient(circle at 100% 0, rgba(204, 0, 0, 0) 14px, #fff 15px),
         radial-gradient(circle at 100% 100%, rgba(204, 0, 0, 0) 14px, #fff 15px),
         radial-gradient(circle at 0 100%, rgba(204, 0, 0, 0) 14px, #fff 15px);
-    font-family: 'Print Char 21';
 }

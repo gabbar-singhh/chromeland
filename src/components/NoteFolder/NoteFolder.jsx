@@ -1,15 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
 import styles from "./NoteFolder.module.css";
 import Draggable from "react-draggable";
-import WindowFrame from "../WindowFrame/WindowFrame";
-import WindowStatusContext from "../ContextAPI/WindowStatusContext";
 import { useDispatch, useSelector } from "react-redux";
 import { showWindow } from "@/feature/windowFrame/windowStatusSlice";
 
 const Note = ({ values }) => {
-  const windowStatus = useSelector((state) => state.window.windowStatus);
-
-  const [prevData, setPrevData] = useState({ name: "Notes", show: false });
   const dispatch = useDispatch();
 
   const showWindowFrame = () => {

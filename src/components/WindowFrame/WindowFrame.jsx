@@ -1,38 +1,20 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect  } from "react";
 import styles from "./WindowFrame.module.css";
 import Draggable from "react-draggable";
-import CloudBtn from "../Buttons/CloudBtn/CloudBtn";
-import WindowStatusContext from "../ContextAPI/WindowStatusContext";
+import CloudBtn from "../Extras/CloudBtn/CloudBtn";
 import supabase from "@/lib/supabaseClient";
-import NotesDataContext from "../ContextAPI/NotesDataContext";
-import Link from "next/link";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useDispatch, useSelector } from "react-redux";
 import { showWindow } from "@/feature/windowFrame/windowStatusSlice";
 import { closeWindow } from "@/feature/windowFrame/windowStatusSlice";
+import { fetchNotes } from "@/feature/notes/notesDataSlice";
 
 const WindowFrame = ({ children, windowName, visible }) => {
-  const [notes, setNotes] = useState([]);
-
   const windowStatus = useSelector((state) => state.window.windowStatus);
+  const notesData = useSelector((state) => state.notes.notesData);
   const dispatch = useDispatch();
-  const noteContext = useContext(NotesDataContext);
 
   const { user, error, isLoading } = useUser();
-
-  const insertDataToTodosTable = async (email) => {
-    const insertEmptyData = await supabase
-      .from("todos")
-      .insert([
-        {
-          todos: [],
-          email_id: email,
-        },
-      ])
-      .select();
-
-    console.log("😂😂😂", insertEmptyData.data[0].todos);
-  };
 
   const signInBtnHandler = async () => {
     console.log("SIGN IN FXN IN CALLED!");
@@ -56,44 +38,21 @@ const WindowFrame = ({ children, windowName, visible }) => {
   };
 
   useEffect(() => {
-    const fetchNotes = async (input_email) => {
-      const data = await supabase
-        .from("notes")
-        .select("notes")
-        .eq("email_id", input_email);
-
-      try {
-        // WHEN THERE IS ALREADY DATA PRESENT IN SUPA
-        noteContext.setNotes(
-          data.data[0].notes.sort(
-            (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-          )
-        );
-      } catch {
-        // WHEN DATA ON SUPA IS EMPTY
-        noteContext.setNotes(
-          data.data.sort(
-            (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-          )
-        );
-      }
-    };
-
     if (user && windowStatus.appName == "NotesApp") {
-      fetchNotes(user.email);
+      dispatch(fetchNotes(user.email));
     }
   }, []);
-
-  const editNoteHandler = () => {};
 
   const deleteNoteHandler = async (note) => {
     const note_id_to_delete = windowStatus.data.id;
 
-    const updated_array = noteContext.notes.filter(
+    const updated_array = notesData.data.filter(
       (note) => note.id !== note_id_to_delete
     );
 
     const ifUpdated = await sendNote(updated_array);
+
+    dispatch(fetchNotes(user.email));
 
     dispatch(
       showWindow({
@@ -111,10 +70,8 @@ const WindowFrame = ({ children, windowName, visible }) => {
     );
 
     if (ifUpdated) {
-      noteContext.setNotes(
-        updated_array.sort(
-          (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-        )
+      updated_array.sort(
+        (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
       );
     }
   };

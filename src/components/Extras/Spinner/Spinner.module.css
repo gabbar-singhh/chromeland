@@ -1,3 +1,11 @@
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px;  
+  width: 450px;
+}
+
 .lds_ellipsis {
     display: inline-block;
     position: relative;
@@ -9,7 +17,8 @@
     top: -10px;
     width: 13px;
     height: 13px;
-    background: #000;
+    /* background: #000; */
+    background: #fff;
     animation-timing-function: cubic-bezier(0, 1, 1, 0);
   }
   .lds_ellipsis div:nth-child(1) {
