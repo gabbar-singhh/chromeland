@@ -1,7 +1,4 @@
-import React, { useContext, useState } from "react";
 import styles from "./PomoFocus.module.css";
-import Draggable from "react-draggable";
-import WindowStatusContext from "../ContextAPI/WindowStatusContext";
 import { useSelector, useDispatch } from "react-redux";
 import { showWindow } from "@/feature/windowFrame/windowStatusSlice";
 

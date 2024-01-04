@@ -1,0 +1,42 @@
+.searchBar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.searchBar span {
+    display: flex;
+}
+
+.searchBar_wrapper {
+    font-size: 14px;
+    font-family: 'Print Char 21';
+    color: #202124;
+    background: #fff;
+    border: none;
+    box-shadow: none;
+    z-index: 3;
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+}
+
+.searchBar_input {
+    background-color: transparent;
+    border: none;
+    color: rgba(0, 0, 0, .87);
+    word-wrap: break-word;
+    outline: none;
+    height: 34px;
+    letter-spacing: -2px;
+    font-size: 16px;
+    font-family: 'Print Char 21';
+}
+
+.searchBar_input::placeholder {
+    color: rgb(118, 118, 118);
+    word-spacing: -3px;
+}
