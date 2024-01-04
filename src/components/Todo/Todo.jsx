@@ -18,12 +18,14 @@ const Todo = () => {
       dispatch(saveTodo({ todo: currentTodo }));
       setCurrentTodo("");
     }
+
+    console.log(todos.length);
   };
 
   useEffect(() => {
+    console.log(localStorage.getItem("TODOS"), "==");
     dispatch(fetchTodosFromLocalStorage());
-  }, [])
-  
+  }, []);
 
   return (
     <main className={styles.container_todo}>
@@ -38,13 +40,13 @@ const Todo = () => {
 
         <p>
           you've{" "}
-          {!todos.length
-            ? "0 task"
+          {todos === null
+            ? "0 tasks"
+            : !todos.length
+            ? "0 tasks"
             : todos.length === 1
             ? "1 task"
-            : todos.length > 1
-            ? `${todos.length} tasks`
-            : null}{" "}
+            : `${todos.length} tasks`}{" "}
           to perform
         </p>
       </div>
