@@ -9,7 +9,15 @@ export const todosSlice = createSlice({
   initialState,
   reducers: {
     fetchTodosFromLocalStorage: (state, action) => {
-      state.todos = JSON.parse(localStorage.getItem(`TODOS`));
+      state.todos = JSON.parse(localStorage.getItem("TODOS"));
+
+      const recoveredTodos = JSON.parse(localStorage.getItem("TODOS"));
+
+      if (recoveredTodos === null) {
+        state.todos = [];
+      } else {
+        state.todos = recoveredTodos;
+      }
     },
 
     saveTodo: (state, action) => {
