@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import Draggable from "react-draggable";
 import styles from "./Notes.module.css";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import { useDispatch } from "react-redux";
 import { saveNotes } from "@/feature/notes/notesDataSlice";
+import { useSession } from "@supabase/auth-helpers-react";
 
 const Notes = () => {
-  const { user, error, isLoading } = useUser();
+  const session = useSession();
   const dispatch = useDispatch();
 
   const [currentTitle, setCurrentTitle] = useState("");
@@ -87,7 +87,7 @@ const Notes = () => {
                 saveNotes({
                   title: currentTitle,
                   content: currentDesc,
-                  email: user.email,
+                  email: session.user.email,
                 })
               );
               clearNotes();
