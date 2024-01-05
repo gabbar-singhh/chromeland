@@ -10,16 +10,17 @@
     "export": "next export"
   },
   "dependencies": {
-    "@auth0/nextjs-auth0": "^3.2.0",
     "@next/font": "^13.4.19",
     "@reduxjs/toolkit": "^2.0.1",
-    "@supabase/supabase-js": "^2.33.1",
+    "@supabase/auth-helpers-react": "^0.4.2",
+    "@supabase/supabase-js": "^2.39.2",
     "date-fns": "^2.30.0",
     "howler": "^2.2.3",
     "next": "^13.5.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-draggable": "^4.4.5",
+    "react-google-calendar-api": "^2.3.0",
     "react-redux": "^9.0.4",
     "uuid": "^9.0.1",
     "validator": "^13.11.0"

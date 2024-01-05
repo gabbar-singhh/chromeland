@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import styles from "./MenuFeedback.module.css";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import validator from "validator";
 import supabase from "@/lib/supabaseClient";
 import Spinner from "../Extras/Spinner/Spinner";
+import { useSession } from "@supabase/auth-helpers-react";
 
 const MenuProfile = () => {
-    const { user, error, isLoading } = useUser();
+    const session = useSession();
 
     const [showLoader, setShowLoader] = useState(false);
     const [btnText, setBtnText] = useState("submit")
     const [feedbackPlaceholder, setFeedbackPlaceholder] = useState("here you go!");
 
-    const [name, setName] = useState(user.name || "Monkey D. Luffy");
-    const [email, setEmail] = useState(user.email || "luffy.monkey@pirate.com");
+    const [name, setName] = useState(session.user.user_metadata.name || "Monkey D. Luffy");
+    const [email, setEmail] = useState(session.user.user_metadata.email || "luffy.monkey@pirate.com");
     const [feedback, setFeedback] = useState("");
 
     const submitHandler = () => {

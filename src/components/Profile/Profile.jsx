@@ -1,19 +1,13 @@
 import React, { useEffect, useState, useContext } from "react";
 import styles from "./Profile.module.css";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { showWindow } from "@/feature/windowFrame/windowStatusSlice";
+import { useSession } from "@supabase/auth-helpers-react";
+import { signIn, signOut } from "@/feature/auth/authSlice";
 
-const Profile = ({
-  name,
-  profile_url,
-  signOut,
-  signIn,
-  status,
-  statusColor,
-}) => {
-  const { user, error, isLoading } = useUser();
+const Profile = ({ name, profile_url, status, statusColor }) => {
+  const session = useSession();
   const [isOpen, setIsOpen] = useState(false);
 
   const windowStatus = useSelector((state) => state.window.windowStatus);
@@ -108,7 +102,7 @@ ONLY 3 TYPES OF appType applicable:
                 {"feedback"}
               </Link>
             </li>
-            {user ? (
+            {session ? (
               <li>
                 <Link
                   className={styles.dropdown_item}
@@ -116,7 +110,7 @@ ONLY 3 TYPES OF appType applicable:
                   style={{ color: "#ff0000", marginBottom: 0 }}
                   onClick={() => {
                     closeDropdown();
-                    signOut();
+                    dispatch(signOut());
                   }}
                 >
                   log out
@@ -130,7 +124,7 @@ ONLY 3 TYPES OF appType applicable:
                   style={{ color: "#ff0000", marginBottom: 0 }}
                   onClick={() => {
                     closeDropdown();
-                    signIn();
+                    dispatch(signIn());
                   }}
                 >
                   log in
