@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/Home.module.css";
 import Layout from "@/components/Layout/Layout";
 import Time from "@/components/Time/Time";
@@ -23,6 +23,7 @@ import {
   useSupabaseClient,
   useSessionContext,
 } from "@supabase/auth-helpers-react";
+import DateTimePicker from "react-datetime-picker";
 
 export default function Home({ children }) {
   const windowStatus = useSelector((state) => state.window.windowStatus);
@@ -33,6 +34,9 @@ export default function Home({ children }) {
 
   const session = useSession(); // tokens
   const { isLoading } = useSessionContext();
+
+  // const  = new Date();
+  const [start, setStart] = useState(new Date());
 
   const viewNote = (e) => {
     const clickedNoteID = e.currentTarget.getAttribute("data-id");
@@ -57,7 +61,9 @@ export default function Home({ children }) {
   };
 
   useEffect(() => {
-   console.log(session)
+    if (session)[
+      console.log("session: ", session)
+  ]
   }, []);
 
   if (isLoading) {
@@ -70,6 +76,7 @@ export default function Home({ children }) {
       <Todo />
       <Notes />
       <SearchBar />
+      <DateTimePicker value={start} onChange={setStart}/>
       {windowStatus.visible && (
         <WindowFrame windowName={windowStatus.appName} visible={true}>
           {windowStatus.appName == "NotesApp" && session && (
