@@ -3,7 +3,7 @@ module.exports = {
   async headers() {
     return [
       {
-        source: " https://chromeland-v1.vercel.app/fonts/PrintChar21.woff2", // Adjust this path to match your font file path
+        source: "/fonts/PrintChar21.woff2", // Adjust this path to match your font file path
         headers: [
           {
             key: "Access-Control-Allow-Origin",
@@ -12,7 +12,7 @@ module.exports = {
         ],
       },
       {
-        source: "https://chromeland-v1.vercel.app/fonts/PrintChar21.woff2", // Adjust this path to match your font file path
+        source: "/fonts/PrintChar21.woff2", // Adjust this path to match your font file path
         headers: [
           {
             key: "Access-Control-Allow-Origin",
@@ -21,7 +21,7 @@ module.exports = {
         ],
       },
       {
-        source: "https://chromeland-v1.vercel.app/fonts/PrintChar21.woff", // Adjust this path to match your font file path
+        source: "/fonts/PrintChar21.woff", // Adjust this path to match your font file path
         headers: [
           {
             key: "Access-Control-Allow-Origin",
@@ -30,7 +30,7 @@ module.exports = {
         ],
       },
       {
-        source: "https://chromeland-v1.vercel.app/fonts/PrintChar21.ttf", // Adjust this path to match your font file path
+        source: "/fonts/PrintChar21.ttf", // Adjust this path to match your font file path
         headers: [
           {
             key: "Access-Control-Allow-Origin",
