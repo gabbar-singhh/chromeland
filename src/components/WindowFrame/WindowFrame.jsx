@@ -1,20 +1,22 @@
-import React, { useEffect  } from "react";
+import React, { useEffect } from "react";
 import styles from "./WindowFrame.module.css";
 import Draggable from "react-draggable";
 import CloudBtn from "../Extras/CloudBtn/CloudBtn";
 import supabase from "@/lib/supabaseClient";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import { useDispatch, useSelector } from "react-redux";
 import { showWindow } from "@/feature/windowFrame/windowStatusSlice";
 import { closeWindow } from "@/feature/windowFrame/windowStatusSlice";
 import { fetchNotes } from "@/feature/notes/notesDataSlice";
+import { useSession } from "@supabase/auth-helpers-react";
+import { signIn } from "@/feature/auth/authSlice";
 
 const WindowFrame = ({ children, windowName, visible }) => {
   const windowStatus = useSelector((state) => state.window.windowStatus);
   const notesData = useSelector((state) => state.notes.notesData);
   const dispatch = useDispatch();
 
-  const { user, error, isLoading } = useUser();
+  // const { user, error, isLoading } = useUser();
+  const session = useSession();
 
   const signInBtnHandler = async () => {
     console.log("SIGN IN FXN IN CALLED!");
@@ -27,7 +29,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
     const { error } = await supabase
       .from("notes")
       .update({ notes: updatedData })
-      .eq("email_id", user.email);
+      .eq("email_id", session.user.email);
 
     if (error) {
       console.error("Error updating user data:", error.message);
@@ -38,8 +40,8 @@ const WindowFrame = ({ children, windowName, visible }) => {
   };
 
   useEffect(() => {
-    if (user && windowStatus.appName == "NotesApp") {
-      dispatch(fetchNotes(user.email));
+    if (session && windowStatus.appName == "NotesApp") {
+      dispatch(fetchNotes(session.user.email));
     }
   }, []);
 
@@ -52,7 +54,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
 
     const ifUpdated = await sendNote(updated_array);
 
-    dispatch(fetchNotes(user.email));
+    dispatch(fetchNotes(session.user.email));
 
     dispatch(
       showWindow({
@@ -111,7 +113,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
             </div>
 
             <div className={styles.data_container}>
-              {user ? (
+              {session ? (
                 <>
                   {!windowStatus.noteDisplay ? (
                     <>{children}</>
@@ -139,10 +141,7 @@ const WindowFrame = ({ children, windowName, visible }) => {
                   }}
                   txt="SIGN IN"
                   onClick={() => {
-                    signInBtnHandler().then((x) => {
-                      // insertDataToTodosTable(user.email)
-                      console.log("x@@: ", x);
-                    });
+                    dispatch(signIn());
                   }}
                 />
               )}

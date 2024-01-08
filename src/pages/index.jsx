@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/Home.module.css";
 import Layout from "@/components/Layout/Layout";
 import Time from "@/components/Time/Time";
@@ -7,7 +8,6 @@ import NoteFolder from "@/components/NoteFolder/NoteFolder";
 import WindowFrame from "@/components/WindowFrame/WindowFrame";
 import PomodoroTimer from "@/components/PomodoroFocus/PomoFocus";
 import PomoFocusApp from "@/components/PomodoroFocus/PomoFocusApp";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import Profile from "@/components/Profile/Profile";
 import MenuProfile from "@/components/Profile/MenuProfile";
 import MenuSocials from "@/components/Profile/MenuSocials";
@@ -18,31 +18,25 @@ import { fetchNotes } from "@/feature/notes/notesDataSlice";
 import Spinner from "@/components/Extras/AppleSpinner/Spinner";
 import CloudBtn from "@/components/Extras/CloudBtn/CloudBtn";
 import SearchBar from "@/components/SearchBar/SearchBar";
+import {
+  useSession,
+  useSupabaseClient,
+  useSessionContext,
+} from "@supabase/auth-helpers-react";
+import DateTimePicker from "react-datetime-picker";
 
 export default function Home({ children }) {
   const windowStatus = useSelector((state) => state.window.windowStatus);
   const notesData = useSelector((state) => state.notes.notesData);
   const todos = useSelector((state) => state.notes.notesData);
+
   const dispatch = useDispatch();
 
-  // AUTH0
-  const { user, error, isLoading } = useUser();
+  const session = useSession(); // tokens
+  const { isLoading } = useSessionContext();
 
-  // TEMP FUNCTION
-  const signOutBtnHandler = async () => {
-    console.log("SIGN OUT FXN IN CALLED!");
-
-    const isFinished = await window.open("/api/auth/logout");
-
-    window.close();
-  };
-
-  const signInBtnHandler = async () => {
-    console.log("SIGN IN FXN IN CALLED!");
-    const isFinished = window.open("/api/auth/login", "_self");
-
-    return { isFinished: true };
-  };
+  // const  = new Date();
+  const [start, setStart] = useState(new Date());
 
   const viewNote = (e) => {
     const clickedNoteID = e.currentTarget.getAttribute("data-id");
@@ -66,15 +60,26 @@ export default function Home({ children }) {
     );
   };
 
+  useEffect(() => {
+    if (session)[
+      console.log("session: ", session)
+  ]
+  }, []);
+
+  if (isLoading) {
+    return <></>;
+  }
+
   return (
     <Layout>
       <Time />
       <Todo />
       <Notes />
-      <SearchBar/>
+      <SearchBar />
+      <DateTimePicker value={start} onChange={setStart}/>
       {windowStatus.visible && (
         <WindowFrame windowName={windowStatus.appName} visible={true}>
-          {windowStatus.appName == "NotesApp" && user && (
+          {windowStatus.appName == "NotesApp" && session && (
             <ul className={styles.ul_list}>
               {/* UNITIL IT'S FETCHING NOTES */}
               {notesData.isLoading && (
@@ -96,7 +101,7 @@ export default function Home({ children }) {
                     txt="try again"
                     href=""
                     onClick={() => {
-                      dispatch(fetchNotes(user.email));
+                      dispatch(fetchNotes(session.user.email));
                     }}
                   />
                 </div>
@@ -151,19 +156,15 @@ export default function Home({ children }) {
         <PomodoroTimer />
       </section>
 
-      {user ? (
+      {session ? (
         <Profile
-          signOut={signOutBtnHandler}
-          signIn={signInBtnHandler}
-          name={user && user.nickname}
-          profile_url={user && user.picture}
+          name={session && session.user.user_metadata.name}
+          profile_url={session && session.user.user_metadata.avatar_url}
           status={"logged in"}
           statusColor="#99FF00"
         />
       ) : (
         <Profile
-          signOut={signOutBtnHandler}
-          signIn={signInBtnHandler}
           name={"unknown"}
           status={"not logged in"}
           profile_url={"/assets/default_profile.svg"}

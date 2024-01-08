@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Todo.module.css";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import { useDispatch, useSelector } from "react-redux";
 import { saveTodo, deleteTodo } from "@/feature/todos/todosSlice";
 import { fetchTodosFromLocalStorage } from "@/feature/todos/todosSlice";
+import { useSession } from "@supabase/auth-helpers-react";
 
 const Todo = () => {
   const todos = useSelector((state) => state.todos.todos);
   const dispatch = useDispatch();
 
-  const { user, error, isLoading } = useUser();
+  const session = useSession()
 
   const [currentTodo, setCurrentTodo] = useState("");
 
